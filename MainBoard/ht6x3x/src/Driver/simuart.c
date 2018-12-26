@@ -360,10 +360,11 @@ void SimuartGpioInit(void)
 
 int SimuartInit(void)
 {
-    int i;
+    uint32_t i;
 
     memset(gSimUartCtrl, 0, sizeof(gSimUartCtrl));
-    for (i=0; i<SIM_UART_CNT; i++) {
+    for (i = 0; i < SIM_UART_CNT; i++) 
+	{
         gSimUartCtrl[i].recvStat = COM_STOP_BIT;
     }
     gSimUartCtrl[0].timerIndex = 0;

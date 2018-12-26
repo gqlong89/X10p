@@ -48,12 +48,14 @@ void UpdateSysToken(void)
 
 int GetPktSum(uint8_t *pData, uint16_t len)
 {
-    int i;
-    uint8_t  sum = 0;
+    uint32_t i;
+    uint8_t sum = 0;
 
-    for (i=0; i<len; i++) {
+    for (i = 0; i < len; i++) 
+	{
         sum += pData[i];
     }
+	
     return sum;
 }
 
@@ -62,9 +64,11 @@ int GetNoZeroSum(uint8_t *pData, uint16_t len)
 {
     int sum = GetPktSum(pData, len);
 
-    if (0 == sum) {
+    if (0 == sum) 
+	{
         sum = 1;
     }
+	
     return sum;
 }
 

@@ -17,7 +17,8 @@ static __IO uint32_t TimingDelay=0;
 //******************************************************************
 void SysTick_Init(void)
 {
-	if(SysTick_Config (44040192/1000)){
+	if(SysTick_Config (44040192/1000))
+	{
 		while (1);
 	}
 }

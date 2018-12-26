@@ -1015,20 +1015,28 @@ void emuTask(void)
 
 	invNxN(EmuCalation.matrixA,invMatrixA);//求逆矩阵
 
-	for (i=1; i<7; i++) { //1~6  写入计量参数
+	for (i=1; i<7; i++) 
+    { //1~6  写入计量参数
 	    j = 0;
-	    while (++j < 4) {
-    		if (CL_OK == writecalpara(EMUID[i])) {
-                if (CL_OK == ReadCheckSum(EMUID[i], &sum)) {
+	    while (++j < 4) 
+        {
+    		if (CL_OK == writecalpara(EMUID[i])) 
+            {
+                if (CL_OK == ReadCheckSum(EMUID[i], &sum)) 
+                {
                     checkSum[i] = sum;
                     CL_LOG("emu check ok,i=%d.\n",i);
                     failFlag = failFlag & ~(1<<i);
                     break;
-                }else{
+                }
+                else
+                {
                     CL_LOG("fail,i=%d.\n",i);
                     vTaskDelay(1000);
                 }
-            }else{
+            }
+            else
+            {
                 CL_LOG("fail,i=%d.\n",i);
                 vTaskDelay(1000);
             }

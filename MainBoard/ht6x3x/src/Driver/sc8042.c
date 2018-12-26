@@ -20,8 +20,10 @@ uint8_t  powerOnFlag = 0;
 
 void CheckVoiceChipPower(void)
 {
-    if ((uint32_t)(GetRtcCount() - voiceUndateTime) > 120) {
-		if (powerOnFlag == 1) {
+    if ((uint32_t)(GetRtcCount() - voiceUndateTime) > 120) 
+	{
+		if (powerOnFlag == 1) 
+		{
 			CL_LOG("pd sc8024.\n");
 			POWER_DOWN_SC();//语音模块下电
 			powerOnFlag = 0;
@@ -36,15 +38,22 @@ void Sc8042bSpeech(int index)
     uint8_t  rtcTime[8];
 
 	GetRtcTime(rtcTime);
-	if (gOutNetStatus.mode != 2) { //以防工厂晚间生产喇叭不会响
-		if (system_info.disturbingStartTime != system_info.disturbingStopTime) {//语音禁播开启时间和结束时间不相等就禁播语音
-			if (system_info.disturbingStartTime < system_info.disturbingStopTime) {
-				if ((rtcTime[4]>=system_info.disturbingStartTime) && (rtcTime[4]<system_info.disturbingStopTime)) {
+	if (gOutNetStatus.mode != 2)
+	{ //以防工厂晚间生产喇叭不会响
+		if (system_info.disturbingStartTime != system_info.disturbingStopTime) 
+		{//语音禁播开启时间和结束时间不相等就禁播语音
+			if (system_info.disturbingStartTime < system_info.disturbingStopTime) 
+			{
+				if ((rtcTime[4]>=system_info.disturbingStartTime) && (rtcTime[4]<system_info.disturbingStopTime)) 
+				{
 					CL_LOG("禁播语音.\n");
 					return;
 				}
-			} else {
-				if ((rtcTime[4]>=system_info.disturbingStartTime) || (rtcTime[4]<system_info.disturbingStopTime)) {
+			} 
+			else 
+			{
+				if ((rtcTime[4]>=system_info.disturbingStartTime) || (rtcTime[4]<system_info.disturbingStopTime)) 
+				{
 					CL_LOG("禁播语音.\n");
 					return;
 				}
@@ -52,26 +61,29 @@ void Sc8042bSpeech(int index)
 		}
 	}
 
-    if (gChgInfo.netStatus & (1<<BLUE_UPGRADE)) {
+    if (gChgInfo.netStatus & (1<<BLUE_UPGRADE)) 
+	{
         CL_LOG("bt ota,not sp.\n");
         return;
     }
 
 	voiceUndateTime = GetRtcCount();
-	if (powerOnFlag == 0) {
+	if (powerOnFlag == 0) 
+	{
 		CL_LOG("po sc8024.\n");
 		POWER_ON_SC();
 		powerOnFlag = 1;
 	}
 
-    CL_LOG("s %d.\n",index);
+    CL_LOG("%d.\n",index);
     MASTER_INT_DIS();
 	ENABLE_SC_RST();
     Feed_WDT();
 	delay_us(VOIC_DELAY_CNT);
 	DISABLE_SC_RST();
 	delay_us(VOIC_DELAY_CNT);
-	for(i=0; i<index; i++) {
+	for(i=0; i<index; i++) 
+	{
         Feed_WDT();
 		//数据脉冲拉高
 		ENABLE_SC_DATA();
@@ -293,7 +305,7 @@ int Sc8042b_Init(void)
 	OS_DELAY_MS(500);
 	Sc8042bSpeech(VOIC_WELCOME);
 	OS_DELAY_MS(800);
-	Sc8042bSpeech(VOIC_NULL2);
+//	Sc8042bSpeech(VOIC_NULL2);
     CL_LOG("init ok.\n");
 	return 0;
 }

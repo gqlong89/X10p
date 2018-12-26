@@ -294,7 +294,7 @@ void UpdateNewUiState(UI_STATE state)
 {
 	ui_Info.Ui_State = state;
 	ui_Info.uiStartTime = GetRtcCount();
-	CL_LOG("Ui_State=%d, uiStartTime=%d.\n", ui_Info.Ui_State, ui_Info.uiStartTime);
+	CL_LOG("Ui_State = %d, uiStartTime = %d.\n", ui_Info.Ui_State, ui_Info.uiStartTime);
 }
 
 void UiDisplayNomalInfo(void)

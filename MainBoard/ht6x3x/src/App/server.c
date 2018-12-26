@@ -56,12 +56,14 @@ void PrintfData(void *pfunc, uint8_t *pdata, int len)
 {
 	int i;
 
-    if (0 == system_info.printSwitch) {
+    if (0 == system_info.printSwitch) 
+	{
         return;
     }
 	CL_LOG("call by %s,len=%d,pdata:",(char*)pfunc,len);
     Feed_WDT();
-	for (i=0; i<len; i++) {
+	for (i=0; i<len; i++) 
+	{
 		printf("%02x",pdata[i]);
 	}
 	printf("\n");
@@ -324,24 +326,30 @@ void RecoverInfo(CHARGER_STR *pCharger)
 {
     int flag = 0;
 
-    if (pCharger->validFlag & (1<<CFG_CHARGER_SN)) {
-        if (memcmp(system_info.station_id, pCharger->station_id, sizeof(pCharger->station_id))) {
+    if (pCharger->validFlag & (1<<CFG_CHARGER_SN)) 
+	{
+        if (memcmp(system_info.station_id, pCharger->station_id, sizeof(pCharger->station_id))) 
+		{
             memcpy(system_info.station_id, pCharger->station_id, sizeof(pCharger->station_id));
             flag = 1;
             CL_LOG("rcv sn.\n");
         }
     }
 
-    if (pCharger->validFlag & (1<<CFG_CHARGER_DEVICEID)) {
-        if (memcmp(system_info.idCode, pCharger->idCode, sizeof(pCharger->idCode))) {
+    if (pCharger->validFlag & (1<<CFG_CHARGER_DEVICEID)) 
+	{
+        if (memcmp(system_info.idCode, pCharger->idCode, sizeof(pCharger->idCode))) 
+		{
             memcpy(system_info.idCode, pCharger->idCode, sizeof(pCharger->idCode));
             flag = 1;
             CL_LOG("rcv id.\n");
         }
     }
 
-    if (pCharger->validFlag & (1<<CFG_OPERATORNUM)) {
-        if (memcmp(system_info.OperatorNum, pCharger->OperatorNum, sizeof(pCharger->OperatorNum))) {
+    if (pCharger->validFlag & (1<<CFG_OPERATORNUM)) 
+	{
+        if (memcmp(system_info.OperatorNum, pCharger->OperatorNum, sizeof(pCharger->OperatorNum))) 
+		{
             memcpy(system_info.OperatorNum, pCharger->OperatorNum, sizeof(pCharger->OperatorNum));
             flag = 1;
             CL_LOG("rcv opnum.\n");
@@ -386,7 +394,8 @@ void ChargerInfoProc(void)
     CHARGER_STR charger;
 
     HT_Flash_ByteRead((void*)&charger, CHARGER_INFO_FLASH_ADDR, sizeof(charger));
-    if (charger.checkSum != GetNoZeroSum((void*)&charger, sizeof(charger)-sizeof(charger.checkSum))) {
+    if (charger.checkSum != GetNoZeroSum((void*)&charger, sizeof(charger)-sizeof(charger.checkSum))) 
+	{
         charger.validFlag = 0x38;
         charger.pullGunStopCharging = 1;
         charger.chargingFullStop = 1;
@@ -907,7 +916,8 @@ void ServerTask(void)
     SycTimeCount(GetRtcCount());
     gChgInfo.lastBlueStatus = 2;
     GprsInit();
-    while (1) {
+    while (1) 
+    {
         system_info.is_socket_0_ok = CL_FALSE;
 		LcdDisplayBackStageConnect(LCD_CLEAR);
         LcdDisplaySingnal(LCD_CLEAR);
@@ -941,19 +951,24 @@ void ServerTask(void)
             }
 
             //本来是本地网络的，如果检测到485网络，就切换到485网络
-            if ((LOCAL_NET == system_info.netType) && (OUT_485_NET == gOutNetStatus.connect)) {
+            if ((LOCAL_NET == system_info.netType) && (OUT_485_NET == gOutNetStatus.connect)) 
+            {
                 break;
             }
 
-            if (FIND_AA != step) {
-                if (5 < (uint32_t)(GetRtcCount() - time)) {
+            if (FIND_AA != step) 
+            {
+                if (5 < (uint32_t)(GetRtcCount() - time)) 
+                {
                     CL_LOG("no rx data,step=%d,err.\n",step);
                     step = FIND_AA;
                 }
             }
-            while (CL_OK == FIFO_S_Get(&gSocketPktRxCtrl, &data)) {
+            while (CL_OK == FIFO_S_Get(&gSocketPktRxCtrl, &data)) 
+            {
                 //printf("%02x ",data);
-                switch (step) {
+                switch (step) 
+                {
                     case FIND_AA:
                         if (data == 0xAA) {
                             time = GetRtcCount();

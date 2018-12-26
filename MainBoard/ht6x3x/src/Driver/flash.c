@@ -100,7 +100,7 @@ void HT_Flash_ByteRead(uint8_t* pReadByte, uint32_t Address, uint32_t Num)
 
     HT_CMU->FLASHCON = CMU_FLASHCON_FOP_READ;                              /*!< Flash读                */
 
-    for(i=0; i<Num; i++)
+    for(i = 0; i < Num; i++)
     {
         pReadByte[i] = M8(Address+i);                                      /*!< 执行Flash读            */
     }
@@ -547,9 +547,10 @@ int FlashWriteSysInfo(void *pSysInfo, uint16_t size, uint8_t readBack)
 //读系统信息
 int FlashReadSysInfo(uint8_t *pInfo, uint16_t size)
 {
-    int i;
+    uint32_t i;
 
-    for (i=0; i<size; i++) {
+    for (i = 0; i < size; i++) 
+	{
 	    at24c64_eepromRead(SysInfoEepromAddr+i, &pInfo[i], 1);
     }
 	return CL_OK;
@@ -570,9 +571,10 @@ int FlashWriteGunInfo(void *pGunInfo, uint16_t size, uint8_t readBack)
 //读枪头信息
 int FlashReadGunInfo(uint8_t *pGunInfo, uint16_t size)
 {
-    int i;
+    uint32_t i;
 
-    for (i=0; i<size; i++) {
+    for (i = 0; i < size; i++) 
+	{
 	    at24c64_eepromRead(GunInfoEepromAddr+i, &pGunInfo[i], 1);
     }
 	return CL_OK;
@@ -591,9 +593,10 @@ int FlashWritMatrix(uint8_t *data, uint16_t size)
 //读计量干扰矩阵系数
 int FlashReadMatrix(uint8_t *data, uint16_t size)
 {
-	int i;
+	uint32_t i;
 
-    for (i=0; i<size; i++) {
+    for (i = 0; i < size; i++) 
+	{
 	    at24c64_eepromRead(EMUCaliationAddr+i, &data[i], 1);
     }
 	return CL_OK;
@@ -604,7 +607,8 @@ void E2promReadDataEx(uint8_t *pBuff, uint32_t addr, uint16_t len)
 {
     uint16_t i;
 
-    for (i=0; i<len; i++) {
+    for (i = 0; i < len; i++) 
+	{
         at24c64_eepromRead(addr+i, (void*)&pBuff[i], 1);
     }
 }

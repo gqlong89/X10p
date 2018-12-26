@@ -227,14 +227,14 @@ int RtcInit(void)
     SetRtcCompensate();
 
     //判断时间戳是否合法，不合法才设置时间
-    uint32_t rtcTime = GetTimeStamp();
-    CL_LOG("init ok, old rtcTime=%d.\n",rtcTime);
-    if ((1523680322 > rtcTime) || (rtcTime > 1839299522)) {
+	gSysSecond = GetTimeStamp();
+    CL_LOG("init ok, 时间戳为[%d].\n", gSysSecond);
+    if ((1523680322 > gSysSecond) || (gSysSecond > 1839299522)) 
+	{
         SycTimeCount(1523680322);
         SetRtcCount(1523680322);
     }
-    gSysSecond = GetTimeStamp();
-    CL_LOG("init ok,new gSysSecond=%d.\n",gSysSecond);
+    
     return CL_OK;
 }
 

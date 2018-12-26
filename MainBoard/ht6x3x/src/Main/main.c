@@ -111,9 +111,9 @@ void SysCfgInit(void)
         system_info.changePowerFlag = 0xee;
     }
 
-    CL_LOG("reset=%x.\n",gLastResetReason);
-    CL_LOG("fwVer=%03d,subVer=%d.\n",FW_VERSION,FW_VERSION_SUB);
-    CL_LOG("ip=%s,port=%d.\n",NET_SERVER_IP,NET_SERVER_PORT);
+    CL_LOG("reset = %x.\n", gLastResetReason);
+    CL_LOG("fwVer = [%03d], subVer = [%d].\n", FW_VERSION, FW_VERSION_SUB);
+    CL_LOG("ip = [%s], port = [%d].\n", NET_SERVER_IP, NET_SERVER_PORT);
     PrintSysCfgInfo();
     CL_LOG("ss=%d, gs=%d.\n",sizeof(system_info), sizeof(gun_info));
 }
@@ -122,13 +122,18 @@ void SysCfgInit(void)
 void LoadSysCfgInfo(void)
 {
 	FlashReadSysInfo((void*)&system_info, sizeof(system_info));
-    if ((MAGIC_NUM_BASE | NEED_EARSE_FLASH) == system_info.magic_number) {
+    if ((MAGIC_NUM_BASE) == system_info.magic_number) 
+	{
+	//	printf("\n\n\n########################################################################################### \n");
         CL_LOG("second start.\n");
         SysCfgInit();
-    }else{
+    }
+	else
+	{
+	//	printf("\n\n\n******************************************************************************************* \n");
         CL_LOG("first start.\n");
         memset((void*)&system_info, 0, sizeof(system_info_t));
-        system_info.magic_number = MAGIC_NUM_BASE | NEED_EARSE_FLASH;
+        system_info.magic_number = MAGIC_NUM_BASE;
         system_info.noLoadFlag = 0xaa55;
 		system_info.disturbingStartTime = CLOSE_VIOCE_START_IIME;
 		system_info.disturbingStopTime = CLOSE_VIOCE_END_IIME;
@@ -177,6 +182,70 @@ void ProcTradeRecord(void)
 }
 
 
+void SystemResetFlag(void)
+{
+	if(gLastResetReason & 0x00000100)
+	{
+		CL_LOG("BOR复位标志位.\n");
+	}
+	else if(gLastResetReason & 0x00000080)
+	{
+		CL_LOG("调试复位复位标志位.\n");
+	}
+    else if(gLastResetReason & 0x00000004)
+	{
+		CL_LOG("Watch Dog复位标志位.\n");
+	}
+	else if(gLastResetReason & 0x00000040)
+	{
+		CL_LOG("软复位复位标志位.\n");
+	}
+	else if(gLastResetReason & 0x00000020)
+	{
+		CL_LOG("外部RST复位标志位.\n");
+	}
+	else if(gLastResetReason & 0x00000008)
+	{
+		CL_LOG("唤醒复位复位标志位.\n");
+	}
+	else if(gLastResetReason & 0x00000002)
+	{
+		CL_LOG("LBOR 复位标志位.\n");
+	}
+	else if(gLastResetReason & 0x00000001)
+	{
+		CL_LOG("POR复位标志位.\n");
+	}
+}
+
+void BspInit(void)
+{
+	SystemClockInit();
+	SysTick_Init();
+	UsartInit();
+	
+	SimuartInit();
+    OS_DELAY_MS(500);
+	printf("\n\n\n########################################################################################### \n");
+    SystemResetFlag();
+	Lcd_Init();
+	LcdEnterInitStu();
+    InitTmp();
+    RtcInit();
+	I2C_Init();
+	LoadSysCfgInfo();
+    ChargerInfoProc();
+    GunInit();
+	Sc8042b_Init();
+	OutNetInit();
+	HistoryOrder_Init();	//订单初始化
+	
+	CL_LOG("BspInit OK.\n");
+	printf("\n########################################################################################### \n");
+        
+	return;
+}
+
 void MainTask(void)
 {
     uint32_t old;
@@ -184,21 +253,8 @@ void MainTask(void)
     int ret = 0;
     uint8_t  flag = 0;
 
-    SimuartInit();
-    OS_DELAY_MS(500);
-    printf("\n");
-	Lcd_Init();
-	LcdEnterInitStu();
-    InitTmp();
-    RtcInit();
-	I2C_Init();
-    LoadSysCfgInfo();
-    ChargerInfoProc();
-    GunInit();
-	Sc8042b_Init();
-	OutNetInit();
-	HistoryOrder_Init();	//订单初始化
-
+   	BspInit();
+    
 	memset(&gChgInfo, 0, sizeof(gChgInfo));
 
     ret  = xTaskCreate((TaskFunction_t)ServerTask,"ServerTask",512,NULL,1,&ServerTaskHandle_t);
@@ -213,7 +269,8 @@ void MainTask(void)
     ShowCostTemplate();
     RestoreGunStatus();
     secondOk = 0;
-	while(1) {
+	while(1) 
+    {
         OS_DELAY_MS(300);
         if (GetRtcCount() != old) {
             old = GetRtcCount();
@@ -301,8 +358,10 @@ void MainTask(void)
                         if (0 == gChgInfo.sendPktFlag) {
                             HeartBeatHandle();
                         }
-                        if (system_info.printSwitch) {
-                            if ((4*24*60*60) < (GetRtcCount() - system_info.logOpenTime)) {
+                        if (system_info.printSwitch) 
+						{
+                            if ((4*24*60*60) < (GetRtcCount() - system_info.logOpenTime)) 
+							{
                                 CL_LOG("log close.\n");
                                 SetPrintSwitch(0);
                             }
@@ -322,7 +381,9 @@ void MainTask(void)
                     }
                 }
                 secondOk++;
-            }else{
+            }
+			else
+			{
                 secondOk = 0;
             }
 
@@ -378,16 +439,16 @@ void MainTask(void)
 int main(void)
 {
     gLastResetReason = HT_PMU->RSTSTA;
-    HT_PMU->RSTSTA = 0;
 	delay(0x1FFF);
     Feed_WDT();
-	SystemClockInit();
-	SysTick_Init();
-    UsartInit();
+	//SystemClockInit();
+	//SysTick_Init();
+	//UsartInit();
     //由于系统资源限制，目前不能启动大于5个线程
     xTaskCreate((TaskFunction_t)MainTask,"MainTask",512,NULL,1,&MainTaskHandle_t);
     vTaskStartScheduler();
-	while(1) {
+	while(1) 
+	{
 		Feed_WDT();
 		vTaskDelay(1000);
 	}

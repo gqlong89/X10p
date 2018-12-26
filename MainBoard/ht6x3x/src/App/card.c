@@ -1266,13 +1266,16 @@ void CkbTask(void)
 	memset(&gBlueInfo, 0, sizeof(gBlueInfo));
     gBlueInfo.btState = 1;
 
-	while(1) {
+	while(1) 
+    {
         vTaskDelay(20);
-		if (old != GetRtcCount()) {
+		if (old != GetRtcCount()) 
+        {
             old = GetRtcCount();
             Feed_WDT();
             second++;
-            if (0 == (second & 0x1f)) {
+            if (0 == (second & 0x1f)) 
+            {
                 CheckBlueInfo(1);
                 CheckBlueUpgrade();
             }

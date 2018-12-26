@@ -59,11 +59,15 @@ void HistoryOrder_Init(void)
 
     E2promReadDataEx((uint8_t*)&orderHeadFlag, RecordHeadFlashAddr, sizeof(orderHeadFlag));
     sum = GetPktSum((uint8_t*)&orderHeadFlag, sizeof(orderHeadFlag)-2);
-	if (orderHeadFlag.checkSum != sum) {
+	if (orderHeadFlag.checkSum != sum) 
+	{
 		Clear_RecordOrder();
 		CL_LOG("orderHeadFlag init.\n");
-	}else{
-        if (CL_OK != CheckOrderInfo()) {
+	}
+	else
+	{
+        if (CL_OK != CheckOrderInfo()) 
+		{
             CL_LOG("call CheckOrderInfo fail.\n");
             Clear_RecordOrder();
         }

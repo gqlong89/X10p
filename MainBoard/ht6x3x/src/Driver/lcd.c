@@ -74,7 +74,8 @@ void HT_LCD_Init(LCD_InitTypeDef* LCD_InitStruct)
 //******************************************************************
 void LcdTurnOnLed(void)
 {
-    if (0 == gChgInfo.lcdPowerStatus) {
+    if (0 == gChgInfo.lcdPowerStatus) 
+	{
     	GPIO_SetBits(HT_GPIOG, GPIO_Pin_7);
         gChgInfo.lcdPowerStatus = 1;
         gChgInfo.turnOnLcdTime = GetRtcCount();
@@ -133,9 +134,10 @@ void LcdAllOn(void)
 
 void LcdAllOff(void)
 {
-	uint8_t i=0;
+	uint8_t i = 0;
 
-	for(i=0; i<=MaxSegNum; i++){
+	for(i = 0; i <= MaxSegNum; i++)
+	{
 		HT_LCD->LCDBUF[i] = 0x00;
 	}
 }
@@ -144,9 +146,12 @@ void LcdDisplay(uint8_t seg, uint8_t segVal, LCD_Display_TypeDef displayFlg)
 {
 	uint8_t lcdBuf = 0;
 	lcdBuf = HT_LCD_Read(seg);
-	if (LCD_DISPLAY == displayFlg) {
+	if (LCD_DISPLAY == displayFlg) 
+	{
 		lcdBuf |= segVal;
-	} else {
+	} 
+	else 
+	{
 		lcdBuf &= ~segVal;
 	}
 	HT_LCD->LCDBUF[seg] = lcdBuf;
@@ -748,11 +753,11 @@ void Lcd_Init(void)
 //	LCD_Init.LCD_ChargeMode=LCDCharge_HighCurrent;
 //	LCD_Init.LCD_CLK=LCDCLK_Div2;
 //	LCD_Init.LCD_Vrsel=VRsel_OneThree_P44;
-	LCD_Init.LCD_Com=LCD_4COM;
-	LCD_Init.LCD_Bias=LCDBias_OneFourth;
-	LCD_Init.LCD_ChargeMode=LCDCharge_HighCurrent;
-	LCD_Init.LCD_CLK=LCDCLK_Div2;
-	LCD_Init.LCD_Vrsel=VRsel_OneFourth_P99;
+	LCD_Init.LCD_Com = LCD_4COM;
+	LCD_Init.LCD_Bias = LCDBias_OneFourth;
+	LCD_Init.LCD_ChargeMode = LCDCharge_HighCurrent;
+	LCD_Init.LCD_CLK = LCDCLK_Div2;
+	LCD_Init.LCD_Vrsel = VRsel_OneFourth_P99;
 
 	HT_LCD_Init(&LCD_Init);
 
