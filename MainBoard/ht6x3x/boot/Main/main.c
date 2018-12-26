@@ -80,7 +80,8 @@ int main(void)
 	
 	HT_Flash_ByteRead((uint8_t *)&updateInfo, SysUpInfoAddr, sizeof(updateInfo));
 	
-	if(0xaa55 == updateInfo.updateFlag){//APP升级请求
+	if(0xaa55 == updateInfo.updateFlag)
+    {//APP升级请求
 		UpdateFromAppBkp(updateInfo.fsize, updateInfo.checkSum);
 	}
 	

@@ -511,7 +511,6 @@ void EXTI9_IRQHandler(void)
 
 	pFunction = (void (*)(void))address;
 	pFunction();//Jump t
-
 }
 
 
