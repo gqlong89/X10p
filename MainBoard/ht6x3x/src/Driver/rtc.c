@@ -22,7 +22,6 @@ static const uint16_t TAB_DFx[10] =
 
 __IO uint32_t gSysSecond = 0;
 
-char gTimeStr[16];
 
 /****************************************************************/
 
@@ -137,12 +136,13 @@ uint32_t GetTimeStamp(void)
 }
 
 
+char gTimeStr[16];
 char* GetCurrentTime(void)
 {
     uint8_t day[8];
 
     GetRtcTime(day);
-    sprintf(gTimeStr,"%02u-%02u %02u:%02u:%02u", day[2], day[3], day[4], day[5], day[6]);
+    sprintf(gTimeStr,"%02u%02u%02u %02u:%02u:%02u", day[1], day[2], day[3], day[4], day[5], day[6]);
     return gTimeStr;
 }
 

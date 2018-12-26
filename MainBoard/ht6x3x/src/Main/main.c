@@ -36,6 +36,7 @@
 #include "gun.h"
 #include "server.h"
 #include "upgrade.h"
+#include "ht6xxx.h"
 
 
 TaskHandle_t MainTaskHandle_t;
@@ -75,6 +76,7 @@ void SystemClockInit(void)
 	EnWr_WPREG();
 	HT_CMU->CLKCTRL0 &= ~0x0380;//¹Ø±ÕHRC_DET,PLL_DET,LF_DET
 	DisWr_WPREG();
+    Feed_WDT();
 	SwitchTo_Fpll();
 	Close_Hrc();
 }

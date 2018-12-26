@@ -255,12 +255,16 @@ typedef struct{
 
 
 char* GetCurrentTime(void);
+#if 0
 #if (0 == SPECIAL_NET_CARD)
 #define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10 %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
 #elif (1 == SPECIAL_NET_CARD)
 #define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10m %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
 #elif (2 == SPECIAL_NET_CARD)
 #define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10c %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
+#endif
+#else
+#define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
 #endif
 
 void ServerTask(void);

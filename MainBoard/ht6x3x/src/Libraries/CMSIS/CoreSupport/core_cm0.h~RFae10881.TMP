@@ -136,10 +136,8 @@ extern "C" {
 
 /** \brief  Union type to access the Application Program Status Register (APSR).
  */
-typedef union
-{
-  struct
-  {
+typedef union {
+    struct {
 #if (__CORTEX_M != 0x04)
         uint32_t _reserved0: 27;             /*!< bit:  0..26  Reserved                           */
 #else
@@ -159,24 +157,20 @@ typedef union
 
 /** \brief  Union type to access the Interrupt Program Status Register (IPSR).
  */
-typedef union
-{
-  struct
-  {
-    uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number                   */
-    uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved                           */
-  } b;                                   /*!< Structure used for bit  access                  */
-  uint32_t w;                            /*!< Type      used for word access                  */
+typedef union {
+    struct {
+        uint32_t ISR: 9;                     /*!< bit:  0.. 8  Exception number                   */
+        uint32_t _reserved0: 23;             /*!< bit:  9..31  Reserved                           */
+    } b;                                   /*!< Structure used for bit  access                  */
+    uint32_t w;                            /*!< Type      used for word access                  */
 } IPSR_Type;
 
 
 /** \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
  */
-typedef union
-{
-  struct
-  {
-    uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number                   */
+typedef union {
+    struct {
+        uint32_t ISR: 9;                     /*!< bit:  0.. 8  Exception number                   */
 #if (__CORTEX_M != 0x04)
         uint32_t _reserved0: 15;             /*!< bit:  9..23  Reserved                           */
 #else
@@ -198,16 +192,14 @@ typedef union
 
 /** \brief  Union type to access the Control Registers (CONTROL).
  */
-typedef union
-{
-  struct
-  {
-    uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
-    uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used                   */
-    uint32_t FPCA:1;                     /*!< bit:      2  FP extension active flag           */
-    uint32_t _reserved0:29;              /*!< bit:  3..31  Reserved                           */
-  } b;                                   /*!< Structure used for bit  access                  */
-  uint32_t w;                            /*!< Type      used for word access                  */
+typedef union {
+    struct {
+        uint32_t nPRIV: 1;                   /*!< bit:      0  Execution privilege in Thread mode */
+        uint32_t SPSEL: 1;                   /*!< bit:      1  Stack to be used                   */
+        uint32_t FPCA: 1;                    /*!< bit:      2  FP extension active flag           */
+        uint32_t _reserved0: 29;             /*!< bit:  3..31  Reserved                           */
+    } b;                                   /*!< Structure used for bit  access                  */
+    uint32_t w;                            /*!< Type      used for word access                  */
 } CONTROL_Type;
 
 /*@} end of group CMSIS_CORE */
@@ -221,18 +213,17 @@ typedef union
 
 /** \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
  */
-typedef struct
-{
-  __IO uint32_t ISER[1];                 /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register           */
-       uint32_t RESERVED0[31];
-  __IO uint32_t ICER[1];                 /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register          */
-       uint32_t RSERVED1[31];
-  __IO uint32_t ISPR[1];                 /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register           */
-       uint32_t RESERVED2[31];
-  __IO uint32_t ICPR[1];                 /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register         */
-       uint32_t RESERVED3[31];
-       uint32_t RESERVED4[64];
-  __IO uint32_t IPR[8];                  /*!< Offset: 0x3EC (R/W)  Interrupt Priority Register              */
+typedef struct {
+    __IO uint32_t ISER[1];                 /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register           */
+    uint32_t RESERVED0[31];
+    __IO uint32_t ICER[1];                 /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register          */
+    uint32_t RSERVED1[31];
+    __IO uint32_t ISPR[1];                 /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register           */
+    uint32_t RESERVED2[31];
+    __IO uint32_t ICPR[1];                 /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register         */
+    uint32_t RESERVED3[31];
+    uint32_t RESERVED4[64];
+    __IO uint32_t IPR[8];                  /*!< Offset: 0x3EC (R/W)  Interrupt Priority Register              */
 }  NVIC_Type;
 
 /*@} end of group CMSIS_NVIC */
@@ -246,20 +237,19 @@ typedef struct
 
 /** \brief  Structure type to access the System Control Block (SCB).
  */
-typedef struct
-{
-  __I  uint32_t CPUID;                   /*!< Offset: 0x000 (R/ )  CPU ID Base Register                                  */
-  __IO uint32_t ICSR;                    /*!< Offset: 0x004 (R/W)  Interrupt Control State Register                      */
-       uint32_t RESERVED0;                                      
-  __IO uint32_t AIRCR;                   /*!< Offset: 0x00C (R/W)  Application Interrupt / Reset Control Register        */
-  __IO uint32_t SCR;                     /*!< Offset: 0x010 (R/W)  System Control Register                               */
-  __IO uint32_t CCR;                     /*!< Offset: 0x014 (R/W)  Configuration Control Register                        */
-       uint32_t RESERVED1;                                      
-  __IO uint32_t SHP[2];                  /*!< Offset: 0x01C (R/W)  System Handlers Priority Registers. [0] is RESERVED   */
-  __IO uint32_t SHCSR;                   /*!< Offset: 0x024 (R/W)  System Handler Control and State Register             */
-       uint32_t RESERVED2[2];                                   
-  __IO uint32_t DFSR;                    /*!< Offset: 0x030 (R/W)  Debug Fault Status Register                           */
-} SCB_Type;                                                
+typedef struct {
+    __I  uint32_t CPUID;                   /*!< Offset: 0x000 (R/ )  CPU ID Base Register                                  */
+    __IO uint32_t ICSR;                    /*!< Offset: 0x004 (R/W)  Interrupt Control State Register                      */
+    uint32_t RESERVED0;
+    __IO uint32_t AIRCR;                   /*!< Offset: 0x00C (R/W)  Application Interrupt / Reset Control Register        */
+    __IO uint32_t SCR;                     /*!< Offset: 0x010 (R/W)  System Control Register                               */
+    __IO uint32_t CCR;                     /*!< Offset: 0x014 (R/W)  Configuration Control Register                        */
+    uint32_t RESERVED1;
+    __IO uint32_t SHP[2];                  /*!< Offset: 0x01C (R/W)  System Handlers Priority Registers. [0] is RESERVED   */
+    __IO uint32_t SHCSR;                   /*!< Offset: 0x024 (R/W)  System Handler Control and State Register             */
+    uint32_t RESERVED2[2];
+    __IO uint32_t DFSR;                    /*!< Offset: 0x030 (R/W)  Debug Fault Status Register                           */
+} SCB_Type;
 
 /* SCB CPUID Register Definitions */
 #define SCB_CPUID_IMPLEMENTER_Pos          24                                             /*!< SCB CPUID: IMPLEMENTER Position */
@@ -369,12 +359,11 @@ typedef struct
 
 /** \brief  Structure type to access the System Timer (SysTick).
  */
-typedef struct
-{
-  __IO uint32_t CTRL;                    /*!< Offset: 0x000 (R/W)  SysTick Control and Status Register */
-  __IO uint32_t LOAD;                    /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register       */
-  __IO uint32_t VAL;                     /*!< Offset: 0x008 (R/W)  SysTick Current Value Register      */
-  __I  uint32_t CALIB;                   /*!< Offset: 0x00C (R/ )  SysTick Calibration Register        */
+typedef struct {
+    __IO uint32_t CTRL;                    /*!< Offset: 0x000 (R/W)  SysTick Control and Status Register */
+    __IO uint32_t LOAD;                    /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register       */
+    __IO uint32_t VAL;                     /*!< Offset: 0x008 (R/W)  SysTick Current Value Register      */
+    __I  uint32_t CALIB;                   /*!< Offset: 0x00C (R/ )  SysTick Calibration Register        */
 } SysTick_Type;
 
 /* SysTick Control / Status Register Definitions */
@@ -419,12 +408,11 @@ typedef struct
 
 /** \brief  Structure type to access the Core Debug Register (CoreDebug).
  */
-typedef struct
-{
-  __IO uint32_t DHCSR;                   /*!< Offset: 0x000 (R/W)  Debug Halting Control and Status Register    */
-  __O  uint32_t DCRSR;                   /*!< Offset: 0x004 ( /W)  Debug Core Register Selector Register        */
-  __IO uint32_t DCRDR;                   /*!< Offset: 0x008 (R/W)  Debug Core Register Data Register            */
-  __IO uint32_t DEMCR;                   /*!< Offset: 0x00C (R/W)  Debug Exception and Monitor Control Register */
+typedef struct {
+    __IO uint32_t DHCSR;                   /*!< Offset: 0x000 (R/W)  Debug Halting Control and Status Register    */
+    __O  uint32_t DCRSR;                   /*!< Offset: 0x004 ( /W)  Debug Core Register Selector Register        */
+    __IO uint32_t DCRDR;                   /*!< Offset: 0x008 (R/W)  Debug Core Register Data Register            */
+    __IO uint32_t DEMCR;                   /*!< Offset: 0x00C (R/W)  Debug Exception and Monitor Control Register */
 } CoreDebug_Type;
 
 /* Debug Halting Control and Status Register */
