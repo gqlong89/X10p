@@ -8,26 +8,26 @@
 
 #include "includes.h"
 
-#define EnWr_WPREG()		HT_CMU->WPREG = 0xA55A			//则关闭写保护功能，用户可以写操作被保护的寄存器
-#define DisWr_WPREG()		HT_CMU->WPREG = 0x0000			//则开启写保护功能，用户禁止写操作被保护的寄存器
+#define EnWr_WPREG()					HT_CMU->WPREG = 0xA55A					//则关闭写保护功能，用户可以写操作被保护的寄存器
+#define DisWr_WPREG()					HT_CMU->WPREG = 0x0000					//则开启写保护功能，用户禁止写操作被保护的寄存器
 
-#define Debug_En_WDT()		HT_CMU->CLKCTRL1|=0x4000		//调试模式下使能看门狗功能
-#define Debug_Dis_WDT()		HT_CMU->CLKCTRL1&=~0x4000		//调试模式下关闭看门狗功能
-
-
-#define	Feed_WDT64mS()		HT_WDT->WDTCLR = 0xAA00		    //FeedWDT per 64ms
-#define	Feed_WDT()			HT_WDT->WDTCLR = 0xAA7F		    //FeedWDT per 8s: 64ms*(1+SET[0..7])
-//#define	Feed_WDT()			HT_WDT->WDTCLR = 0xAA3F		//FeedWDT per 4s: 64ms*(1+SET[0..7])
-#define	Feed_WDT16S()		HT_WDT->WDTCLR = 0xAAFF		    //FeedWDT per 16s
-#define WDT_RESET_SYS()     HT_WDT->WDTCLR = 0x00           //立即复位
+#define Debug_En_WDT()					HT_CMU->CLKCTRL1|=0x4000				//调试模式下使能看门狗功能
+#define Debug_Dis_WDT()					HT_CMU->CLKCTRL1&=~0x4000				//调试模式下关闭看门狗功能
 
 
-#define AppFlashAddr	    (uint32_t)0x2000		//App运行入口地址(110k)
-#define AppUpBkpAddr	    (uint32_t)0x1D800		//app缓存数据存储基地址(110k)
-#define TradeRecordAddr		(uint32_t)0x39000		//订单未上报记录存储基地址	16k
-#define SysUpInfoAddr	    (uint32_t)0x3D000		//升级请求消息(1K)
-#define CHARGER_INFO_FLASH_ADDR 0x3D400             //充电桩重要信息保存地址 1k
-//#define RecordHeadFlashAddr	    (uint32_t)0x3D400	//订单头信息(1K)
+#define	Feed_WDT64mS()					HT_WDT->WDTCLR = 0xAA00		    		//FeedWDT per 64ms
+#define	Feed_WDT()						HT_WDT->WDTCLR = 0xAA7F		    		//FeedWDT per 8s: 64ms*(1+SET[0..7])
+//#define	Feed_WDT()					HT_WDT->WDTCLR = 0xAA3F					//FeedWDT per 4s: 64ms*(1+SET[0..7])
+#define	Feed_WDT16S()					HT_WDT->WDTCLR = 0xAAFF		    		//FeedWDT per 16s
+#define WDT_RESET_SYS()     			HT_WDT->WDTCLR = 0x00           		//立即复位
+
+
+#define AppFlashAddr	    			(uint32_t)0x2000						//App运行入口地址(220k)
+#define AppUpBkpAddr	    			(uint32_t)0x37000 + AppFlashAddr		//app缓存数据存储基地址(220k)
+#define TradeRecordAddr					(uint32_t)0x37000 + AppUpBkpAddr		//订单未上报记录存储基地址	16k
+#define SysUpInfoAddr	    			(uint32_t)0x4000 + TradeRecordAddr		//升级请求消息(1K)
+#define CHARGER_INFO_FLASH_ADDR 		(uint32_t)0x400 + SysUpInfoAddr         //充电桩重要信息保存地址 1k
+//#define RecordHeadFlashAddr	    	(uint32_t)0x3D400	//订单头信息(1K)
 
 
 #define FLASH_PAGE_SIZE					1024

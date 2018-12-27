@@ -28,12 +28,14 @@ int UpdateFromAppBkp(uint32_t fsize, uint16_t checksum)
 	FlashClrSysUpInfo();
 	
 	//计算备份App程序checksum
-	for(i=0; i<fsize; i++){
+	for(i=0; i<fsize; i++)
+    {
 		HT_Flash_ByteRead(&rbyte, AppUpBkpAddr+i, 1);
 		ck += rbyte;
 	}
 	//校验与升级信息校验不相等返回失败
-	if(ck != checksum){
+	if(ck != checksum)
+    {
 		return -1;
 	}
 	
@@ -49,29 +51,33 @@ int UpdateFromAppBkp(uint32_t fsize, uint16_t checksum)
 		p = buffer;
 		
 		//写入一页的数据
-		for(i=0; i<FLASH_PAGE_SIZE; i++){
+		for(i = 0; i < FLASH_PAGE_SIZE; i++)
+        {
 			//每次写入4个byte的数据
 			HT_Flash_ByteWrite(p, AppFlashAddr + page * FLASH_PAGE_SIZE + i, 1);
-			p+=1;
+			p += 1;
 		}
 	}
 	
 	ck = 0;
 	
 	//写入数据完毕,计算App更新程序后的校验
-	for(i=0;i<fsize;i++){
+	for(i=0;i<fsize;i++)
+    {
         ck= *(unsigned char*)(AppFlashAddr+i) + ck;
     }
 	
 	//如果校验不等于升级程序的校验,返回失败
-    if(ck == checksum){
+    if(ck == checksum)
+    {
 		//printf("checksum ok, update success!\r\n");
 		return 0;
-	}else{
+	}
+    else
+    {
 		//printf("checksum fail, update failed!\r\n");
 		return -1;
-	}  
-
+	}
 }
 
 int FlashClrSysUpInfo(void)
