@@ -73,9 +73,11 @@ void TIMER_4_IRQHandler(void);
 void TIMER_5_IRQHandler(void);
 void UART6_IRQHandler(void);
 void EXTI7_IRQHandler(void);
-void EXTI8_IRQHandler(void);
-void EXTI9_IRQHandler(void);
+void Reserved_IRQHandler(void);
+void SPI2_IRQHandler(void);
 void DMA_IRQHandler(void);
+
+
 
 #ifdef __cplusplus
 }

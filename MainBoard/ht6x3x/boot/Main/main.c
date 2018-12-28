@@ -53,7 +53,7 @@ extern SYS_UPDATE_INFO_t updateInfo;
 //******************************************************************
 void SystemClockInit(void)
 {	
-	HT_PMU->RSTSTA = 0x0000;	
+//	HT_PMU->RSTSTA = 0x0000;	
 	Feed_WDT();
 	EnWr_WPREG();
 	HT_CMU->CLKCTRL0 &= ~0x0380;//¹Ø±ÕHRC_DET,PLL_DET,LF_DET
@@ -94,7 +94,10 @@ int main(void)
 	__set_MSP(*(uint32_t*) AppFlashAddr);
 	pFunction();//Jump t
 	
-	while(1);
+	while(1)
+    {
+        Feed_WDT();
+    }
 	
 	
 //	memcpy((void*)0x20000000, (void*)AppFlashAddr, 0x200);

@@ -330,7 +330,7 @@
             <vShortWch>1</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>HT6x2x</Define>
+              <Define>HT6x3x</Define>
               <Undefine></Undefine>
               <IncludePath>..\Main;..\Libraries\CMSIS\CoreSupport;..\Libraries\CMSIS\DeviceSupport;..\Libraries\Startup;..\Driver</IncludePath>
             </VariousControls>
@@ -381,11 +381,6 @@
               <FilePath>..\Main\CpuCfg.c</FilePath>
             </File>
             <File>
-              <FileName>ht60xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Main\ht60xx_it.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Main\main.c</FilePath>
@@ -394,6 +389,11 @@
               <FileName>update.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Main\update.c</FilePath>
+            </File>
+            <File>
+              <FileName>ht60xx_it .c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Main\ht60xx_it .c</FilePath>
             </File>
           </Files>
         </Group>

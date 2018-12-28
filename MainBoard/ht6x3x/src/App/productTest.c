@@ -119,13 +119,16 @@ void TestDataHandle(OUT_PKT_STR *pFrame, uint8_t len)
 
 		case TEST_CMD_RELAY:
 			gunId = pFrame->data[1];
-			if (pFrame->data[0] == 0x00) {//继电器打开,上报功率
+			if (pFrame->data[0] == 0x00) 
+            {//继电器打开,上报功率
 				//TurnOnAllGun();
 				GunTurnOn(gunId+1);
 				GunTurnOn(gunId+2);
 				GunTurnOn(gunId+3);
 				ackData[0] = 0x00;
-			} else {//继电器关闭, 上报功率
+			} 
+            else 
+            {//继电器关闭, 上报功率
 				//TurnOffAllGun();
 				GunTurnOff(gunId+1);
 				GunTurnOff(gunId+2);

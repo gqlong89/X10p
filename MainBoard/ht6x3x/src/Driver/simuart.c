@@ -79,21 +79,38 @@ int OpenTimer(uint8_t timer, uint16_t us)
 
 void TIM_Cmd(int timer, int en)
 {
-	if(timer == 0) {
+	if(timer == 0) 
+    {
 		if(en)
-			setbit(HT_TMR0->TMRCON,0);
+        {
+            setbit(HT_TMR0->TMRCON,0);
+        }
 		else
-			clrbit(HT_TMR0->TMRCON,0);
-	}else if(timer == 1){
+        {
+            clrbit(HT_TMR0->TMRCON,0);
+        }
+	}
+    else if(timer == 1)
+    {
 		if(en)
-			setbit(HT_TMR1->TMRCON,0);
+        {
+            setbit(HT_TMR1->TMRCON,0);
+        }
 		else
-			clrbit(HT_TMR1->TMRCON,0);
-	}else if(timer == 3){
+        {
+            clrbit(HT_TMR1->TMRCON,0);
+        }
+	}
+    else if(timer == 3)
+    {
 		if(en)
-			setbit(HT_TMR3->TMRCON,0);
+        {
+            setbit(HT_TMR3->TMRCON,0);
+        }
 		else
-			clrbit(HT_TMR3->TMRCON,0);
+        {
+            clrbit(HT_TMR3->TMRCON,0);
+        }
 	}
 }
 
@@ -141,33 +158,49 @@ void SimuUartRecvByte(uint8_t uartIndex, uint8_t buffIndex)
 {
     SIM_UART_STR *pSimUart = &gSimUartCtrl[uartIndex];
 
-    if (4 <= ++pSimUart->recvCnt) {
+    if (4 <= ++pSimUart->recvCnt) 
+	{
         pSimUart->recvCnt = 0;
         pSimUart->recvStat++;
     }
 
-	if (pSimUart->recvStat == COM_STOP_BIT) {
+	if (pSimUart->recvStat == COM_STOP_BIT) 
+	{
 		TIM_Cmd(pSimUart->timerIndex, DISABLE);
 		FIFO_S_Put(&gUartPortAddr[buffIndex].rxBuffCtrl, pSimUart->recvData);
         pSimUart->statis.recvOk++;
-	}else if (pSimUart->recvStat == COM_CHECKSUM_BIT) { //如果当前是校验位 则检查数据正确性
-		if (uartIndex == 0) {
-			if (GET_USART_RX() != check_sum(pSimUart->recvData)) {//校验位正确 进入下一步接收停止位
+	}
+	else if (pSimUart->recvStat == COM_CHECKSUM_BIT) 
+	{ //如果当前是校验位 则检查数据正确性
+		if (uartIndex == 0) 
+		{
+			if (GET_USART_RX() != check_sum(pSimUart->recvData)) 
+			{//校验位正确 进入下一步接收停止位
 				pSimUart->statis.byteCheckErr++;
 			}
-		} else if (uartIndex == 2) {
-			if (GET_RX9() != check_sum(pSimUart->recvData)) {//校验位正确 进入下一步接收停止位
+		} 
+		else if (uartIndex == 2) 
+		{
+			if (GET_RX9() != check_sum(pSimUart->recvData)) 
+			{//校验位正确 进入下一步接收停止位
 				pSimUart->statis.byteCheckErr++;
 			}
 		}
 
-	}else if (pSimUart->recvStat) {
-		if (uartIndex == 0) {
-			if (GET_USART_RX()) {
+	}
+	else if (pSimUart->recvStat) 
+	{
+		if (uartIndex == 0) 
+		{
+			if (GET_USART_RX()) 
+			{
 				pSimUart->recvData |= (1 << (pSimUart->recvStat - 1));
 			}
-		} else if (uartIndex == 2) {
-			if (GET_RX9()) {
+		} 
+		else if (uartIndex == 2) 
+		{
+			if (GET_RX9()) 
+			{
 				pSimUart->recvData |= (1 << (pSimUart->recvStat - 1));
 			}
 		}
@@ -180,24 +213,33 @@ void TIMER_0_IRQHandler(void)
     SIM_UART_STR *pSimUart = &gSimUartCtrl[0];
     UART_INFO_STR *pUart = &gUartPortAddr[7];
 
-    if (2 == pSimUart->recvSend) {
-    	if (HT_TMR0->TMRIF != 1) {
+    if (2 == pSimUart->recvSend) 
+    {
+    	if (HT_TMR0->TMRIF != 1) 
+        {
     		return;
     	}
         HT_TMR0->TMRIF = 0;
 
         SimUartSendByte(pSimUart->gSendStat, pSimUart->gSendData, 0);
         pSimUart->gSendStat++;
-        if (12 == pSimUart->gSendStat) {
-            if (++pUart->sendCnt < pUart->allCnt) {
+        if (12 == pSimUart->gSendStat) 
+        {
+            if (++pUart->sendCnt < pUart->allCnt) 
+            {
                 pSimUart->gSendData = pUart->pSendData[pUart->sendCnt];
                 pSimUart->gSendStat = 0;
-            }else{
+            }
+            else
+            {
                 TIM_Cmd(0, DISABLE);
             }
         }
-    }else if (1 == pSimUart->recvSend) {
-        if (HT_TMR0->TMRIF == 1) {
+    }
+    else if (1 == pSimUart->recvSend) 
+    {
+        if (HT_TMR0->TMRIF == 1) 
+        {
             HT_TMR0->TMRIF = 0;
             SimuUartRecvByte(0, 7);
         }
@@ -210,24 +252,33 @@ void TIMER_1_IRQHandler(void)
     SIM_UART_STR *pSimUart = &gSimUartCtrl[1];
     UART_INFO_STR *pUart = &gUartPortAddr[8];
 
-    if (2 == pSimUart->recvSend) {
-    	if (HT_TMR1->TMRIF != 1) {
+    if (2 == pSimUart->recvSend) 
+    {
+    	if (HT_TMR1->TMRIF != 1) 
+        {
     		return;
     	}
         HT_TMR1->TMRIF = 0;
 
         SimUartSendByte(pSimUart->gSendStat, pSimUart->gSendData, 1);
         pSimUart->gSendStat++;
-        if (12 == pSimUart->gSendStat) {
-            if (++pUart->sendCnt < pUart->allCnt) {
+        if (12 == pSimUart->gSendStat) 
+        {
+            if (++pUart->sendCnt < pUart->allCnt) 
+            {
                 pSimUart->gSendData = pUart->pSendData[pUart->sendCnt];
                 pSimUart->gSendStat = 0;
-            }else{
+            }
+            else
+            {
                 TIM_Cmd(1, DISABLE);
             }
         }
-    }else if (1 == pSimUart->recvSend) {
-        if (HT_TMR1->TMRIF == 1) {
+    }
+    else if (1 == pSimUart->recvSend) 
+    {
+        if (HT_TMR1->TMRIF == 1) 
+        {
             HT_TMR1->TMRIF = 0;
             SimuUartRecvByte(1, 8);
         }
@@ -239,24 +290,33 @@ void TIMER_3_IRQHandler(void)
     SIM_UART_STR *pSimUart = &gSimUartCtrl[2];
     UART_INFO_STR *pUart = &gUartPortAddr[9];
 
-    if (2 == pSimUart->recvSend) {
-    	if (HT_TMR3->TMRIF != 1) {
+    if (2 == pSimUart->recvSend) 
+    {
+    	if (HT_TMR3->TMRIF != 1) 
+        {
     		return;
     	}
         HT_TMR3->TMRIF = 0;
 
         SimUartSendByte(pSimUart->gSendStat, pSimUart->gSendData, 2);
         pSimUart->gSendStat++;
-        if (12 == pSimUart->gSendStat) {
-            if (++pUart->sendCnt < pUart->allCnt) {
+        if (12 == pSimUart->gSendStat) 
+        {
+            if (++pUart->sendCnt < pUart->allCnt) 
+            {
                 pSimUart->gSendData = pUart->pSendData[pUart->sendCnt];
                 pSimUart->gSendStat = 0;
-            }else{
+            }
+            else
+            {
                 TIM_Cmd(3, DISABLE);
             }
         }
-    }else if (1 == pSimUart->recvSend) {
-        if (HT_TMR3->TMRIF == 1) {
+    }
+    else if (1 == pSimUart->recvSend) 
+    {
+        if (HT_TMR3->TMRIF == 1) 
+        {
             HT_TMR3->TMRIF = 0;
             SimuUartRecvByte(2, 9);
         }
@@ -265,7 +325,7 @@ void TIMER_3_IRQHandler(void)
 
 int SimuUartSendData(UART_INFO_STR*pUart, const uint8_t *pData, uint16_t len)
 {
-    int waitCnt = 4*len;
+    int waitCnt = len;
     int cnt = 0;
     SIM_UART_STR *pSimUart = &gSimUartCtrl[pUart->Data.simUart.deviceIndex];
 
@@ -277,10 +337,12 @@ int SimuUartSendData(UART_INFO_STR*pUart, const uint8_t *pData, uint16_t len)
     pSimUart->recvSend = 2;
     OpenTimer(pSimUart->timerIndex, pSimUart->baudRate);
 	TIM_Cmd(pSimUart->timerIndex, ENABLE);
-    while (pUart->sendCnt < pUart->allCnt) {
-        OS_DELAY_MS(1);
+    while (pUart->sendCnt < pUart->allCnt) 
+	{
+        OS_DELAY_MS(10);
         Feed_WDT();
-        if (waitCnt < ++cnt) {
+        if (waitCnt < ++cnt) 
+		{
             pSimUart->statis.sendTimeOut++;
             TIM_Cmd(pSimUart->timerIndex, DISABLE);
             return CL_FAIL;
@@ -288,15 +350,15 @@ int SimuUartSendData(UART_INFO_STR*pUart, const uint8_t *pData, uint16_t len)
     }
     return CL_OK;
 }
-
-
-void EXTI9_IRQHandler(void)
+void EXTI7_IRQHandler(void)
 {
     SIM_UART_STR *pSimUart = &gSimUartCtrl[0];
 
 	HT_INT->EXTIF2 = 0x0000;
-	if (GET_USART_RX() == 0) {
-		if (pSimUart->recvStat == COM_STOP_BIT) {
+	if (GET_USART_RX() == 0) 
+	{
+		if (pSimUart->recvStat == COM_STOP_BIT) 
+		{
             pSimUart->statis.recvIrqOk++;
             pSimUart->recvCnt = 0;
 			pSimUart->recvStat = COM_START_BIT;
@@ -313,8 +375,11 @@ void EXTI4_IRQHandler(void)
     SIM_UART_STR *pSimUart = &gSimUartCtrl[2];
 
 	HT_INT->EXTIF = 0x0000;
-	if (GET_RX9() == 0) {
-		if (pSimUart->recvStat == COM_STOP_BIT) {
+	if (GET_RX9() == 0) 
+	{
+
+		if (pSimUart->recvStat == COM_STOP_BIT) 
+		{
             pSimUart->statis.recvIrqOk++;
             pSimUart->recvCnt = 0;
 			pSimUart->recvStat = COM_START_BIT;

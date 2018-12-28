@@ -82,16 +82,16 @@ typedef struct{
 
 
 
-int CheckGunStatu(uint8_t gunId);
-int GetChargingGunCnt(void);
-int GunTurnOff(uint8_t gunId);
-int GunTurnOn(uint8_t gunId);
-int TurnOffAllGun(void);
-int TurnOnAllGun(void);
+extern int CheckGunStatu(uint8_t gunId);
+extern int GetChargingGunCnt(void);
+extern int GunTurnOff(uint8_t gunId);
+extern int GunTurnOn(uint8_t gunId);
+extern int TurnOffAllGun(void);
+extern int TurnOnAllGun(void);
 
-int GunGpioInit(void);
-int GunInit(void);
-void RestoreGunStatus(void);
+extern int GunGpioInit(void);
+extern int GunInit(void);
+extern void RestoreGunStatus(void);
 
 
 extern gun_info_t gun_info[GUN_NUM_MAX];

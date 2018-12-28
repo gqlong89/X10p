@@ -45,8 +45,8 @@ GUN_STATUS_STR gun[13];//多申请一个空间 下面全是1~12有效  0无效
 uint8_t readerror[7];
 EMU_STATIC_STR gEmuStatic[6];
 uint8_t  gEmuResetFlag = 0;  //比特1开始表示枪头1，如果为1，表示需要重新配置参数
-                                 //0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-const uint8_t gBuffToEmuIndex[] = {0, 0, 0, 1, 2, 3, 4, 6, 0, 5};
+                                 //0,1,2,3,4,5,6,7,8,9
+const uint8_t gBuffToEmuIndex[] = {0,0,0,1,2,3,4,6,0,5};
 //                        3     4     5     6     9     7
 const char EMUID[7] = {99,EMU_1,EMU_2,EMU_3,EMU_4,EMU_5,EMU_6};//从1开始
 
@@ -249,9 +249,11 @@ void matprod(const float AA[144], const float sample[12], float invout[12])
     int i0;
     int i1;
 
-    for (i0 = 0; i0 < 12; i0++) {
+    for (i0 = 0; i0 < 12; i0++) 
+	{
         invout[i0] = 0.0F;
-        for (i1 = 0; i1 < 12; i1++) {
+        for (i1 = 0; i1 < 12; i1++) 
+		{
             invout[i0] += AA[i0 + 12 * i1] * sample[i1];
         }
     }
@@ -275,66 +277,77 @@ void invNxN(const float x[144], float y[144])
     int kAcol;
     int i;
 
-  for (i1 = 0; i1 < 144; i1++) {
-    y[i1] = 0.0F;
-    b_x[i1] = x[i1];
-  }
+	for (i1 = 0; i1 < 144; i1++) 
+	{
+		y[i1] = 0.0F;
+		b_x[i1] = x[i1];
+	}
 
-  for (i1 = 0; i1 < 12; i1++) {
-    ipiv[i1] = (signed char)(1 + i1);
-  }
+	for (i1 = 0; i1 < 12; i1++) 
+	{
+		ipiv[i1] = (signed char)(1 + i1);
+	}
 
-  for (j = 0; j < 11; j++) {
-    c = j * 13;
-    jBcol = 0;
-    ix = c;
-    smax = (float)fabs(b_x[c]);
-    for (k = 2; k <= 12 - j; k++) {
-      ix++;
-      s = (float)fabs(b_x[ix]);
-      if (s > smax) {
-        jBcol = k - 1;
-        smax = s;
-      }
-    }
+	for (j = 0; j < 11; j++) 
+  	{
+		c = j * 13;
+		jBcol = 0;
+		ix = c;
+		smax = (float)fabs(b_x[c]);
+		for (k = 2; k <= 12 - j; k++) {
+      	ix++;
+      	s = (float)fabs(b_x[ix]);
+      	if (s > smax) 
+		{
+        	jBcol = k - 1;
+        	smax = s;
+      	}
+	}
 
-    if (b_x[c + jBcol] != 0.0F) {
-      if (jBcol != 0) {
-        ipiv[j] = (signed char)((j + jBcol) + 1);
-        ix = j;
-        jBcol += j;
-        for (k = 0; k < 12; k++) {
-          smax = b_x[ix];
-          b_x[ix] = b_x[jBcol];
-          b_x[jBcol] = smax;
-          ix += 12;
-          jBcol += 12;
-        }
-      }
+	if (b_x[c + jBcol] != 0.0F) 
+	{
+		if (jBcol != 0) 
+		{
+        	ipiv[j] = (signed char)((j + jBcol) + 1);
+        	ix = j;
+        	jBcol += j;
+        	for (k = 0; k < 12; k++) 
+			{
+	          	smax = b_x[ix];
+	         	b_x[ix] = b_x[jBcol];
+	          	b_x[jBcol] = smax;
+	          	ix += 12;
+	          	jBcol += 12;
+        	}
+      	}
 
-      i1 = (c - j) + 12;
-      for (i = c + 1; i + 1 <= i1; i++) {
-        b_x[i] /= b_x[c];
-      }
-    }
+      	i1 = (c - j) + 12;
+      	for (i = c + 1; i + 1 <= i1; i++) 
+		{
+        	b_x[i] /= b_x[c];
+      	}
+	}
 
     jBcol = c;
     kAcol = c + 12;
-    for (i = 1; i <= 11 - j; i++) {
-      smax = b_x[kAcol];
-      if (b_x[kAcol] != 0.0F) {
-        ix = c + 1;
-        i1 = (jBcol - j) + 24;
-        for (k = 13 + jBcol; k + 1 <= i1; k++) {
-          b_x[k] += b_x[ix] * -smax;
-          ix++;
-        }
-      }
+    for (i = 1; i <= 11 - j; i++) 
+	{
+		smax = b_x[kAcol];
+		if (b_x[kAcol] != 0.0F) 
+		{
+        	ix = c + 1;
+        	i1 = (jBcol - j) + 24;
+        	for (k = 13 + jBcol; k + 1 <= i1; k++) 
+			{
+          		b_x[k] += b_x[ix] * -smax;
+          		ix++;
+        	}
+      	}
 
-      kAcol += 12;
-      jBcol += 12;
-    }
-  }
+      	kAcol += 12;
+      	jBcol += 12;
+    	}
+	}
 
   for (i1 = 0; i1 < 12; i1++) {
     p[i1] = (signed char)(1 + i1);
@@ -404,11 +417,7 @@ void filterValue(float out[])
 
 int SendData_HT7017(int no, uint8_t *Data, uint16_t len)
 {
-    int ret = CL_FAIL;
-    
-    ret = UsartSend(no, Data, len);
-    
-    return ret;
+    return UsartSend(no, Data, len);
 }
 
 
@@ -428,33 +437,26 @@ int HT7017_Write(int no, uint8_t RegAdd, uint16_t Data)
 	Buf[2] = (uint8_t)((Data>>8)&0xff);//先发高字节
 	Buf[3] = (uint8_t)(Data&0xff);     //再发低字节
 
-	for (i=0; i<4; i++) 
-    {
+	for (i=0; i<4; i++) {
 	    checksum += Buf[i];
 	}
 	Buf[4] = ~checksum;  //校验和取反
 
-	while(++retry<RETRYTIME) 
-    {
+	while(++retry<RETRYTIME) {
 		FIFO_S_Flush(&(gUartPortAddr[no].rxBuffCtrl));
         gSimUartCtrl[0].recvStat = COM_STOP_BIT;
 		gSimUartCtrl[2].recvStat = COM_STOP_BIT;
 		SendData_HT7017(no, Buf, 5);
 		vTaskDelay(15);//丢弃写完收到的数据
 		num = FIFO_S_CountUsed(&(gUartPortAddr[no].rxBuffCtrl));
-		if (num >= 1) 
-        {
-            for (i=0; i<num; i++) 
-            {
+		if (num >= 1) {
+            for (i=0; i<num; i++) {
     			UsartGetOneData(no,rxbuff);
-    			if(*rxbuff == 0x54) 
-                {
+    			if(*rxbuff == 0x54) {
     				gEmuStatic[index-1].writeOk++;
 					readerror[index]=0;
     				return 0;
-    			}
-                else
-                {
+    			}else{
     				//CL_LOG("send error!!!retry!!!!\n");
     				gEmuStatic[index-1].writeSend0Err++;
     			}
@@ -463,8 +465,7 @@ int HT7017_Write(int no, uint8_t RegAdd, uint16_t Data)
 	}
 
 	CL_LOG("tx err,no=%d.\n",no);
-	if (readerror[index]<250) 
-    {
+	if (readerror[index]<250) {
         readerror[index]++;
 	}
     gEmuStatic[index-1].writeSend1Err++;
@@ -501,7 +502,8 @@ int HT7017_Read(int no,uint8_t RegAdd,uint8_t *Data)
     Buf[0] = FIXED_HEAD;
     Buf[1] = RegAdd & 0x7F;
     //发送数据---并判断结果
-	while(retry<RETRYTIME) {
+	while(retry < RETRYTIME) 
+	{
 		retry++;
 		FIFO_S_Flush(&(gUartPortAddr[no].rxBuffCtrl));//准备接受串口队列
 		gSimUartCtrl[0].recvStat = COM_STOP_BIT;
@@ -509,27 +511,34 @@ int HT7017_Read(int no,uint8_t RegAdd,uint8_t *Data)
 		SendData_HT7017(no,Buf,2);//发两字节地址
  		vTaskDelay(15);
 		num = FIFO_S_CountUsed(&(gUartPortAddr[no].rxBuffCtrl));
-		if(num>=4) {
-			for(int i=0;i<4;i++) {
-				UsartGetOneData(no,rxbuff+i);
+		if(num >= 4) 
+		{
+			for(int i = 0; i < 4; i++) 
+			{
+				UsartGetOneData(no,rxbuff + i);
 			}
 
 			ret = check7017_sum(Buf,rxbuff);
-			if(ret) {//校验通过 拷贝数据      结束函数返回
+			if(ret) 
+			{//校验通过 拷贝数据      结束函数返回
 				memcpy(Data,rxbuff,4);
                 gEmuStatic[index-1].readOk++;
 				readerror[index]=0;
 				return CL_OK;
-			}else { //校验失败 重复接受
+			}
+			else 
+			{ //校验失败 重复接受
 				//CL_LOG("rece error!!retry!!!\n");
 				gEmuStatic[index-1].readCheckErr++;
 			}
 		}
 	}
+	
 	//三次接受失败  清空数据并返回
-	CL_LOG("rx fail,no=%d.\n",no);
+	CL_LOG("rx fail, no = %d.\n", no);
     gEmuStatic[index-1].readRecv1Err++;
-	if (readerror[index]<250) {
+	if (readerror[index] < 250) 
+	{
         readerror[index]++;
 	}
 	return CL_FAIL;
@@ -542,7 +551,7 @@ int readVol(int no, int *vol)//0.1v
 	float f;
 	uint8_t temp[3];
 
-	if(HT7017_Read(no,EMU_RMSU,ChipID)==CL_FAIL)
+	if(HT7017_Read(no, EMU_RMSU, ChipID) == CL_FAIL)
 		return CL_FAIL;
 
 	*vol = 0;
@@ -553,6 +562,7 @@ int readVol(int no, int *vol)//0.1v
 	memcpy((char *)vol,temp,3);
 	f = EMUDATA[no].setupconfig.k_vol * (*vol)*10;
 	*vol = (int)(f+0.5);
+	
 	return CL_OK;
 }
 
@@ -565,12 +575,12 @@ int readCur(int no,int channel, int *cur )//1mA
 
 	if(channel==1)
 	{
-		if(HT7017_Read(no,EMU_RMSI1,ChipID)==CL_FAIL)
+		if(HT7017_Read(no, EMU_RMSI1, ChipID) == CL_FAIL)
 			return CL_FAIL;
 	}
 	else
 	{
-		if(HT7017_Read(no,EMU_RMSI2,ChipID)==CL_FAIL)
+		if(HT7017_Read(no, EMU_RMSI2, ChipID) == CL_FAIL)
 			return CL_FAIL;
 	}
 
@@ -593,12 +603,12 @@ int readPow(int no,int channel,int *pow )//0.1w
 
 	if(channel==1)
 	{
-		if(HT7017_Read(no,EMU_PowerP1,ChipID)==CL_FAIL)
+		if(HT7017_Read(no, EMU_PowerP1, ChipID) == CL_FAIL)
 			return CL_FAIL;
 	}
 	else
 	{
-		if(HT7017_Read(no,EMU_PowerP2,ChipID)==CL_FAIL)
+		if(HT7017_Read(no, EMU_PowerP2, ChipID) == CL_FAIL)
 			return CL_FAIL;
 	}
 
@@ -627,7 +637,6 @@ int writecalpara(int no)
 {
     int ret;
 
-	CL_LOG("nowwwwwwwwwww=%d.\n", no);
     ret  = HT7017_Write(no,VAR_WPREG,0xBC);
     ret |= HT7017_Write(no,VAR_EMUCFG,EMUDATA[no].setupconfig.EMUCFG_values);
     ret |= HT7017_Write(no,VAR_ANAEN,EMUDATA[no].setupconfig.ANAEN_value);
@@ -652,7 +661,6 @@ int writecalpara(int no)
     ret |= HT7017_Write(no,VAR_P1OFFSETL,EMUDATA[no].setupconfig.P1OffsetL_vlue);
     ret |= HT7017_Write(no,VAR_P2OFFSETL,EMUDATA[no].setupconfig.P2OffsetL_vlue);
     ret |= HT7017_Write(no,VAR_P2OFFSETH,EMUDATA[no].setupconfig.P2OffsetH_value);
-
     return ret;
 }
 
@@ -661,7 +669,8 @@ int ReadCheckSum(int no, uint32_t *pSum)
 {
 	uint8_t data[4];
 
-	if (HT7017_Read(no,EMU_SUMChecksum,data) == CL_OK){
+	if (HT7017_Read(no, EMU_SUMChecksum, data) == CL_OK)
+	{
 		*pSum = (uint32_t)((data[0] << 16)|(data[1] << 8) | data[2]);
         return CL_OK;
 	}
@@ -678,28 +687,28 @@ int WritecalparaByGunId(uint8_t gunId)
 }
 
 
-//校准参数验证函数
-void checkCalreg(int no)
-{
-	uint8_t ChipID[16][4];
+////校准参数验证函数
+//void checkCalreg(int no)
+//{
+//	uint8_t ChipID[16][4];
 
-	HT7017_Read(no,VAR_WPREG,ChipID[0]);
-	HT7017_Read(no,VAR_EMUCFG,ChipID[1]);
-	HT7017_Read(no,VAR_ANAEN,ChipID[2]);
-	HT7017_Read(no,VAR_ModuleEn,ChipID[3]);
-	HT7017_Read(no,VAR_GP1,ChipID[4]);
-	HT7017_Read(no,VAR_GQ1,ChipID[5]);
-	HT7017_Read(no,VAR_GS1,ChipID[6]);
-	HT7017_Read(no,VAR_GPhs1,ChipID[7]);
-	HT7017_Read(no,VAR_GQ2,ChipID[8]);
-	HT7017_Read(no,VAR_GS2,ChipID[9]);
-	HT7017_Read(no,VAR_GP2,ChipID[10]);
-	HT7017_Read(no,VAR_GPhs2,ChipID[11]);
-	HT7017_Read(no,VAR_I1RMSOFFSET,ChipID[12]);
-	HT7017_Read(no,VAR_I2RMSOFFSET,ChipID[13]);
-	HT7017_Read(no,VAR_I2Gain,ChipID[14]);
-	HT7017_Read(no,VAR_CHK,ChipID[15]);
-}
+//	HT7017_Read(no, VAR_WPREG, ChipID[0]);
+//	HT7017_Read(no, VAR_EMUCFG, ChipID[1]);
+//	HT7017_Read(no, VAR_ANAEN,ChipID[2]);
+//	HT7017_Read(no, VAR_ModuleEn, ChipID[3]);
+//	HT7017_Read(no, VAR_GP1, ChipID[4]);
+//	HT7017_Read(no, VAR_GQ1, ChipID[5]);
+//	HT7017_Read(no, VAR_GS1, ChipID[6]);
+//	HT7017_Read(no, VAR_GPhs1, ChipID[7]);
+//	HT7017_Read(no, VAR_GQ2, ChipID[8]);
+//	HT7017_Read(no, VAR_GS2, ChipID[9]);
+//	HT7017_Read(no, VAR_GP2, ChipID[10]);
+//	HT7017_Read(no, VAR_GPhs2, ChipID[11]);
+//	HT7017_Read(no, VAR_I1RMSOFFSET, ChipID[12]);
+//	HT7017_Read(no, VAR_I2RMSOFFSET, ChipID[13]);
+//	HT7017_Read(no, VAR_I2Gain, ChipID[14]);
+//	HT7017_Read(no, VAR_CHK, ChipID[15]);
+//}
 
 
 //gunId 1~12
@@ -733,73 +742,98 @@ int readAlldata(void)
 	int i = 0;
     EMU_CTRL_STR *pEmu = NULL;
 
-	for (int j=1; j<7; j++) {
+	for (int j = 1; j < 7; j++) 
+	{
 		//先读第二路、再度第一路
-		if(j == 1){
+		if(j == 1)
+		{
 			i = 2;
-		}else if( j == 2){
+		}
+		else if( j == 2)
+		{
 			i = 1;
-		}else{
+		}
+		else
+		{
 			i = j;
 		}
 
-        if (CL_OK == readVol(EMUID[i], &data)) {  //. 1 2  2 3 4   3 5 6   4 7 8   5 9 10   6 11 12
+        if (CL_OK == readVol(EMUID[i], &data)) 
+		{  //. 1 2  2 3 4   3 5 6   4 7 8   5 9 10   6 11 12
 			sampleVol[(i<<1)-1] = data;
 			sampleVol[(i<<1)-2] = data;
-			if(i == 2){
+			if(i == 2)
+			{
 				Voltage = data;
 			}
         }
 
 		//偶数路
-		if (CL_OK == readPow(EMUID[i],1, &data)) {
-		    samplePower[(i<<1)-1] = data;
+		if (CL_OK == readPow(EMUID[i],1, &data)) 
+		{
+		    samplePower[(i << 1) - 1] = data;
         }
 
-        if (CL_OK == readCur(EMUID[i],1, &data)) {
+        if (CL_OK == readCur(EMUID[i],1, &data)) 
+		{
 			sampleCur[(i<<1)-1] = (float)data*direction;
         }
 
 		//功率因数
 		fs = (sampleVol[(i<<1)-1] * sampleCur[(i<<1)-1]);
-		if(fs != 0){
+		if(fs != 0)
+		{
 			powerF[(i<<1)-1] = samplePower[(i<<1)-1]/ fs;
-			if(powerF[(i<<1)-1] > 1){
+			if(powerF[(i<<1)-1] > 1)
+			{
 				powerF[(i<<1)-1] = 1;
 			}
-		}else{
+		}
+		else
+		{
 			powerF[(i<<1)-1] = 0;
 		}
 
 		//奇数路
-		if (CL_OK == readPow(EMUID[i],2, &data)) {
+		if (CL_OK == readPow(EMUID[i],2, &data)) 
+		{
 		    samplePower[(i<<1)-2] = data;
         }
 
-        if (CL_OK == readCur(EMUID[i],2, &data)) {
+        if (CL_OK == readCur(EMUID[i],2, &data)) 
+		{
 			sampleCur[(i<<1)-2] = (float)data*direction*(-1);
         }
 
 		//功率因数
 		fs = (sampleVol[(i<<1)-2] * sampleCur[(i<<1)-2]);
-		if(fs != 0){
+		if(fs != 0)
+		{
 			powerF[(i<<1)-2] = samplePower[(i<<1)-2]/ fs;
-			if(powerF[(i<<1)-2] > 1){
+			if(powerF[(i<<1)-2] > 1)
+			{
 				powerF[(i<<1)-2] = 1;
 			}
-		}else{
+		}
+		else
+		{
 			powerF[(i<<1)-2] = 0;
 			CL_LOG("功率因数为0.\n");
 		}
 
 		data = readerror[i];
-        if ((5<data) && (data<10)) {
+        if ((5<data) && (data<10)) 
+		{
             CL_LOG("reinit uart,i=%d.\n",i);
             gUartInitFun[EMUID[i]](); //重新初始化串口
-        }else if (data>10) {
+        }
+		else if (data>10) 
+		{
 			setbit(gun[2*i-1].status,0);
 			setbit(gun[2*i].status,0);
-		}else{
+		}
+		else
+		{
 			clrbit(gun[2*i].status,0);
 			clrbit(gun[2*i-1].status,0);
 		}
@@ -812,33 +846,43 @@ int readAlldata(void)
 	filterValue(checkCur);
 
 	//功率计算  将电流和功率赋值到GUN_STATUS_STR结构体中
-	for(i = 0; i<12; i++) {
+	for(i = 0; i<12; i++) 
+	{
 		checkPower[i] = checkCur[i] * Voltage * powerF[i];
         gun[i+1].power = checkPower[i];
         gun[i+1].voltage = Voltage;
         gun[i+1].current = checkCur[i];
 	}
 
-	for (i=1; i<13; i++) {//过压 过流判断  电压电流 功率
+	for (i=1; i<13; i++) 
+	{//过压 过流判断  电压电流 功率
 	    pEmu = &gEmuCtrl[i];
-		if (gun[i].voltage > 2600) {
+		if (gun[i].voltage > 2600) 
+		{
             CL_LOG("v=%d,err.\n",gun[i].voltage);
-			if (4 <= ++pEmu->overvolcount) {
+			if (4 <= ++pEmu->overvolcount) 
+			{
                 setbit(gun[i].status,2);
                 CL_LOG("v over,err.\n");
             }
-		}else{
+		}
+		else
+		{
 			pEmu->overvolcount = 0;
             clrbit(gun[i].status, 2);
 		}
 
-		if (gun[i].current > 5000) {
+		if (gun[i].current > 5000) 
+		{
             CL_LOG("c=%d,err.\n",gun[i].current);
-            if (1 <= ++pEmu->overcurcount) {
+            if (1 <= ++pEmu->overcurcount) 
+			{
                 CL_LOG("c over,err.\n");
 			    setbit(gun[i].status,1);
             }
-		}else{
+		}
+		else
+		{
 			pEmu->overcurcount = 0;
             clrbit(gun[i].status,1);
 		}
@@ -1029,53 +1073,52 @@ void emuTask(void)
 
 	invNxN(EmuCalation.matrixA,invMatrixA);//求逆矩阵
 
-	for (i = 1; i < 7; i++) 
-    { //1~6  写入计量参数
-	    j = 0;
-	    while (++j < 4) 
-        {
-            CL_LOG("wwwwwwwwww=%d.\n", j);
-    		if (CL_OK == writecalpara(EMUID[i])) 
-            {
-                CL_LOG("gggggggggg.\n");
-                if (CL_OK == ReadCheckSum(EMUID[i], &sum)) 
-                {
-                    checkSum[i] = sum;
-                    CL_LOG("emu check ok,i=%d.\n",i);
-                    failFlag = failFlag & ~(1<<i);
-                    break;
-                }
-                else
-                {
-                    CL_LOG("fail,i=%d.\n",i);
-                    vTaskDelay(1000);
-                }
-            }
-            else
-            {
-                CL_LOG("fail,i=%d.\n",i);
-                vTaskDelay(1000);
-            }
-	    }
-		CL_LOG("qqqqqqqqqqqqqqqqqqq=%d.\n", i);
-        vTaskDelay(200);
-	}
-    CL_LOG("hhhhhhhhhhhhhhhhhhhhhhh.\n");
+//	for (i=1; i<7; i++) 
+//    { //1~6  写入计量参数
+//	    j = 0;
+//	    while (++j < 4) 
+//        {
+//    		if (CL_OK == writecalpara(EMUID[i])) 
+//            {
+//                if (CL_OK == ReadCheckSum(EMUID[i], &sum)) 
+//                {
+//                    checkSum[i] = sum;
+//                    CL_LOG("emu check ok,i=%d.\n",i);
+//                    failFlag = failFlag & ~(1<<i);
+//                    break;
+//                }
+//                else
+//                {
+//                    CL_LOG("fail,i=%d.\n",i);
+//                    vTaskDelay(1000);
+//                }
+//            }
+//            else
+//            {
+//                CL_LOG("fail,i=%d.\n",i);
+//                vTaskDelay(1000);
+//            }
+//	    }
+//        vTaskDelay(200);
+//	}
     if (failFlag) 
-    {
+	{
         SendEventNotice(0, EVENT_CHIP_FAULT, CHIP_EMU, 100, EVENT_OCCUR, NULL);
     }
 
 	while(1) 
 	{
         vTaskDelay(200);
-        if (old != GetRtcCount()) {
+        if (old != GetRtcCount()) 
+		{
             old = GetRtcCount();
             second++;
-            if (0 == (second % 60)) {
+            if (0 == (second % 60)) 
+			{
 				ElecHandle();//计算电量
             }
-            if (0 == (second & 0x3ff)) {
+            if (0 == (second & 0x3ff)) 
+			{
                 //ShowEmuAllStatic();
                 //ShowSimUartErr(&gSimUartCtrl[0].statis);
                 CL_LOG("running,s=%d.\n",second);
@@ -1083,7 +1126,8 @@ void emuTask(void)
 
             readAlldata();
 
-			if (0 == (second % 10)) {
+			if (0 == (second % 10)) 
+			{
 				AutoLearnMatrix();
 				//for(int k = 0;k < 12 ;k++){
 				//	printf("gun_id=%d vol=%d current=%d checkCur=%d | power=%d checkPower=%d\n",k+1,(int)sampleVol[k],(int)sampleCur[k],(int)checkCur[k],(int)samplePower[k],(int)checkPower[k]);
@@ -1091,13 +1135,18 @@ void emuTask(void)
 				//printf("...................\n");
             }
 
-            if (gEmuResetFlag) {
-                for (i=1; i<7; i++) {
-                    if (gEmuResetFlag & (1<<i)) {
+            if (gEmuResetFlag) 
+			{
+                for (i = 1; i < 7; i++) 
+				{
+                    if (gEmuResetFlag & (1<<i)) 
+					{
                         HT7017_Write(EMUID[i], VAR_SRSTREG, 0x55);
                         vTaskDelay(1000);
-                        for (j=0; j<3; j++) {
-                            if (CL_OK == writecalpara(EMUID[i])) {
+                        for (j=0; j<3; j++) 
+						{
+                            if (CL_OK == writecalpara(EMUID[i])) 
+							{
                                 //CL_LOG("call writecalpara ok.\n");
                                 break;
                             }
@@ -1107,10 +1156,14 @@ void emuTask(void)
                 }
             }
 
-			if (0 == (second & 0x7f)) {
-                for (i=1; i<7; i++) {
-    				if (CL_OK == ReadCheckSum(EMUID[i], &sum)) {
-                        if (checkSum[i] != sum) {
+			if (0 == (second & 0x7f)) 
+			{
+                for (i = 1; i < 7; i++) 
+				{
+    				if (CL_OK == ReadCheckSum(EMUID[i], &sum)) 
+					{
+                        if (checkSum[i] != sum) 
+						{
                             gChgInfo.statusErr |= (1<<i);
         					writecalpara(EMUID[i]);
                             CL_LOG("check emu data fail,i=%d.\n",i);

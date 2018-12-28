@@ -104,9 +104,9 @@ void GPIO_Cfg(HT_GPIO_TypeDef* GPIOx, uint32_t Gpio_Pin, GPIOMode_TypeDef GPIO_M
 	GPIO_InitTypeDef  GPIO_Init;
 
 	GPIO_Init.GPIO_Pin = Gpio_Pin;
-	GPIO_Init.GPIO_Mode=GPIO_Mode;
-	GPIO_Init.GPIO_InputStruct=GPIO_Input;
-	GPIO_Init.GPIO_OutputStruct=GPIO_Output;
+	GPIO_Init.GPIO_Mode = GPIO_Mode;
+	GPIO_Init.GPIO_InputStruct = GPIO_Input;
+	GPIO_Init.GPIO_OutputStruct = GPIO_Output;
 
 	HT_GPIO_Init(GPIOx,&GPIO_Init);
 }

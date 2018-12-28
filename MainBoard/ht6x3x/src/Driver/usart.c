@@ -84,11 +84,15 @@ int UsartSend(int portIndex, const uint8_t *pData, uint16_t len)
     int ret = CL_FAIL;
     UART_INFO_STR *pUart = &gUartPortAddr[portIndex];
 
-    if (PHY_UART == pUart->type) {
+    if (PHY_UART == pUart->type) 
+	{
         ret = UartSendData(pUart, pData, len);
-    }else if (SIMU_UART == pUart->type) {
+    }
+	else if (SIMU_UART == pUart->type) 
+	{
         ret = SimuUartSendData(pUart, pData, len);
     }
+	
     return ret;
 }
 
@@ -430,10 +434,12 @@ void UART0_IRQHandler(void)
     UART_INFO_STR *pUart = &gUartPortAddr[0];
 
 	//receive interrupt
-	if ((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) {
+	if ((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) 
+	{
         data = pUart->Data.sysAddr->SBUF;
 		FIFO_S_Put(&pUart->rxBuffCtrl, data);
-        if (system_info.is_socket_0_ok) {
+        if (system_info.is_socket_0_ok) 
+		{
             FIFO_S_Put(&gSocketPktRxCtrl, data);
         }
 		//clear recevie interrupt flag
@@ -441,9 +447,11 @@ void UART0_IRQHandler(void)
 	}
 
     //send interrupt
-	if ((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if ((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}
@@ -460,15 +468,18 @@ void UART1_IRQHandler(void)
 {
     UART_INFO_STR *pUart = &gUartPortAddr[1];
 	//receive interrupt
-	if ((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) {
+	if ((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) 
+	{
         FIFO_S_Put(&pUart->rxBuffCtrl, pUart->Data.sysAddr->SBUF);
 		pUart->Data.sysAddr->UARTSTA &= 0x05;
 	}
 
     //send interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}
@@ -486,15 +497,18 @@ void UART2_IRQHandler(void)
     UART_INFO_STR *pUart = &gUartPortAddr[2];
 
 	//receive interrupt
-	if ((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) {
+	if ((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) 
+	{
         FIFO_S_Put(&pUart->rxBuffCtrl, pUart->Data.sysAddr->SBUF);
         pUart->recvCnt++;
 		pUart->Data.sysAddr->UARTSTA &= 0x05;
 	}
     //send interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}
@@ -512,14 +526,17 @@ void UART3_IRQHandler(void)
     UART_INFO_STR *pUart = &gUartPortAddr[3];
 
 	//receive interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0){
+	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0)
+	{
         FIFO_S_Put(&pUart->rxBuffCtrl, pUart->Data.sysAddr->SBUF);
 		pUart->Data.sysAddr->UARTSTA &= 0x05;
 	}
     //send interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}
@@ -537,14 +554,17 @@ void UART4_IRQHandler(void)
     UART_INFO_STR *pUart = &gUartPortAddr[4];
 
 	//receive interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) 
+	{
         FIFO_S_Put(&pUart->rxBuffCtrl, pUart->Data.sysAddr->SBUF);
 		pUart->Data.sysAddr->UARTSTA &= 0x05;
 	}
     //send interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}
@@ -562,14 +582,17 @@ void UART5_IRQHandler(void)
     UART_INFO_STR *pUart = &gUartPortAddr[5];
 
 	//receive interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) 
+	{
         FIFO_S_Put(&pUart->rxBuffCtrl, pUart->Data.sysAddr->SBUF);
 		pUart->Data.sysAddr->UARTSTA &= 0x05;
 	}
     //send interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}
@@ -586,14 +609,17 @@ void UART6_IRQHandler(void)
     UART_INFO_STR *pUart = &gUartPortAddr[6];
 
 	//receive interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x02)!=0) 
+	{
         FIFO_S_Put(&pUart->rxBuffCtrl, pUart->Data.sysAddr->SBUF);
 		pUart->Data.sysAddr->UARTSTA &= 0x05;
 	}
     //send interrupt
-	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) {
+	if((pUart->Data.sysAddr->UARTSTA & 0x01) != 0) 
+	{
 		pUart->Data.sysAddr->UARTSTA &= 0x06;
-        if (++pUart->sendCnt < pUart->allCnt) {
+        if (++pUart->sendCnt < pUart->allCnt) 
+		{
             pUart->Data.sysAddr->SBUF = pUart->pSendData[pUart->sendCnt];
         }
 	}

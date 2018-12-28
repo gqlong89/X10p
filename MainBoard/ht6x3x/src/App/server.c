@@ -821,15 +821,19 @@ void StartChargingSend(void)
     GUN_CHARGING_STR *pGunCharging = NULL;
     uint32_t old = GetRtcCount();
 
-    if ((uint32_t)(old - SendStartChargingNoticeTime) > 5) {
+    if ((uint32_t)(old - SendStartChargingNoticeTime) > 5) 
+	{
         SendStartChargingNoticeTime = old;
-        for (i=1; i<=GUN_NUM_MAX; i++) {
+        for (i = 1; i <= GUN_NUM_MAX; i++) 
+		{
             pGunInfo = &gun_info[i-1];
             pGunCharging = &gChgInfo.gunCharging[i-1];
-            if (pGunInfo->is_load_on && (pGunInfo->isSync != 0) && (pGunCharging->startChargerTimers < START_NOTICE_REPEAT_TIMERS)) {
+            if (pGunInfo->is_load_on && (pGunInfo->isSync != 0) && (pGunCharging->startChargerTimers < START_NOTICE_REPEAT_TIMERS)) 
+			{
 				pGunCharging->startChargerTimers++;
 				SendStartChargingNotice(i, pGunInfo->start_time, pGunInfo->isSync);
-				if (pGunInfo->isSync == FIRST_START_CHARGING){
+				if (pGunInfo->isSync == FIRST_START_CHARGING)
+				{
 					OS_DELAY_MS(500);
 					SendHeartBeatFun(i);
 				}
@@ -871,7 +875,8 @@ void ProcGunStatus(void)
                     }
                 }
             }
-            if (stop) {
+            if (stop) 
+            {
                 CL_LOG("stop charging,reason=%d,gunid=%d,status=%d.\n",stop,i,gunStatus.status);
                 pGunCharging->isTesting = 0;
                 GunTurnOff(i);

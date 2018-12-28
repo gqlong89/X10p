@@ -878,12 +878,14 @@ int TestCloseGun(uint8_t gunId)
     gun_info_t *pGunInfo = &gun_info[gunId-1];
     GUN_CHARGING_STR *pGunCharging = &gChgInfo.gunCharging[gunId-1];
 
-    if (pGunInfo->is_load_on) {
+    if (pGunInfo->is_load_on) 
+    {
         CL_LOG("gun %d buys.\n",gunId);
         return CL_FAIL;
     }
 
-    if (pGunCharging->isTesting) {
+    if (pGunCharging->isTesting) 
+    {
         pGunCharging->isTesting = 0;
         GunTurnOff(gunId);
     }

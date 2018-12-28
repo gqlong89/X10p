@@ -118,10 +118,13 @@ int GunTurnOff(uint8_t gunId)
 {
 	//printf("turn %u gun off\r\n", gunId);
 
-    if((1 <= gunId) && (gunId <=GUN_NUM_MAX)){
+    if((1 <= gunId) && (gunId <= GUN_NUM_MAX))
+	{
         GPIO_ResetBits(Gun_GPIO_PortTable[gunId-1].port, Gun_GPIO_PortTable[gunId-1].pin);
         return 0;
-    }else{
+    }
+	else
+	{
         return -1;
     }
 }
@@ -129,7 +132,8 @@ int GunTurnOff(uint8_t gunId)
 
 int TurnOffAllGun(void)
 {
-    for (int i=0; i<GUN_NUM_MAX; i++) {
+    for (int i=0; i<GUN_NUM_MAX; i++) 
+    {
         GPIO_ResetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
     }
     return 0;
@@ -137,7 +141,8 @@ int TurnOffAllGun(void)
 
 int TurnOnAllGun(void)
 {
-    for (int i=0; i<GUN_NUM_MAX; i++) {
+    for (int i=0; i<GUN_NUM_MAX; i++) 
+    {
         GPIO_SetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
     }
     return 0;

@@ -44,7 +44,7 @@ void Sc8042bSpeech(int index)
 		{//语音禁播开启时间和结束时间不相等就禁播语音
 			if (system_info.disturbingStartTime < system_info.disturbingStopTime) 
 			{
-				if ((rtcTime[4]>=system_info.disturbingStartTime) && (rtcTime[4]<system_info.disturbingStopTime)) 
+				if ((rtcTime[4] >= system_info.disturbingStartTime) && (rtcTime[4] < system_info.disturbingStopTime)) 
 				{
 					CL_LOG("禁播语音.\n");
 					return;
@@ -52,7 +52,7 @@ void Sc8042bSpeech(int index)
 			} 
 			else 
 			{
-				if ((rtcTime[4]>=system_info.disturbingStartTime) || (rtcTime[4]<system_info.disturbingStopTime)) 
+				if ((rtcTime[4] >= system_info.disturbingStartTime) || (rtcTime[4] < system_info.disturbingStopTime)) 
 				{
 					CL_LOG("禁播语音.\n");
 					return;

@@ -273,7 +273,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x2000</StartAddress>
-                <Size>0x1b800</Size>
+                <Size>0x37000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -330,7 +330,7 @@
             <vShortWch>1</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>HT6x2x</Define>
+              <Define>HT6x3x</Define>
               <Undefine></Undefine>
               <IncludePath>..\Main;..\Libraries\CMSIS\CoreSupport;..\Libraries\CMSIS\DeviceSupport;..\Libraries\Startup;..\freertos\include;..\freertos\portable\Keil\ARM_CM0;..\freertos\portable\MemMang;..\freertos\portable\RVDS;..\Driver;..\App</IncludePath>
             </VariousControls>

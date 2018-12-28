@@ -272,7 +272,8 @@ void MainTask(void)
 	while(1) 
     {
         OS_DELAY_MS(300);
-        if (GetRtcCount() != old) {
+        if (GetRtcCount() != old) 
+        {
             old = GetRtcCount();
             Feed_WDT();
 
@@ -339,7 +340,8 @@ void MainTask(void)
                     StartChargingSend();
 
                     //发送充电完成通知
-                    if ((uint32_t)(old - SendTradeRecordNoticeTime) > 30) {
+                    if ((uint32_t)(old - SendTradeRecordNoticeTime) > 30) 
+					{
                         SendTradeRecordNoticeTime = old;
                         SendHistoryOrder();
                     }
@@ -441,9 +443,10 @@ int main(void)
     gLastResetReason = HT_PMU->RSTSTA;
 	delay(0x1FFF);
     Feed_WDT();
-	//SystemClockInit();
-	//SysTick_Init();
-	//UsartInit();
+//	SystemClockInit();
+//	SysTick_Init();
+//	UsartInit();
+	
     //由于系统资源限制，目前不能启动大于5个线程
     xTaskCreate((TaskFunction_t)MainTask,"MainTask",512,NULL,1,&MainTaskHandle_t);
     vTaskStartScheduler();

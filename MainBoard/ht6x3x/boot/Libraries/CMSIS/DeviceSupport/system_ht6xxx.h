@@ -5,13 +5,13 @@
 *
 *                                   Copyright 2013, Hi-Trend Tech, Corp.
 *                                        All Rights Reserved
-*                                         
+*
 *
 * Project      : HT6xxx
 * File         : systerm_ht6xxx.h
 * By           : SocTeam
 * Version      : CurrentVersion
-* Description  : 
+* Description  :
 *********************************************************************************************************
 */
 
@@ -19,10 +19,10 @@
 #define __SYSTERM_HT6XXX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
-  
+
 /*
 *********************************************************************************************************
 *                                           全局宏/结构体
