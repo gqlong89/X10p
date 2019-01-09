@@ -129,9 +129,12 @@ int PutOut485NetPkt(uint8_t *pkt, uint16_t len, uint8_t type)
 //pkt:指向数据体，如:aa 55 02
 int PutOutNetPkt(uint8_t *pkt, uint16_t len, uint8_t type)
 {
-    if (OUT_485_NET == system_info.netType) {
+    if (OUT_485_NET == system_info.netType) 
+	{
         return PutOut485NetPkt(pkt, len, type);
-    }else{
+    }
+	else
+	{
         return SendOutNetPkt(pkt, len, type);
     }
 }
@@ -148,11 +151,13 @@ int SendFwInfo(FRAME_STR *pkt, DOWN_FW_REQ_STR *pFwInfo)
 // 拉远2g模块检测
 int OutSizeNetCheck(void)
 {
-    int i;
+    uint32_t i;
 
     CL_LOG("check out net...\n");
-	for (i=0; i<15; i++) {
-        if (0 != gOutNetStatus.connect) {
+	for (i = 0; i < 15; i++) 
+	{
+        if (0 != gOutNetStatus.connect) 
+		{
             CL_LOG("check out net ok,connect=%d, 2:485,3:2.4G.\n",gOutNetStatus.connect);
             return CL_OK;
         }
@@ -271,21 +276,27 @@ void OutNetRecvProc(OUT_PKT_STR *pPkt, uint16_t len)
 {
     OUT_HEART_BEAT_REQ_STR *pMsg = (void*)pPkt->data;
 
-    if (OUT_NET_START == pPkt->head.cmd) {
+    if (OUT_NET_START == pPkt->head.cmd) 
+	{
         gOutNetStatus.mode = 1;
-    }else if (TEST_START == pPkt->head.cmd) {
+    }
+	else if (TEST_START == pPkt->head.cmd) 
+	{
         gOutNetStatus.mode = 2;
         TestDataHandle(pPkt, len);
         return;
     }
 
-    if (2 == gOutNetStatus.mode) {
+    if (2 == gOutNetStatus.mode) 
+	{
         TestDataHandle(pPkt, len);
         return;
     }
 
-    if ((OUT_NET_HEART_BEAT == pPkt->head.cmd) || (OUT_NET_START == pPkt->head.cmd)) {
-        if (OUT_485_NET == pMsg->netType) {
+    if ((OUT_NET_HEART_BEAT == pPkt->head.cmd) || (OUT_NET_START == pPkt->head.cmd)) 
+	{
+        if (OUT_485_NET == pMsg->netType) 
+		{
             Out485NetRecvProc(pPkt);
         }
     }
@@ -294,9 +305,11 @@ void OutNetRecvProc(OUT_PKT_STR *pPkt, uint16_t len)
 
 void OutNetConnetProc(void)
 {
-    if (gOutNetStatus.connect) {
-        if (60 < (uint32_t)(GetRtcCount() - gOutNetStatus.lastRecvTime)) {
-            CL_LOG("out net connect break,connect type=%d, change to 0(error).\n",gOutNetStatus.connect);
+    if (gOutNetStatus.connect) 
+	{
+        if (60 < (uint32_t)(GetRtcCount() - gOutNetStatus.lastRecvTime)) 
+		{
+            CL_LOG("out net connect break,connect type=%d, change to 0(error).\n", gOutNetStatus.connect);
             gOutNetStatus.connect = 0;
         }
     }
@@ -315,14 +328,19 @@ void OutNetUpgradeProc(void *pFwInfo)
 
 void UpgradeTimeOutProc(void)
 {
-    if (1 == gChgInfo.sendPktFlag) {
-        if (900 < (uint32_t)(GetRtcCount()- gChgInfo.lastOpenTime)) {
+    if (1 == gChgInfo.sendPktFlag) 
+	{
+        if (900 < (uint32_t)(GetRtcCount()- gChgInfo.lastOpenTime)) 
+		{
             OptFailNotice(118);
             CL_LOG("upgrade timeout,or connect break,connect=%d,root system.\n",gOutNetStatus.connect);
             ResetSysTem();
         }
-    }else if (2 == gChgInfo.sendPktFlag) {
-        if (600 < (uint32_t)(GetRtcCount()- gChgInfo.lastOpenTime)) {
+    }
+	else if (2 == gChgInfo.sendPktFlag) 
+	{
+        if (600 < (uint32_t)(GetRtcCount()- gChgInfo.lastOpenTime)) 
+		{
             OptFailNotice(120);
             CL_LOG("local upgrade timeout.\n");
             ResetSysTem();
@@ -343,17 +361,21 @@ void SysTask(void)
     uint32_t oldTime;
 
     gOutNetStatus.rs485Node = GetDialValue();
-    CL_LOG("rs485 node=%d.\n",gOutNetStatus.rs485Node);
-    while (1) {
+    CL_LOG("rs485 node=%d.\n", gOutNetStatus.rs485Node);
+    while (1) 
+	{
         vTaskDelay(25);
-        if (oldTime != GetRtcCount()) {
+        if (oldTime != GetRtcCount()) 
+		{
             oldTime = GetRtcCount();
             OutNetConnetProc();
             UpgradeTimeOutProc();
         }
 
-        while (CL_OK == UsartGetOneData(UART_485_PORT, &data)) {
-            switch (step) {
+        while (CL_OK == UsartGetOneData(UART_485_PORT, &data)) 
+		{
+            switch (step) 
+			{
                 case FIND_AA:
                     if (0xaa == data) {
                         i = 0;
@@ -426,9 +448,12 @@ void SysTask(void)
                     break;
                case FIND_CHK:
                     pRecvBuff[i++] = data;
-                    if (sum == data) {
+                    if (sum == data) 
+					{
                         OutNetRecvProc((void*)pRecvBuff, i);
-                    }else{
+                    }
+					else
+					{
                         //PrintfData("SysTask", pRecvBuff, i);
                         CL_LOG("local sum=%d,pkt sum=%d,error.\n",sum,data);
                     }

@@ -42,10 +42,17 @@ void delay_us(uint32_t count)
 {
 	__IO uint32_t i = 0;
 	__IO uint32_t j = 0;
-
-	for(i=0; i<count; i++) {
+	__IO uint32_t CountDelay;
+		
+#if (0 == IS_CPU_DOU_FRE)
+	CountDelay = count / VOICE_DELAY_DIV;
+#else
+	CountDelay = count;
+#endif
+	for(i = 0; i < CountDelay; i++) 
+	{
 		//todo
-		for(j=0; j<5; j++);
+		for(j = 0; j < 5; j++);
 	}
 }
 

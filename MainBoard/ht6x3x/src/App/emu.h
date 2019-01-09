@@ -214,6 +214,7 @@ typedef struct{
 }EMU_CAL;
 
 extern EMU_CAL EmuCalation;
+extern uint8_t EMUIFIFlag;//¼Ä´æÆ÷ÊÇ·ñ³õÊ¼»¯
 
 #endif //__EMU_H__
 

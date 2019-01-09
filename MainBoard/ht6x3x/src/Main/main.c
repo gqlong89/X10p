@@ -37,6 +37,7 @@
 #include "server.h"
 #include "upgrade.h"
 #include "ht6xxx.h"
+#include "TempDetection.h"
 
 
 TaskHandle_t MainTaskHandle_t;
@@ -111,11 +112,10 @@ void SysCfgInit(void)
         system_info.changePowerFlag = 0xee;
     }
 
-    CL_LOG("reset = %x.\n", gLastResetReason);
-    CL_LOG("fwVer = [%03d], subVer = [%d].\n", FW_VERSION, FW_VERSION_SUB);
-    CL_LOG("ip = [%s], port = [%d].\n", NET_SERVER_IP, NET_SERVER_PORT);
+    CL_LOG("[fwVer: %03d], [subVer: %d].\n", FW_VERSION, FW_VERSION_SUB);
+    CL_LOG("[ip地址: %s], [port号: %d].\n", NET_SERVER_IP, NET_SERVER_PORT);
     PrintSysCfgInfo();
-    CL_LOG("ss=%d, gs=%d.\n",sizeof(system_info), sizeof(gun_info));
+    CL_LOG("[system_info 大小: %d], [gun_info 大小: %d].\n", sizeof(system_info), sizeof(gun_info));
 }
 
 
@@ -153,14 +153,19 @@ void TempProc(void)
     static uint8_t tempHight = 0;
     int ret = GetCpuTemp();
 
-    if (65 < ret) {
+    if (65 < ret) 
+	{
         TempNotice(ret);
-        if (0 == tempHight) {
+        if (0 == tempHight) 
+		{
             tempHight = 1;
             SendEventNotice(0, EVENT_ENV_TEMP_HIGH, ret, 0, EVENT_OCCUR, NULL);
         }
-    }else if (ret < 55) {
-        if (1 == tempHight) {
+    }
+	else if (ret < 55) 
+	{
+        if (1 == tempHight) 
+		{
             tempHight = 0;
             SendEventNotice(0, EVENT_ENV_TEMP_HIGH, ret, 0, EVENT_RECOVER, NULL);
         }
@@ -184,6 +189,7 @@ void ProcTradeRecord(void)
 
 void SystemResetFlag(void)
 {
+    CL_LOG("reset原因 = %x.\n", gLastResetReason);
 	if(gLastResetReason & 0x00000100)
 	{
 		CL_LOG("BOR复位标志位.\n");
@@ -230,7 +236,8 @@ void BspInit(void)
     SystemResetFlag();
 	Lcd_Init();
 	LcdEnterInitStu();
-    InitTmp();
+//    InitTmp();
+	ADC_Init();
     RtcInit();
 	I2C_Init();
 	LoadSysCfgInfo();
@@ -276,62 +283,88 @@ void MainTask(void)
         {
             old = GetRtcCount();
             Feed_WDT();
-
+			CL_LOG("1111111111111111\n");
+			ReadTempDetection(TBS_ADC3);
+			CL_LOG("2222222222222222\n");
+			ReadTempDetection(TBS_ADC4);
             //socket已经建立连接
-            if ((system_info.is_socket_0_ok == CL_TRUE) && ((LOCAL_NET == system_info.netType) || (OUT_485_NET == system_info.netType))) {
-                if (system_info.isRecvStartUpAck == 0) { //未登录，首次上电，需要处理id2
+            if ((system_info.is_socket_0_ok == CL_TRUE) && ((LOCAL_NET == system_info.netType) || (OUT_485_NET == system_info.netType))) 
+			{
+                if (system_info.isRecvStartUpAck == 0) 
+				{ //未登录，首次上电，需要处理id2
                     #if (1 == ID2)
-                    if (LOCAL_NET == system_info.netType) { //本地sim上网才进行id2加密处理
-                        if (0 == memcmp(gZeroArray, gID2, TFS_ID2_LEN)) {
-                            if (CL_OK == TfsGetId2(gID2)) {
+                    if (LOCAL_NET == system_info.netType) 
+					{ //本地sim上网才进行id2加密处理
+                        if (0 == memcmp(gZeroArray, gID2, TFS_ID2_LEN)) 
+						{
+                            if (CL_OK == TfsGetId2(gID2)) 
+							{
                                 SendDeviceAesReq(GetRtcCount(), gChgInfo.ReqKeyReason);
                                 gChgInfo.lastOpenTime = GetRtcCount();
                             }
-                        }else{
-                            if (0 == AesKeyUpdateFlag) {
-                    			if ((gChgInfo.sendCnt ? 64 : 6) < (uint32_t)(GetRtcCount() - gChgInfo.lastOpenTime)) {
+                        }
+						else
+						{
+                            if (0 == AesKeyUpdateFlag) 
+							{
+                    			if ((gChgInfo.sendCnt ? 64 : 6) < (uint32_t)(GetRtcCount() - gChgInfo.lastOpenTime)) 
+								{
                                     SendDeviceAesReq(GetRtcCount(), gChgInfo.ReqKeyReason);
                                     gChgInfo.sendCnt++;
                                     gChgInfo.lastOpenTime = GetRtcCount();
                                 }
                             }
                         }
-                    }else{
+                    }
+					else
+					{
                         AesKeyUpdateFlag = 1;
                     }
                     #else
                     AesKeyUpdateFlag = 1;
                     #endif
 
-                    if (1 == AesKeyUpdateFlag) {
-                        if (gChgInfo.netStatus & (1<<6)) {
+                    if (1 == AesKeyUpdateFlag) 
+					{
+                        if (gChgInfo.netStatus & (1<<6)) 
+						{
                             gChgInfo.netStatus &= ~(1<<6);
                             secondOk = 0;
                         }
-                        if (0 == (secondOk & 0x3f)) {
-                            if (memcmp(gZeroArray, system_info.idCode, sizeof(system_info.idCode))) {
+                        if (0 == (secondOk & 0x3f)) 
+						{
+                            if (memcmp(gZeroArray, system_info.idCode, sizeof(system_info.idCode))) 
+							{
                                 SendStartUpNotice(1);//登录
                                 gChgInfo.lastOpenTime = GetRtcCount();
                                 flag = 1;
-                            }else{
+                            }
+							else
+							{
                                 SendRegister();//注册
                             }
                         }
                     }
-                }else{//已经登录
-                    if (1 == flag) {//第一次登陆成功
+                }
+				else
+				{//已经登录
+                    if (1 == flag) 
+					{//第一次登陆成功
                         flag = 2;
                         SwitchToUi_Standby();
                         //SendReqCostTemplate(0); //每次登录都向后台请求一次计费模版
                     }
 
                     #if (1 == ID2)
-                    if ((LOCAL_NET == system_info.netType) && (0 == AesKeyUpdateFlag)) {
-                        if (gChgInfo.netStatus & (1<<7)) {
+                    if ((LOCAL_NET == system_info.netType) && (0 == AesKeyUpdateFlag)) 
+					{
+                        if (gChgInfo.netStatus & (1<<7)) 
+						{
                             gChgInfo.netStatus &= ~(1<<7);
                             secondOk = 0;
                         }
-                        if (0 == (secondOk & 0x3f)) {
+                        if (0 == (secondOk & 0x3f)) 
+						{
                             SendDeviceAesReq(GetRtcCount(), gChgInfo.ReqKeyReason);
                         }
                     }
@@ -346,18 +379,23 @@ void MainTask(void)
                         SendHistoryOrder();
                     }
 
-                    if (LOCAL_NET == system_info.netType) {
-                        if (0 == (secondOk & 0x1f)) {
+                    if (LOCAL_NET == system_info.netType) 
+					{
+                        if (0 == (secondOk & 0x1f)) 
+						{
                             GprsSocketStateCheck();
                         }
-                        if (0 == (secondOk & 0xff)) {
+                        if (0 == (secondOk & 0xff)) 
+						{
                             GprsSendCmd("AT+CSQ\r","\r\nOK\r\n",100, 0);
                         }
                     }
 
                     //心跳
-                    if (0 == (secondOk % 90)) {
-                        if (0 == gChgInfo.sendPktFlag) {
+                    if (0 == (secondOk % 90)) 
+					{
+                        if (0 == gChgInfo.sendPktFlag) 
+						{
                             HeartBeatHandle();
                         }
                         if (system_info.printSwitch) 
@@ -369,14 +407,16 @@ void MainTask(void)
                             }
                         }
                     }
-
-                    if (0 == (secondOk & 0x3ff)) {
+					//CostTemplateReq();
+                    if (0 == (secondOk & 0x3ff)) 
+					{
                         CL_LOG("running...,second=%d.\n",old);
                         //CostTemplateReq();
                         TempProc();
                     }
 
-                    if ((86400/2) < secondOk) {
+                    if ((86400/2) < secondOk) 
+					{
                         secondOk = 0;
                         CostTemplateReq();
                         //SendReqCostTemplate(0);
@@ -389,38 +429,48 @@ void MainTask(void)
                 secondOk = 0;
             }
 
-            if (10 < gChgInfo.second) { //为了避免上电时间不够，功率还没有完全上升就开始检测功率，导致误停止，先等一段时间再进行充电控制处理
+            if (10 < gChgInfo.second) 
+			{ //为了避免上电时间不够，功率还没有完全上升就开始检测功率，导致误停止，先等一段时间再进行充电控制处理
                 //充电处理
-                if (gChgInfo.second & 1) {
+                if (gChgInfo.second & 1) 
+				{
                     ChargingCtrlProc();
                 }
-                if (0 == (gChgInfo.second & 0x07)) {
+                if (0 == (gChgInfo.second & 0x07)) 
+				{
                     ProcNetStatus();
                     ChargingProc();
                     CheckDialValue();
                 }
             }
 
-            if (0 == (gChgInfo.second & 0xf)) {
+            if (0 == (gChgInfo.second & 0xf)) 
+			{
                 CheckVoiceChipPower();
                 ProcGunStatus();
                 BlueTimingOpen();
 			}
 
             //蓝牙已经连接
-			if (gBlueStatus.status && (upgradeInfo.upgradeFlag == 0)) {
+			if (gBlueStatus.status && (upgradeInfo.upgradeFlag == 0)) 
+			{
 				//发送心跳
-				if (0 == (gChgInfo.second % 10)) {
+				if (0 == (gChgInfo.second % 10)) 
+				{
 					BlueSendHeartBeat();
 					//CL_LOG("BlueSendHeartBeat.\n");
 				}
-				if(memcmp(system_info.idCode,gZeroArray,sizeof(system_info.idCode)) != 0) {
+				if(memcmp(system_info.idCode,gZeroArray,sizeof(system_info.idCode)) != 0) 
+				{
 					//判断蓝牙离线
 					ProcBtHeartBeat();
 					//发送历史订单
 					ProcTradeRecord();
-				}else{//设备注册
-					if (0 == (gChgInfo.second & 0x07)) {
+				}
+				else
+				{//设备注册
+					if (0 == (gChgInfo.second & 0x07)) 
+					{
 						BlueRegister();
 						CL_LOG("blue register.\n");
 					}

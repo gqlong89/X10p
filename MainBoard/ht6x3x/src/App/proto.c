@@ -75,7 +75,8 @@ int GetNoZeroSum(uint8_t *pData, uint16_t len)
 
 int CheckCostTemplate(void)
 {
-    if ((COST_POWER != system_info.cost_template.mode) && (COST_UNIFY != system_info.cost_template.mode)) {
+    if ((COST_POWER != system_info.cost_template.mode) && (COST_UNIFY != system_info.cost_template.mode)) 
+	{
         return CL_FAIL;
     }
     return CL_OK;
@@ -87,7 +88,8 @@ int SendProtoPkt(uint16_t sn, uint8_t cmd, PKT_STR *pPkt, uint16_t len, uint8_t 
 {
     uint16_t encryLen;
 
-    if (gChgInfo.sendPktFlag) {
+    if (gChgInfo.sendPktFlag) 
+	{
         CL_LOG("skf=%d,cns.\n",gChgInfo.sendPktFlag);
         return CL_FAIL;
     }
@@ -95,9 +97,12 @@ int SendProtoPkt(uint16_t sn, uint8_t cmd, PKT_STR *pPkt, uint16_t len, uint8_t 
     pPkt->head.aa = 0xaa;
     pPkt->head.five = 0x55;
     pPkt->head.type = CHARGER_TYPE;
-    if ((MQTT_CMD_REGISTER == cmd) || (MQTT_CMD_AES_REQ == cmd) || (MQTT_CMD_UPDATE_AES_NOTICE == cmd)) {
+    if ((MQTT_CMD_REGISTER == cmd) || (MQTT_CMD_AES_REQ == cmd) || (MQTT_CMD_UPDATE_AES_NOTICE == cmd)) 
+	{
         memcpy(pPkt->head.chargerSn, system_info.station_id, sizeof(pPkt->head.chargerSn));
-    }else{
+    }
+	else
+	{
         memcpy(pPkt->head.chargerSn, system_info.idCode, sizeof(system_info.idCode));
     }
     pPkt->head.len = len + 5;
@@ -106,14 +111,17 @@ int SendProtoPkt(uint16_t sn, uint8_t cmd, PKT_STR *pPkt, uint16_t len, uint8_t 
     pPkt->head.cmd = cmd;
     pPkt->data[len] = GetPktSum((void*)&pPkt->head.ver, len+4);
 
-    if (LOCAL_NET != system_info.netType) { //非本地网络发送不加密
+    if (LOCAL_NET != system_info.netType) 
+	{ //非本地网络发送不加密
         return PutOutNetPkt((void*)pPkt, sizeof(PKT_HEAD_STR)+len+1, REQ_SEND_PKT);
     }
-    if (0 == decrypetFlag) {
+    if (0 == decrypetFlag) 
+	{
         return SocketSendData(SOCKET_ID, (void*)pPkt, sizeof(PKT_HEAD_STR)+len+1);
     }
 
-    if (0 == AesKeyUpdateFlag) {
+    if (0 == AesKeyUpdateFlag) 
+	{
         CL_LOG("key err.\n");
         return CL_FAIL;
     }
@@ -197,7 +205,7 @@ int SendRegister(void)
     memcpy(msg->device_type, STATION_MACHINE_TYPE, strlen(STATION_MACHINE_TYPE));
     memcpy(msg->register_code, REGISTER_CODE, strlen(REGISTER_CODE));
     memcpy(msg->hwId, system_info.iccid, sizeof(msg->hwId));
-	PrintfData("SendRegister origin data", (void*)msg, sizeof(REGISTER_REQ_STR));
+	PrintfData("发送注册请求", (void*)msg, sizeof(REGISTER_REQ_STR));
 	SendProtoPkt(system_info.mqtt_sn++, MQTT_CMD_REGISTER, (void*)&pkt->protoHead, sizeof(REGISTER_REQ_STR), ID2);
     MuxSempGive(&gProtoSendMux);
     return CL_OK;
@@ -232,7 +240,7 @@ int SendStartUpNotice(int flag)
     mqtt_start_up_req->statistics_info[6] = system_info.disturbingStopTime;
     mqtt_start_up_req->statistics_info[7] = system_info.fwVersion;
     mqtt_start_up_req->fwDownProto = 0;
-	PrintfData("startup origin data", (void*)mqtt_start_up_req, sizeof(START_UP_REQ_STR));
+	PrintfData("发送登录请求", (void*)mqtt_start_up_req, sizeof(START_UP_REQ_STR));
 	SendProtoPkt(system_info.mqtt_sn++, MQTT_CMD_START_UP, (void*)&pkt->protoHead, sizeof(START_UP_REQ_STR), ID2);
     MuxSempGive(&gProtoSendMux);
     return CL_OK;
@@ -485,6 +493,7 @@ int SendReqCostTemplate(uint8_t gunId)
     FRAME_STR *pkt = (void*)gProtoSendBuff;
     REQ_COST_TEMPLATE_STR *reqCostTemplate = (void*)pkt->data;
 
+	CL_LOG("计费模板请求.\n");
     MuxSempTake(&gProtoSendMux);
 	memset(gProtoSendBuff, 0, sizeof(gProtoSendBuff));
     reqCostTemplate->gun_id = gunId;
@@ -497,8 +506,8 @@ int SendReqCostTemplate(uint8_t gunId)
 
 void CostTemplateReq(void)
 {
-    if ((COST_POWER != system_info.cost_template.mode) && (COST_UNIFY != system_info.cost_template.mode)) {
-        CL_LOG("send req.\n");
+    if ((COST_POWER != system_info.cost_template.mode) && (COST_UNIFY != system_info.cost_template.mode)) 
+	{
         SendReqCostTemplate(0);
     }
 }
@@ -689,7 +698,8 @@ int CostTempCopy(COST_TEMPLATE_HEAD_STR *pcost)
     int ret = CL_OK;
     uint16_t temp;
 
-    if (0 == pcost->template_id) {
+    if (0 == pcost->template_id) 
+	{
         CL_LOG("id=0,err.\n");
         OptFailNotice(207);
         return CL_FAIL;
@@ -1116,12 +1126,14 @@ void ProcChargerInfo(void)
     CHARGER_STR charger;
 
     HT_Flash_ByteRead((void*)&charger, CHARGER_INFO_FLASH_ADDR, sizeof(charger));
-    if (memcmp(charger.station_id, system_info.station_id, sizeof(system_info.station_id))) {
+    if (memcmp(charger.station_id, system_info.station_id, sizeof(system_info.station_id))) 
+	{
         WriteCfgInfo(CFG_CHARGER_SN, sizeof(system_info.station_id), system_info.station_id);
         CL_LOG("w sn.\n");
     }
 
-    if (memcmp(charger.idCode, system_info.idCode, sizeof(system_info.idCode))) {
+    if (memcmp(charger.idCode, system_info.idCode, sizeof(system_info.idCode))) 
+	{
         WriteCfgInfo(CFG_CHARGER_DEVICEID, sizeof(system_info.idCode), system_info.idCode);
         CL_LOG("w id.\n");
     }
@@ -1183,13 +1195,15 @@ int RecvServerData(PKT_STR *pFrame, uint16_t len)
 	}
     #endif
 
-    switch (pFrame->head.cmd) {
+    switch (pFrame->head.cmd) 
+	{
         case MQTT_CMD_REGISTER:
         {
-            PrintfData("RecvServerData: register ack", (void*)pFrame, len);
+            PrintfData("RecvServerData: 收到设备注册应答", (void*)pFrame, len);
             REGISTER_ACK_STR *pRegister = (void*)pFrame->data;
 
-            if (0 == pRegister->result) {
+            if (0 == pRegister->result) 
+			{
                 PrintfData("idcode:", (void*)pRegister->idcode, 8);
                 memcpy((void*)system_info.idCode, (void*)pRegister->idcode, sizeof(system_info.idCode));
                 FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
@@ -1198,7 +1212,9 @@ int RecvServerData(PKT_STR *pFrame, uint16_t len)
                 CL_LOG("register ok,reboot.\n");
                 OptSuccessNotice(802);
                 ResetSysTem();
-            }else{
+            }
+			else
+			{
                 CL_LOG("register ack=%d,err.\n",pRegister->result);
                 OptFailNotice(100);
             }
@@ -1207,17 +1223,21 @@ int RecvServerData(PKT_STR *pFrame, uint16_t len)
 
         case MQTT_CMD_START_UP:
         {
-            PrintfData("RecvServerData: start up ack", (void*)pFrame, len);
+            PrintfData("RecvServerData: 收到设备登录应答", (void*)pFrame, len);
             START_UP_ACK_STR* pStartUp = (START_UP_ACK_STR*)pFrame->data;
             SycTimeCount(pStartUp->time_utc);
+			CL_LOG("系统时间戳: %d.\n", pStartUp->time_utc);
             SetRtcCount(pStartUp->time_utc);
             gSimStatus = 0;
             gChgInfo.errCode = 0;
             gChgInfo.netStatus = 0;
-            if (0 == pStartUp->result) {
+            if (0 == pStartUp->result) 
+			{
                 system_info.isRecvStartUpAck = 1;
                 ProcChargerInfo();
-            }else{
+            }
+			else
+			{
                 CL_LOG("start up ack=%d,err.\n",pStartUp->result);
                 OptFailNotice(101);
             }
@@ -1396,6 +1416,7 @@ int RecvServerData(PKT_STR *pFrame, uint16_t len)
         case MQTT_CMD_COST_DOWN:
         {
             //PrintfData("RecvServerData: recv cost template", (void*)pFrame, len);
+            PrintfData("RecvServerData: 服务器下发计费模板", (void*)pFrame->data, len);
             CostTemplateProc((void*)pFrame);
         }
         break;

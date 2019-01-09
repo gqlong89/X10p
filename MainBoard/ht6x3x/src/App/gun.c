@@ -10,7 +10,7 @@
 #include "rtc.h"
 #include "flash.h"
 #include "server.h"
-
+#include "relayCtrlTask.h"
 
 gun_info_t gun_info[GUN_NUM_MAX];
 
@@ -132,19 +132,23 @@ int GunTurnOff(uint8_t gunId)
 
 int TurnOffAllGun(void)
 {
-    for (int i=0; i<GUN_NUM_MAX; i++) 
-    {
-        GPIO_ResetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
-    }
+//    for (int i=0; i<GUN_NUM_MAX; i++) 
+//    {
+//        GPIO_ResetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
+//    }
+	RelayCtrl(0,0);
+
     return 0;
 }
 
 int TurnOnAllGun(void)
 {
-    for (int i=0; i<GUN_NUM_MAX; i++) 
-    {
-        GPIO_SetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
-    }
+ //   for (int i=0; i<GUN_NUM_MAX; i++) 
+ //   {
+ //       GPIO_SetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
+ //   }
+	RelayCtrl(0,1);
+	
     return 0;
 }
 
@@ -189,10 +193,24 @@ int GunGpioInit(void)
 	return 0;
 }
 
+//交流电流过零点检测中断引脚
+void AttGpioInit(void)
+{
+	GPIO_Cfg(HT_GPIOA, GPIO_Pin_10, GPIO_Mode_AF1, GPIO_Input_Up, GPIO_Output_PP);
+	
+	EnWr_WPREG();	
+	HT_INT->EXTIF = 0x0000;
+	NVIC_ClearPendingIRQ(EXTI5_IRQn);
+	NVIC_SetPriority(EXTI5_IRQn, 2);
+	HT_INT->EXTIE |= (1 << 5);			//INT5下降沿中断使能
+	NVIC_EnableIRQ(EXTI5_IRQn);
+    DisWr_WPREG();
+}
 
 int GunInit(void)
 {
     GunGpioInit();
+	AttGpioInit();
     FlashReadGunInfo((void*)gun_info, sizeof(gun_info));
     TurnOffAllGun();
     CL_LOG("init ok.\n");

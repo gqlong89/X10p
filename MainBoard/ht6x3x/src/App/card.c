@@ -346,7 +346,8 @@ void KeyModuleHandle(CKB_STR* pFrame)
 	KEY_VAL_REPORT_STR* pKey = (KEY_VAL_REPORT_STR*)pFrame->data;
 	CL_LOG("key=%d.\n", pKey->value);
 	Sc8042bSpeech(VOIC_KEY);
-	if (TestKeyFlag == 1) {
+	if (TestKeyFlag == 1) 
+	{
 		uint8_t ackData[2] = {0};
 		ackData[0] = 0x01;
 		ackData[1] = pKey->value;
@@ -390,20 +391,22 @@ void ReadPayCardBlock8Handle(BLOCK8_STRUCT_TYPE *pGetBlockData, uint8_t sectorOf
         memcpy(pWriteCardReq->keyA, gChgInfo.PayCardBlockBuff.MiyaoPayment, sizeof(gChgInfo.PayCardBlockBuff.MiyaoPayment));
         memcpy(pWriteCardReq->data, gChgInfo.PayCardBlockBuff.block8, sizeof(gChgInfo.PayCardBlockBuff.block8));
         WriteToCardBlock(&MiyaoWithBlock[0], sectorOffset + 2, 0);
-    }else{
+    }
+	else
+	{
         Sc8042bSpeech(VOIC_CARD);
         //正在读卡
         Sc8042bSpeech(VOIC_READING_CARD);
-        vTaskDelay(650);
+        vTaskDelay(650 / VOICE_DELAY_DIV);
         PrintfData("块数据", &pGetBlockData->CardUserFlag, 16);
         memcpy(gChgInfo.PayCardBlockBuff.block8, pGetBlockData, sizeof(gChgInfo.PayCardBlockBuff.block8));
         gChgInfo.PaymentCardMoney = pGetBlockData->CardBalance;
         SwitchToUI_ShowBalance(gChgInfo.PaymentCardMoney);
         SpeechCardBalance(gChgInfo.PaymentCardMoney);
-        vTaskDelay(750);
+        vTaskDelay(750 / VOICE_DELAY_DIV);
         Sc8042bSpeech(VOIC_INPUT_SOCKET_NUM);
         SwitchToUi_InputSocketNum();
-        vTaskDelay(600);
+        vTaskDelay(600 / VOICE_DELAY_DIV);
         clearKeyBuf(&keyVal);
     }
 }
@@ -412,7 +415,8 @@ void ReadPayCardBlock8Handle(BLOCK8_STRUCT_TYPE *pGetBlockData, uint8_t sectorOf
 //支付卡与门禁卡块数据的处理
 void ReadPayCardBlock9Handle(BLOCK9_STRUCT_TYPE *pGetBlock9Data, uint8_t* ucardkeyA, uint8_t sectorOffset)
 {
-    if (pGetBlock9Data->CheckSum != GetPktSum((void*)pGetBlock9Data, 15)) {
+    if (pGetBlock9Data->CheckSum != GetPktSum((void*)pGetBlock9Data, 15)) 
+	{
 		CL_LOG("fail,ofs=%d.\n",sectorOffset);
         return;
     }
@@ -503,7 +507,9 @@ void ReadAuthCardIDHandle(CKB_STR* pFrame)
     }
 
     //没有计费模板不发起充电
-    if (CL_OK != CheckCostTemplate()) {
+    if (CL_OK != CheckCostTemplate()) 
+    {
+       // CL_LOG("没有计费模板.\n");
         OptFailNotice(206);
         return;
     }
@@ -665,7 +671,8 @@ void EntranceGuardCardReadIDHandle(CKB_STR* pFrame)
     if(0x11 == gChgInfo.isPayCard)      //支付卡
     {
         CL_LOG("支付卡.\n");
-        if (CL_OK != CheckCostTemplate()) { //没有计费模板不发起充电
+        if (CL_OK != CheckCostTemplate()) 
+        { //没有计费模板不发起充电
             OptFailNotice(206);
             return;
         }
@@ -781,7 +788,8 @@ void CardReadIDHandle(CKB_STR* pFrame)
     if(0x11 == gChgInfo.isPayCard)      //支付卡
     {
         CL_LOG("支付卡.\n");
-        if (CL_OK != CheckCostTemplate()) { //没有计费模板不发起充电
+        if (CL_OK != CheckCostTemplate()) 
+        { //没有计费模板不发起充电
             OptFailNotice(206);
             return;
         }
@@ -808,21 +816,26 @@ void CardModuleHandle(CKB_STR* pFrame)
     static uint8_t ucardkeyA[16];
     static uint32_t TickOfMiYaoCardOutTime = 0;
 
-    if ((0x01 == gChgInfo.isMiYaoCard) && ((uint32_t)((GetRtcCount() - TickOfMiYaoCardOutTime) > 15))) {
+    if ((0x01 == gChgInfo.isMiYaoCard) && ((uint32_t)((GetRtcCount() - TickOfMiYaoCardOutTime) > 15))) 
+	{
         TickOfMiYaoCardOutTime = GetRtcCount();
         gChgInfo.isMiYaoCard = 0;
     }
-	if (pFrame->head.cmd == CMD_CARD_UP) {//卡信息
+	if (pFrame->head.cmd == CMD_CARD_UP) 
+	{//卡信息
 		//应答接收成功
 		SendCardInfoReportAck(0);
 		CARD_INFO_REPORT_STR* pCardInfo = (CARD_INFO_REPORT_STR*)pFrame->data;
-		if (pCardInfo->type == 0x01) {//密码卡
+		if (pCardInfo->type == 0x01) 
+		{//密码卡
 		    gChgInfo.PayCardReadFlag = 0;   //如果支付卡输入插座和金额后再刷密钥卡，就让其重新开始输入
 		    ReadCardNumReq(&SecretCardKEY_A[0], 2, 0);
             gChgInfo.isMiYaoCard = 1;
             TickOfMiYaoCardOutTime = GetRtcCount();     //以防密钥卡还没读取完数据就移开卡
             gChgInfo.DataFlagBit.CardMisoperationTimes = 0;
-		} else if (pCardInfo->type == 0x02) {//非密码卡
+		} 
+		else if (pCardInfo->type == 0x02) 
+		{//非密码卡
 			//获取卡序列号
 			AES_set_encrypt_key("chargerlink1234", 128, &aes);
 			memcpy(tmp, pCardInfo->serial, 4);
@@ -832,7 +845,8 @@ void CardModuleHandle(CKB_STR* pFrame)
 			PrintfData("card keyA:", ucardkeyA, 6);
             gChgInfo.DataFlagBit.CardMisoperationTimes = 0;
 
-            if((0 == gChgInfo.PayCardReadFlag) || (GetRtcCount() - gChgInfo.SecondCardTick > 15) || ((1 == gChgInfo.PayCardReadFlag) && (UI_STANDBY == UIGetState()))) {
+            if((0 == gChgInfo.PayCardReadFlag) || (GetRtcCount() - gChgInfo.SecondCardTick > 15) || ((1 == gChgInfo.PayCardReadFlag) && (UI_STANDBY == UIGetState()))) 
+			{
                 CL_LOG("第1次刷卡.\n");
                 //gChgInfo.DataFlagBit.isReadFromElevenSector = 0;
                 gChgInfo.DataFlagBit.ReadFromElevenSector = 0;   //对于没有加门禁卡功能的卡, 清除这个标志
@@ -843,7 +857,9 @@ void CardModuleHandle(CKB_STR* pFrame)
                 memcpy(gChgInfo.PayCardBlockBuff.MiyaoPayment, ucardkeyA, sizeof(gChgInfo.PayCardBlockBuff.MiyaoPayment));
                 gChgInfo.DataFlagBit.isPayCardFlag = 0;
                 gChgInfo.payCardBlock = 9;
-            }else if((5 == gChgInfo.PayCardReadFlag)) {
+            }
+			else if((5 == gChgInfo.PayCardReadFlag)) 
+			{
                 CL_LOG("第2次刷卡.\n");
                 gChgInfo.DataFlagBit.ReadFromElevenSector = 0;  //对于没有加门禁卡功能的卡, 清除这个标志
                 gChgInfo.PayCardReadFlag = 8;
@@ -853,7 +869,9 @@ void CardModuleHandle(CKB_STR* pFrame)
                 gChgInfo.payCardBlock = 9;
             }
 		}
-	}else if (pFrame->head.cmd == CMD_CARD_READ) { //读卡
+	}
+	else if (pFrame->head.cmd == CMD_CARD_READ) 
+	{ //读卡
         READ_CARD_REPORT_STR* pReadCard = (READ_CARD_REPORT_STR*)pFrame->data;
         if(1 == gChgInfo.isMiYaoCard)   //密钥卡？
         {
@@ -864,7 +882,8 @@ void CardModuleHandle(CKB_STR* pFrame)
                 MiYaoCardReadIDHandle(pFrame);
                 gChgInfo.DataFlagBit.ReadFromElevenSector = 0;
             }
-            else{      //读卡失败或确认是否增加门禁功能
+            else
+			{      //读卡失败或确认是否增加门禁功能
                 KeyCardConfirmAddEntranceGuard();
                 return;
             }
@@ -884,7 +903,8 @@ void CardModuleHandle(CKB_STR* pFrame)
                     break;
                 }
             }
-            else{   //读卡失败或确认是否增加门禁功能
+            else
+			{   //读卡失败或确认是否增加门禁功能
                 PayCardConfirmAddEntranceGuard(ucardkeyA);
                 return;
             }
@@ -949,7 +969,8 @@ void HandleCKBData(void *pPkt)
 {
 	CKB_STR* pFrame = pPkt;
 
-	switch (pFrame->head.module) {
+	switch (pFrame->head.module) 
+	{
 		case WHOLE_MODULE://整体消息
 		{
 			WholeModuleHandle(pFrame);
@@ -967,7 +988,8 @@ void HandleCKBData(void *pPkt)
                     LcdTurnOnLed();
                 }
             }
-			else{
+			else
+			{
                 KeyModuleHandle(pFrame);
                 LcdTurnOnLed();
             }
@@ -1041,17 +1063,22 @@ void ProcKBData(void)
 	static uint8_t  sum;
     static uint32_t time;
 
-    if (CKB_FIND_AA != step) {
-        if (2 < (uint32_t)(GetRtcCount() - time)) {
+    if (CKB_FIND_AA != step) 
+	{
+        if (2 < (uint32_t)(GetRtcCount() - time)) 
+		{
             CL_LOG("no rx data,step=%d,err.\n",step);
             step = CKB_FIND_AA;
         }
     }
-	while (CL_OK == FIFO_S_Get(&gUartPortAddr[1].rxBuffCtrl, &data)) {
-    	switch (step) {
+	while (CL_OK == FIFO_S_Get(&gUartPortAddr[1].rxBuffCtrl, &data)) 
+	{
+    	switch (step) 
+		{
     		case CKB_FIND_AA:
     		{
-    			if (data == 0xAA) {
+    			if (data == 0xAA) 
+				{
                     time = GetRtcCount();
     				pktLen=0;
     				pktBuff[pktLen] = 0xAA;
@@ -1062,23 +1089,30 @@ void ProcKBData(void)
     		break;
     		case CKB_FIND_FIVE:
     		{
-    			if (data == 0x55) {
+    			if (data == 0x55) 
+				{
     				pktBuff[pktLen] = 0x55;
     				pktLen++;
     				step = CKB_FIND_LEN;
-    			} else {
+    			} 
+				else 
+				{
     				step = CKB_FIND_AA;
     			}
     		}
     		break;
     		case CKB_FIND_LEN:
     		{
-    			if (pktLen == 2) {
+    			if (pktLen == 2) 
+				{
     				length = data;
-    			} else if (pktLen == 3) {
+    			} 
+				else if (pktLen == 3) 
+				{
     				length |= (data << 8);
     				sum = 0;
-                    if (5 > length) {
+                    if (5 > length) 
+					{
                         CL_LOG("length=%d,err.\n", length);
                         step = CKB_FIND_AA;
                         break;
@@ -1091,14 +1125,17 @@ void ProcKBData(void)
     		break;
     		case CKB_FIND_VER:
     		{
-    			if (data == 0x01) {
+    			if (data == 0x01) 
+				{
     				sum += data;
     				pktBuff[pktLen] = data;
     				length--;
     				pktLen++;
     				step = CKB_FIND_SN;
     				//CL_LOG("CKB find version = %d.\n", data);
-    			} else {
+    			} 
+				else 
+				{
     				step = CKB_FIND_AA;
     			}
     		}
@@ -1127,9 +1164,12 @@ void ProcKBData(void)
     		{
     			sum += data;
     			pktBuff[pktLen] = data;
-    			if (--length) {
+    			if (--length) 
+				{
                     step = CKB_FIND_DATA;
-                }else{
+                }
+				else
+				{
                     step = CKB_FIND_CHECKSUM;
                 }
     			pktLen++;
@@ -1142,7 +1182,8 @@ void ProcKBData(void)
     			pktBuff[pktLen] = data;
     			pktLen++;
     			length--;
-    			if (length==1) {
+    			if (length==1) 
+				{
     				step = CKB_FIND_CHECKSUM;
     			}
     		}
@@ -1151,10 +1192,13 @@ void ProcKBData(void)
     		{
     			pktBuff[pktLen] = data;
     			pktLen++;
-    			if (data == sum) {
+    			if (data == sum) 
+				{
     				gChgInfo.lastRecvKbMsgTime = GetRtcCount();
     				HandleCKBData((void*)pktBuff);
-    			} else {
+    			} 
+				else 
+				{
     				CL_LOG("CKB cs err.\n");
     			}
     			step = CKB_FIND_AA;

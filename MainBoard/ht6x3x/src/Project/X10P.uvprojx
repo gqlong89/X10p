@@ -455,6 +455,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\upgrade.c</FilePath>
             </File>
+            <File>
+              <FileName>relayCtrlTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\relayCtrlTask.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -529,6 +534,11 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Driver\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>TempDetection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\TempDetection.c</FilePath>
             </File>
           </Files>
         </Group>

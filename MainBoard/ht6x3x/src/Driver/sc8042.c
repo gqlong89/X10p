@@ -213,7 +213,8 @@ void SpeechCardBalance(uint32_t balance)
 {
 	uint8_t temp3,temp4;
 
-	if (balance > 99999) {
+	if (balance > 99999) 
+	{
 		return;
 	}
 
@@ -221,14 +222,14 @@ void SpeechCardBalance(uint32_t balance)
 	temp4 = balance%10;
 
 	Sc8042bSpeech(VOIC_CARD_BANLANCE);
-	vTaskDelay(1000);
+	vTaskDelay(1000 / VOICE_DELAY_DIV);
     SoundNumber(balance);
     Sc8042bSpeech(VOIC_POINT);
-    vTaskDelay(250);
+    vTaskDelay(250 / VOICE_DELAY_DIV);
     Sc8042bSpeech(temp3+31);
-    vTaskDelay(250);
+    vTaskDelay(250 / VOICE_DELAY_DIV);
     Sc8042bSpeech(temp4+31);
-    vTaskDelay(250);
+    vTaskDelay(250 / VOICE_DELAY_DIV);
 	Sc8042bSpeech(VOIC_YUAN);
 }
 

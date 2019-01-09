@@ -54,11 +54,11 @@ PUTCHAR_PROTOTYPE
 
 void PrintfData(void *pfunc, uint8_t *pdata, int len)
 {
-	int i;
+	uint32_t i;
 
     if (0 == system_info.printSwitch) 
 	{
-        return;
+    //    return;
     }
 	CL_LOG("call by %s,len=%d,pdata:",(char*)pfunc,len);
     Feed_WDT();
@@ -316,9 +316,9 @@ void PrintSysCfgInfo(void)
 {
     CL_LOG("cm=%d,pgst=%d,cft=%d,pgs=%d,cfs=%d,csg=%d,dstart=%d,dstopt=%d.\n",
         system_info.chargerMethod,system_info.pullGunStopTime,system_info.chargingFullTime,system_info.pullGunStop,system_info.chargingFullStop,system_info.chargerStartingGold,system_info.disturbingStartTime,system_info.disturbingStopTime);
-    PrintfData("opnum", system_info.OperatorNum, sizeof(system_info.OperatorNum));
-    PrintfData("sn", system_info.station_id, sizeof(system_info.station_id));
-    PrintfData("id", system_info.idCode, sizeof(system_info.idCode));
+    PrintfData("运营商编号", system_info.OperatorNum, sizeof(system_info.OperatorNum));
+    PrintfData("设备号", system_info.station_id, sizeof(system_info.station_id));
+    PrintfData("识别码", system_info.idCode, sizeof(system_info.idCode));
 }
 
 
@@ -796,16 +796,19 @@ void ProcNetStatus(void)
 
 void OpenNetDevice(void)
 {
-    while (1) {
+    while (1) 
+	{
         system_info.netType = 5;
-        if (CL_OK == OutSizeNetCheck()) {
+        if (CL_OK == OutSizeNetCheck()) 
+		{
             system_info.netType = gOutNetStatus.connect;
             break;
         }
 
         #if (0 == X10C_TYPE)
         system_info.netType = 4;
-        if (CL_OK == Sim800cReconnect()) {
+        if (CL_OK == Sim800cReconnect()) 
+		{
             system_info.netType = LOCAL_NET;
             break;
         }

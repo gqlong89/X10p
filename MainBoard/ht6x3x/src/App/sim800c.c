@@ -403,10 +403,13 @@ int SOCKET_open_set(int socket, char* addr, int port)
     sprintf(cmd_ack, "%d, CONNECT OK", socket);
     sprintf(cmd_req,"AT+CIPSTART=%d,\"TCP\",\"%s\",%d\r", socket, addr, port);
 
-    if(!GprsSendCmd(cmd_req, cmd_ack, 5000, 0)) {
+    if(!GprsSendCmd(cmd_req, cmd_ack, 5000, 0)) 
+    {
         CL_LOG("link %d open ok,ip=%s,port=%d.\n", socket,addr,port);
         return 0;
-    }else{
+    }
+    else
+    {
         CL_LOG("link %d open err.\n", socket);
         return -1;
     }
@@ -419,7 +422,8 @@ int sim800_ipopen(char ok, uint8_t retry)
     int ready = 0;
 
     CL_LOG("in.\n");
-    switch(state) {
+    switch(state) 
+    {
         case NET_STATE_SOCKET0_OPEN:
         {
             ready = CL_FALSE;
@@ -468,7 +472,8 @@ int sim800_ipopen(char ok, uint8_t retry)
 
 int sim800_default(char ok, uint8_t retry)
 {
-    if (istage < SIM800_STATE_NUM) {
+    if (istage < SIM800_STATE_NUM) 
+	{
         istage++;
     }
     return CL_OK;
@@ -481,31 +486,41 @@ int Sim800cReconnect(void)
     uint8_t retry = 0;
 
 	istage = SIM800_RESET;
-	while(1) {
+	while(1) 
+    {
         Feed_WDT();
         OS_DELAY_MS(ipinit_tab[istage].nwait*10);
 
-        if (OUT_485_NET == gOutNetStatus.connect) {
+        if (OUT_485_NET == gOutNetStatus.connect) 
+        {
             CL_LOG("485 net check ok,stop try local net.\n");
             return CL_FAIL;
         }
 
-        if (ipinit_tab[istage].cmd) {
+        if (ipinit_tab[istage].cmd) 
+        {
             ok = GprsSendCmd(ipinit_tab[istage].cmd,ipinit_tab[istage].res,ipinit_tab[istage].wait, 0);
         }
 
-        if (ipinit_tab[istage].process) {
-            if (CL_OK == ipinit_tab[istage].process(ok, retry)) {
+        if (ipinit_tab[istage].process) 
+        {
+            if (CL_OK == ipinit_tab[istage].process(ok, retry)) 
+            {
                 retry = 0;
-            }else{
+            }
+            else
+            {
                 retry++;
             }
         }
 
-		if (istage == SIM800_STATE_NUM) {
+		if (istage == SIM800_STATE_NUM) 
+        {
 			CL_LOG("2G init and set socket ok.\n");
 			return CL_OK;
-		}else if (SIM800_RESET == istage) {
+		}
+        else if (SIM800_RESET == istage) 
+        {
             CL_LOG("2G init and set socket fail.\n");
             return CL_FAIL;
         }
@@ -969,17 +984,20 @@ int GprsSocketStateCheck(void)
     int res;
     char cmd_req[32] = {0};
 
-    if (gChgInfo.sendPktFlag) {
+    if (gChgInfo.sendPktFlag) 
+    {
         return CL_FAIL;
     }
 
     sprintf(cmd_req, "AT+CIPSTATUS=%d\r", SOCKET_ID);      //查询当前socket的连接状态
     res = GprsSendCmd(cmd_req, "OK", 5000, 0);
-    if (res != CL_OK) {  //当前socket连接异常，马上重新建链
-        CL_LOG("link fault.\n");
+    if (res != CL_OK) 
+    {  //当前socket连接异常，马上重新建链
+        CL_LOG("网络连接异常, 正在重新建链...\n");
         sprintf(cmd_req, "AT+CIPCLOSE=%d\r", SOCKET_ID);
         GprsSendCmd(cmd_req, "CLOSE OK", 1000, 0);
-        if (CL_OK == SOCKET_open_set(SOCKET_ID, NET_SERVER_IP, NET_SERVER_PORT)) {
+        if (CL_OK == SOCKET_open_set(SOCKET_ID, NET_SERVER_IP, NET_SERVER_PORT)) 
+        {
             CL_LOG("reconnect.\n");
             return CL_OK;
         }

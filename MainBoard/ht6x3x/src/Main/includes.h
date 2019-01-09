@@ -110,68 +110,68 @@
 034.0   mcu降频，解决低温异常复位问题
 */
 
-#define SPECIAL_NET_CARD				0                   //0:公网卡   1:专网卡  2:X10c
+#define SPECIAL_NET_CARD				1                   //0:公网卡    1:专网卡    2:X10c
 #define ENVI_TYPE                       0                   //0:正式环境 1:测试环境 2:预发布环境 3:开发环境 4:测试环境2
-#define FW_VERSION                      34
+#define FW_VERSION                      1
 #define FW_VERSION_SUB                  (SPECIAL_NET_CARD)
 
 #if (1 == SPECIAL_NET_CARD) //====================== 专网卡 ========================
 #define X10C_TYPE                       0                   //0:正常x10  1:x10c
 #define ID2                             1                   //0:不加密	 1:加密
-#define IS_CPU_DOU_FRE                  0                   //是否倍频  0不倍频；  1倍频
-#if (0 == ENVI_TYPE)
-#define NET_SERVER_IP                   "www.access.com"    //正式环境
-#define NET_SERVER_PORT                 10010
-#endif
-#if (1 == ENVI_TYPE)
-#define NET_SERVER_IP                   "test.access.com"
-#define NET_SERVER_PORT                 10010
-#endif
-#if (2 == ENVI_TYPE)
-#define NET_SERVER_IP                   "172.16.0.245"
-#define NET_SERVER_PORT                 10010
-#endif
-#if (3 == ENVI_TYPE)
-#define NET_SERVER_IP                   "172.16.0.228"
-#define NET_SERVER_PORT                 10010
-#endif
-#if (4 == ENVI_TYPE)
-#define NET_SERVER_IP                   "172.16.0.8"
-#define NET_SERVER_PORT                 10010
-#endif
+	#if (0 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "www.access.com"    //正式环境
+	#define NET_SERVER_PORT                 10010
+	#elif (1 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "test.access.com"
+	#define NET_SERVER_PORT                 10010
+	#elif (2 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "172.16.0.245"
+	#define NET_SERVER_PORT                 10010
+	#elif (3 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "172.16.0.228"
+	#define NET_SERVER_PORT                 10010
+	#elif (4 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "172.16.0.8"
+	#define NET_SERVER_PORT                 10010
+	#endif
+
 #define REGISTER_CODE					"928698494848"
+
 #elif (0 == SPECIAL_NET_CARD) //====================== 公网卡 ========================
 #define X10C_TYPE                       0                   //0:正常x10  1:x10c
 #define ID2                             0                   //0:不加密	 1:加密
-#define IS_CPU_DOU_FRE                  0   //是否倍频  0不倍频；  1倍频
-#if (0 == ENVI_TYPE)
-#define NET_SERVER_IP                   "access.sharecharger.com"     //正式环境
-#define NET_SERVER_PORT                 10010
-#endif
-#if (1 == ENVI_TYPE)
-#define NET_SERVER_IP                   "test.access.chargerlink.com"
-#define NET_SERVER_PORT                 10010
-#endif
-#if (2 == ENVI_TYPE)
-#define NET_SERVER_IP                   "47.97.236.187"
-#define NET_SERVER_PORT                 10010
-#endif
-#if (3 == ENVI_TYPE)
-#define NET_SERVER_IP                   "47.97.238.64"
-#define NET_SERVER_PORT                 10010
-#endif
-#if (4 == ENVI_TYPE)
-#define NET_SERVER_IP                   "47.97.237.248"
-#define NET_SERVER_PORT                 10010
-#endif
+
+	#if (0 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "access.sharecharger.com"     //正式环境
+	#define NET_SERVER_PORT                 10010
+	#elif (1 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "test.access.chargerlink.com"
+	#define NET_SERVER_PORT                 10010
+	#elif (2 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "47.97.236.187"
+	#define NET_SERVER_PORT                 10010
+	#elif (3 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "47.97.238.64"
+	#define NET_SERVER_PORT                 10010
+	#elif (4 == ENVI_TYPE)
+	#define NET_SERVER_IP                   "47.97.237.248"
+	#define NET_SERVER_PORT                 10010
+	#endif
+	
 #define REGISTER_CODE					"928698494847"
 #elif (2 == SPECIAL_NET_CARD) //====================== X10C ========================
-#define IS_CPU_DOU_FRE                  0   //是否倍频
 #define X10C_TYPE                       1                   //0:正常x10  1:x10c
 #define NET_SERVER_IP                   "www.access.com"     //正式环境
 #define NET_SERVER_PORT                 10010
 #define ID2                             0                    //0:不加密	 1:加密
 #define REGISTER_CODE					"830484693193"
+#endif
+
+#define IS_CPU_DOU_FRE                  1                   //是否倍频  0不倍频；  1倍频
+#if (0 == IS_CPU_DOU_FRE)
+	#define VOICE_DELAY_DIV               2
+#else
+	#define VOICE_DELAY_DIV               1
 #endif
 
 #define IS_THREE_DIAL                   0
@@ -215,9 +215,9 @@ typedef unsigned long long uint64_t;
 #define CHARGING_POWER_LIMIT            8700  //整桩最大功率限制 w
 
 
-#define setbit(x,y) x|=(1<<y)           //将X的第Y位置1
-#define clrbit(x,y) x&=~(1<<y)          //将X的第Y位清0
-#define revbit(x,y) x^=(1<<y)           //将X的第Y位反转
+#define setbit(x,y) 					x |= (1<<y)           //将X的第Y位置1
+#define clrbit(x,y) 					x &= ~(1<<y)          //将X的第Y位清0
+#define revbit(x,y) 					x ^= (1<<y)           //将X的第Y位反转
 
 
 typedef struct {
@@ -244,5 +244,10 @@ typedef struct{
 
 
 #endif //__INCLUDE_H__
+
+
+
+
+
 
 

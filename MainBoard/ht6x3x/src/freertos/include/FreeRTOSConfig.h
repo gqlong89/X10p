@@ -93,8 +93,11 @@ extern uint32_t SystemCoreClock;
 #define configUSE_IDLE_HOOK				0
 #define configUSE_TICK_HOOK				0
 
-#define configCPU_CLOCK_HZ				(25000000/2)   //½µÆµ20m
-//#define configCPU_CLOCK_HZ				25000000 //1ms
+//#if (0 == IS_CPU_DOU_FRE)
+//	#define configCPU_CLOCK_HZ				(25000000/2)   //½µÆµ20m
+//#else
+	#define configCPU_CLOCK_HZ				25000000 //1ms
+//#endif
 
 #define configTICK_RATE_HZ				( ( TickType_t ) 500 )
 #define configMAX_PRIORITIES			( 1 )
