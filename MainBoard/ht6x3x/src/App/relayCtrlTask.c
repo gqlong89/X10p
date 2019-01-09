@@ -256,12 +256,24 @@ void HT_TMRExt_Init(HT_TMR_TypeDef* TMRx, TMRExt_InitTypeDef* TMR_InitStruct)
         TMRx->TMRPRD = TMR_InitStruct->TimerPeriod;        /*!< 设置定时器周期寄存器        */
         TMRx->TMRCMP = TMR_InitStruct->TimerCompare;       /*!< 设置定时器比较寄存器        */
         TMRx->TMRCNT = 0;                                  /*!< 清空定时器计数寄存器        */
-        tempreg = TMR_TMRCON_CNTEN;                        /*!< 定时器使能                 */
+     //   tempreg = TMR_TMRCON_CNTEN;                        /*!< 定时器使能                 */
         tempreg |= ((uint32_t)TMR_InitStruct->TimerMode|(uint32_t)TMR_InitStruct->TimerSource);
         TMRx->TMRCON = tempreg;                            /*!< 设置定时器工作模式          */
     }
 }
 #endif
+
+void TIM4_5_Cmd(HT_TMR_TypeDef* TMRx, int en)
+{
+	if(en)
+	{
+	    setbit(TMRx->TMRCON,0);
+	}
+	else
+	{
+	    clrbit(TMRx->TMRCON,0);
+	}
+}
 
 int timer4_init(uint16_t period) 
 {
@@ -290,6 +302,7 @@ int timer4_init(uint16_t period)
 	HT_TMR_PeriodSet(HT_TMR4, period);									//设置周期寄存器值并清空当前计数值
 	HT_TMR_ITConfig(HT_TMR4, TMR_TMRIE_PRDIE, ENABLE);
 	NVIC_EnableIRQ(TIMER_4_IRQn);
+	TIM4_5_Cmd(HT_TMR4, ENABLE);
 	
 	return 0;
 }
@@ -340,6 +353,19 @@ void RelayCtrl(uint8_t gunId,uint8_t on)
 }
 
 
+int ReadEMUIF(int no)
+{
+	uint8_t data[4];
+	
+	if(HT7017_Read(no,VAR_EMUIF,data) != CL_FAIL)
+	{
+		uint32_t reg = (uint32_t)((data[0] << 16)|(data[1] << 8) | data[2]);
+		
+		return reg;
+	}
+	
+	return CL_FAIL;
+}
 
 void RelayCtrlTask(void)
 {
@@ -359,10 +385,10 @@ void RelayCtrlTask(void)
                 //清中断标志
 				for(uint8_t i = 0;i<3;i++)
 				{
-//					if(ReadEMUIF(EMU6_UART) == CL_OK)
-//					{
-//						break;
-//					}
+					if(ReadEMUIF(EMUID[6]) == CL_OK)
+					{
+						break;
+					}
 				}
                 tick = xTaskGetTickCount();
                 while(1)
@@ -392,37 +418,28 @@ void RelayCtrlTask(void)
     }
 }
 
-//void TIMER7_UP_IRQHandler(void)
-//{
-//    if(SET == timer_interrupt_flag_get(TIMER7,TIMER_INT_FLAG_UP)){ 
-//		timer_interrupt_flag_clear(TIMER7,TIMER_INT_FLAG_UP);
-//        
-//		timer_interrupt_disable(TIMER7, TIMER_INT_FLAG_UP);
-//        nvic_irq_disable(TIMER7_UP_IRQn);
-//		timer_flag_clear(TIMER7,TIMER_FLAG_UP);
-//        timer_disable(TIMER7);
-//		
-//        if(operate == 0)
-//        {
-//            CrtlRelay_OFF();//关
-//        }
-//        else if(operate == 1)
-//        {
-//            CrtlRelay_ON();//控制继电器-开
-//        }
-//        timerHandle = 0;
-//		ATTFlag = 1;
-//    }
-//}
-
 void TIMER_4_IRQHandler(void)
 {
 	if(SET == HT_TMR_ITFlagStatusGet(HT_TMR2, TMR_TMRIF_PRDIF))                /*!< 周期中断           */
     {
-		
         HT_TMR_ClearITPendingBit(HT_TMR2, TMR_TMRIF_PRDIF);                    /*!< 清除中断标志       */
-    }
 
+        HT_TMR_ITConfig(HT_TMR4, TMR_TMRIE_PRDIE, DISABLE);
+        NVIC_DisableIRQ(TIMER_4_IRQn);
+		TIM4_5_Cmd(HT_TMR4, DISABLE);
+		
+        if(operate == 0)
+        {
+            CrtlRelay_OFF();//关
+        }
+        else if(operate == 1)
+        {
+            CrtlRelay_ON();//控制继电器-开
+        }
+        timerHandle = 0;
+		ATTFlag = 1;
+    }
+#if 0
     if(SET == HT_TMR_ITFlagStatusGet(HT_TMR2, TMR_TMRIF_CAPIF))                /*!< 捕获中断           */
     {
 		
@@ -434,6 +451,7 @@ void TIMER_4_IRQHandler(void)
 		
         HT_TMR_ClearITPendingBit(HT_TMR2, TMR_TMRIF_CMPIF);                    /*!< 清除中断标志       */
     }
+#endif
 }
 
 

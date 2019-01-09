@@ -1197,7 +1197,7 @@ void emuTask(void)
                         gEmuResetFlag = gEmuResetFlag & (~(1<<i));
                     }
                 }
-                #if 0
+                #if 1
 				if(EnableZXIE(EMUID[6]) != CL_FAIL)
 				{
 					CL_LOG("enable ZXIE success..\r\n");

@@ -38,6 +38,7 @@
 #include "upgrade.h"
 #include "ht6xxx.h"
 #include "TempDetection.h"
+#include "relayCtrlTask.h"
 
 
 TaskHandle_t MainTaskHandle_t;
@@ -271,6 +272,9 @@ void MainTask(void)
 	ret |= xTaskCreate((TaskFunction_t)CkbTask,"CkbTask",512+128,NULL,1,NULL);
     OS_DELAY_MS(500);
     ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask",256+128,NULL,1,&gEmuTaskHandle_t);
+	OS_DELAY_MS(500);
+	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask",128,NULL,1,NULL); 
+    OS_DELAY_MS(500);
     CL_LOG("task init, ret=%d.\n",ret);
 
     ShowCostTemplate();
@@ -279,7 +283,7 @@ void MainTask(void)
 	while(1) 
     {
         OS_DELAY_MS(300);
-        if (GetRtcCount() != old) 
+        if (GetRtcCount() != old)
         {
             old = GetRtcCount();
             Feed_WDT();
