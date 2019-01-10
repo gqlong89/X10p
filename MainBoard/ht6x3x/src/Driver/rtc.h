@@ -24,7 +24,7 @@ extern char* GetCurrentTime(void);
 extern uint32_t GetTimeStamp(void);
 extern int LinuxTickToDay(uint32_t tick, uint8_t *pDay);
 
-
+extern uint32_t RegisterWriteProtect[2];
 extern __IO uint32_t gSysSecond;
 
 #endif //__RTC_H__

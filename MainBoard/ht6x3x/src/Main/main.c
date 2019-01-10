@@ -230,7 +230,9 @@ void BspInit(void)
 	SystemClockInit();
 	SysTick_Init();
 	UsartInit();
-	
+    
+	RegisterWriteProtect[0] = CMU_WPREG_Protected;
+    RegisterWriteProtect[1] = CMU_WPREG_UnProtected;
 	SimuartInit();
     OS_DELAY_MS(500);
 	printf("\n\n\n########################################################################################### \n");
@@ -291,6 +293,10 @@ void MainTask(void)
 			ReadTempDetection(TBS_ADC3);
 			CL_LOG("2222222222222222\n");
 			ReadTempDetection(TBS_ADC4);
+////			LcdTurnOnLed();
+			OS_DELAY_MS(500);
+////			LcdTurnOffLed();
+			OS_DELAY_MS(500);
             //socket已经建立连接
             if ((system_info.is_socket_0_ok == CL_TRUE) && ((LOCAL_NET == system_info.netType) || (OUT_485_NET == system_info.netType))) 
 			{

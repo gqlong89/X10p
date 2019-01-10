@@ -4,10 +4,10 @@
 * liutao@chargerlink.com
 */
 #include "includes.h"
+#include "rtc.h"
 
 
-
-static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
+//static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
 
 //******************************************************************
 //! \brief  	Fsys ÇÐ»»µ½Flf£¨32768Hz£©

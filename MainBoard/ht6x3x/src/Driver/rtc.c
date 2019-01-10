@@ -10,7 +10,7 @@
 #include "server.h"
 
 
-static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
+uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
 static const uint16_t TAB_DFx[10] =
 {
 	0x0000, 0x0000,

@@ -25,7 +25,7 @@
 #define M16(adr)    (*((uint16_t *) (adr)))
 #define M32(adr)    (*((uint32_t *) (adr)))
 
-static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
+//static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
 
 //uint8_t TradeRecordGunId=0;
 
@@ -47,7 +47,8 @@ static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnP
 * 特殊说明: 用户应保证函数执行过程中寄存器写保护状态以及Flash解锁状态不变
 *********************************************************************************************************
 */
-void HT_Flash_ByteWrite(uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
+#if 0
+void HT_Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
 {
     /*  assert_param  */
 
@@ -73,6 +74,48 @@ void HT_Flash_ByteWrite(uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
     HT_CMU->WPREG = writeProtect;                                          /*!< 恢复之前写保护设置     */
     MASTER_INT_EN();
 }
+#else
+__ASM void HT_Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
+{
+    PUSH    {R4-R6}
+    LDR     R6, |KEIL_FLASH_BWR_WPREG_UL_VAL|
+    MOVS    R5, #1
+    LDR     R3, |KEIL_FLASH_BWR_WPREG_REG_ADDR|
+    LDR     R4, [R3]
+    ANDS    R4, R4, R5
+    BEQ     KEIL_FLASH_BWR_CONFIG_REG_SET
+    MOVS    R4, R6
+KEIL_FLASH_BWR_CONFIG_REG_SET
+    STR     R6, [R3]
+    LDR     R6, |KEIL_FLASH_BWR_CONFIG_UL_VAL|
+    STR     R6, [R3, #0x38]
+    STR     R5, [R3, #0x34]
+    CMP     R2, #0
+    BEQ     KEIL_FLASH_BWR_END
+KEIL_FLASH_BWR_LOOP
+    LDRB    R5, [R0]
+    NOP
+    STRB    R5, [R1]
+KEIL_FLASH_BWR_FLAG_CHK_LOOP
+    LDR     R5, [R3, #0x34]
+    LSLS    R5, R5, #29
+    BMI     KEIL_FLASH_BWR_FLAG_CHK_LOOP
+    ADDS    R0, R0, #1
+    ADDS    R1, R1, #1
+    SUBS    R2, R2, #1
+    BNE     KEIL_FLASH_BWR_LOOP
+KEIL_FLASH_BWR_END
+    MOVS    R0, #0
+    STR     R0, [R3, #0x34]
+    STR     R0, [R3, #0x38]
+    STR     R4, [R3]
+    POP     {R4-R6}
+    BX      LR
+|KEIL_FLASH_BWR_WPREG_REG_ADDR| DCD    0x4000F000
+|KEIL_FLASH_BWR_WPREG_UL_VAL|   DCD    0x0000A55A
+|KEIL_FLASH_BWR_CONFIG_UL_VAL|  DCD    0x00007A68
+}
+#endif
 
 
 /*
@@ -328,6 +371,7 @@ void HT_Flash_ChipErase(void)
 * 特殊说明: 用户应保证函数执行过程中寄存器写保护状态以及Flash解锁状态不变，1K bytes/page
 *********************************************************************************************************
 */
+#if 0
 void HT_Flash_PageErase(uint32_t EraseAddress)
 {
     /*  assert_param  */
@@ -351,7 +395,45 @@ void HT_Flash_PageErase(uint32_t EraseAddress)
     HT_CMU->WPREG = writeProtect;                                          /*!< 恢复之前写保护设置     */
 	MASTER_INT_EN();
 }
-
+#else
+__ASM void HT_Flash_PageErase(uint32_t EraseAddress)
+{
+    PUSH    {R4}
+    LDR     R3, |KEIL_FLASH_PGES_WPREG_UL_VAL|
+    LDR     R1, |KEIL_FLASH_PGES_WPREG_REG_ADDR|
+    LDR     R2, [R1]
+    LSLS    R2, R2, #31
+    BPL     KEIL_FLASH_PGES_CLEAR
+    MOVS    R2, R3
+    B       KEIL_FLASH_PGES_CONFIG_REG_SET
+KEIL_FLASH_PGES_CLEAR
+    MOVS    R2, #0
+KEIL_FLASH_PGES_CONFIG_REG_SET
+    STR     R3, [R1]
+    LDR     R3, |KEIL_FLASH_PGES_CONFIG_UL_VAL|
+    STR     R3, [R1, #0x38]
+    MOVS    R3, #2
+    STR     R3, [R1, #0x34]
+    MOVS    R3, #255
+    MOVS    R4, #3
+    BICS    R0, R0, R4
+    NOP
+    STR     R3, [R0]
+KEIL_FLASH_PGES_FLAG_CHK_LOOP
+    LDR     R0, [R1, #0x34]
+    LSLS    R0, R0, #29
+    BMI     KEIL_FLASH_PGES_FLAG_CHK_LOOP
+    MOVS    R0, #0
+    STR     R0, [R1, #0x34]
+    STR     R0, [R1, #0x38]
+    STR     R2, [R1]
+    POP     {R4}
+    BX      LR
+|KEIL_FLASH_PGES_WPREG_REG_ADDR| DCD    0x4000F000
+|KEIL_FLASH_PGES_WPREG_UL_VAL|   DCD    0x0000A55A
+|KEIL_FLASH_PGES_CONFIG_UL_VAL|  DCD    0x00007A68
+}
+#endif
 
 void FlashWriteAppBackup(uint32_t app_backup_record_addr, uint8_t* buffer, uint16_t len)
 {

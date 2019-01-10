@@ -7,6 +7,7 @@
 #include "includes.h"
 #include "i2c.h"
 #include "server.h"
+#include "simuart.h"
 
 
 //定义用于和I2C中断传递信息的全局变量
@@ -60,9 +61,20 @@ void I2C_Init(void)
 uint8_t keyHappenEvent=0;
 void EXTI6_IRQHandler(void)
 {
+    if(SET == HT_EXTIRise_ITFlagStatusGet(INT_EXTIF_RIF_INT6))         /*!< INT4上升沿中断           */
+    {
+
+        HT_EXTIRise_ClearITPendingBit(INT_EXTIF_RIF_INT6);             /*!< 清除中断标志             */
+    }
+
+    if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF_FIF_INT6))         /*!< INT4下降沿中断           */
+    {
+
+        HT_EXTIFall_ClearITPendingBit(INT_EXTIF_FIF_INT6);             /*!< 清除中断标志             */
+    }
 	keyHappenEvent = 1;
 	//delay_ms(100);
-	HT_INT->EXTIF = 0x0000;		//清中断标志
+//	HT_INT->EXTIF = 0x0000;		//清中断标志
 }
 
 //******************************************************************

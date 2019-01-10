@@ -21,6 +21,167 @@ void ShowSimUartErr(SIM_USART_STATI_STR *pStati)
     printf("\n");
 }
 
+/*
+*********************************************************************************************************
+*                            GET SPECIFIED EXTI RISE INTERRUPT FLAG STATUS
+*
+* 函数说明: 获取相应EXTI上升沿中断标志状态
+*
+* 入口参数: ITFlag     想要检查的某个EXTI上升沿中断，可以为以下参数:
+*                        @arg INT_EXTIF_RIF_INT0
+*                        @arg INT_EXTIF_RIF_INT1
+*                        @arg INT_EXTIF_RIF_INT2
+*                        @arg INT_EXTIF_RIF_INT3
+*                        @arg INT_EXTIF_RIF_INT4
+*                        @arg INT_EXTIF_RIF_INT5
+*                        @arg INT_EXTIF_RIF_INT6
+*                        @arg INT_EXTIF2_RIF_INT7   (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_RIF_INT8   (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_RIF_INT9   (for HT6x2x, HT6x3x and HT502x)
+*
+* 返回参数: ITStatus    = SET：  相应中断标志产生
+*                       = RESET：相应中断标志未产生
+*
+* 特殊说明: 无
+*********************************************************************************************************
+*/
+ITStatus HT_EXTIRise_ITFlagStatusGet(uint32_t ITFlag)
+{
+    /*  assert_param  */
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+    uint32_t tempreg = (ITFlag & INT_EXTIF2_RIF)>>16;
+#endif
+
+    if (HT_INT->EXTIF & ITFlag)
+    {
+        return SET;                        /*!< Interrupt Flag is set   */
+    }
+    else
+    {
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+        if (HT_INT->EXTIF2 & tempreg)
+        {
+            return SET;                    /*!< Interrupt Flag is set   */
+        }
+#endif
+        return RESET;                      /*!< Interrupt Flag is reset */
+    }
+}
+
+/**********************************************************************************************************
+*                                   CLEAR EXTI RISE INTERRUPT FLAG
+*
+* 函数说明: 清除EXTI上升沿中断标志
+*
+* 入口参数: ITFlag     想要清除的某个EXTI上升沿中断标志，可以为以下参数或其组合:
+*                        @arg INT_EXTIF_RIF_INT0
+*                        @arg INT_EXTIF_RIF_INT1
+*                        @arg INT_EXTIF_RIF_INT2
+*                        @arg INT_EXTIF_RIF_INT3
+*                        @arg INT_EXTIF_RIF_INT4
+*                        @arg INT_EXTIF_RIF_INT5
+*                        @arg INT_EXTIF_RIF_INT6
+*                        @arg INT_EXTIF2_RIF_INT7   (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_RIF_INT8   (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_RIF_INT9   (for HT6x2x, HT6x3x and HT502x)
+*
+* 返回参数: 无
+*
+* 特殊说明: 无
+**********************************************************************************************************/
+void HT_EXTIRise_ClearITPendingBit(uint32_t ITFlag)
+{
+    /*  assert_param  */
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+    uint32_t tempreg = (ITFlag & INT_EXTIF2_RIF)>>16;
+#endif
+    ITFlag &= INT_EXTIF_RIF;
+    HT_INT->EXTIF  &= ~ITFlag;                  /*!< Clear EXTI Rise Edge Interrupt Flag */
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+    HT_INT->EXTIF2  &= ~tempreg;
+#endif
+}
+
+/*
+*********************************************************************************************************
+*                          GET SPECIFIED EXTI FALL INTERRUPT FLAG STATUS
+*
+* 函数说明: 获取相应EXTI下降沿中断标志状态
+*
+* 入口参数: ITFlag     想要检查的某个EXTI下降沿中断，可以为以下参数:
+*                        @arg INT_EXTIF_FIF_INT0
+*                        @arg INT_EXTIF_FIF_INT1
+*                        @arg INT_EXTIF_FIF_INT2
+*                        @arg INT_EXTIF_FIF_INT3
+*                        @arg INT_EXTIF_FIF_INT4
+*                        @arg INT_EXTIF_FIF_INT5
+*                        @arg INT_EXTIF_FIF_INT6
+*                        @arg INT_EXTIF2_FIF_INT7     (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_FIF_INT8     (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_FIF_INT9     (for HT6x2x, HT6x3x and HT502x)
+*
+* 返回参数: ITStatus    = SET：  相应中断标志产生
+*                       = RESET：相应中断标志未产生
+*
+* 特殊说明: 无
+*********************************************************************************************************
+*/
+ITStatus HT_EXTIFall_ITFlagStatusGet(uint32_t ITFlag)
+{
+    /*  assert_param  */
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+    uint32_t tempreg = (ITFlag & INT_EXTIF2_FIF)>>16;
+#endif
+    if (HT_INT->EXTIF & ITFlag)
+    {
+        return SET;                        /*!< Interrupt Flag is set   */
+    }
+    else
+    {
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+        if (HT_INT->EXTIF2 & tempreg)
+        {
+            return SET;                    /*!< Interrupt Flag is set   */
+        }
+#endif
+        return RESET;                      /*!< Interrupt Flag is reset */
+    }
+}
+
+/**********************************************************************************************************
+*                                   CLEAR EXTI FALL INTERRUPT FLAG
+*
+* 函数说明: 清除EXTI下降沿中断标志
+*
+* 入口参数: ITFlag     想要清除的某个EXTI下降沿中断标志，可以为以下参数或其组合:
+*                        @arg INT_EXTIF_FIF_INT0
+*                        @arg INT_EXTIF_FIF_INT1
+*                        @arg INT_EXTIF_FIF_INT2
+*                        @arg INT_EXTIF_FIF_INT3
+*                        @arg INT_EXTIF_FIF_INT4
+*                        @arg INT_EXTIF_FIF_INT5
+*                        @arg INT_EXTIF_FIF_INT6
+*                        @arg INT_EXTIF2_FIF_INT7   (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_FIF_INT8   (for HT6x2x, HT6x3x and HT502x)
+*                        @arg INT_EXTIF2_FIF_INT9   (for HT6x2x, HT6x3x and HT502x)
+*
+* 返回参数: 无
+*
+* 特殊说明: 无
+**********************************************************************************************************/
+void HT_EXTIFall_ClearITPendingBit(uint32_t ITFlag)
+{
+    /*  assert_param  */
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+    uint32_t tempreg = (ITFlag & INT_EXTIF2_FIF)>>16;
+#endif
+    ITFlag &= INT_EXTIF_FIF;
+    HT_INT->EXTIF  &= ~ITFlag;                /*!< Clear EXTI Fall Edge Interrupt Flag */
+#if  defined  HT6x2x  ||  defined  HT6x3x  ||  defined  HT502x
+    HT_INT->EXTIF2  &= ~tempreg;
+#endif
+}
+
 
 uint8_t check_sum(unsigned char revbyte)//返回偶校验值
 {
@@ -354,7 +515,44 @@ void EXTI7_IRQHandler(void)
 {
     SIM_UART_STR *pSimUart = &gSimUartCtrl[0];
 
-	HT_INT->EXTIF2 = 0x0000;
+//	HT_INT->EXTIF2 = 0x0000;
+    if(SET == HT_EXTIRise_ITFlagStatusGet(INT_EXTIF2_RIF_INT7))         /*!< INT7上升沿中断           */
+    {
+
+        HT_EXTIRise_ClearITPendingBit(INT_EXTIF2_RIF_INT7);             /*!< 清除中断标志             */
+    }
+
+    if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF2_FIF_INT7))         /*!< INT7下降沿中断           */
+    {
+
+        HT_EXTIFall_ClearITPendingBit(INT_EXTIF2_FIF_INT7);             /*!< 清除中断标志             */
+    }
+
+
+    if(SET == HT_EXTIRise_ITFlagStatusGet(INT_EXTIF2_RIF_INT8))         /*!< INT8上升沿中断           */
+    {
+
+        HT_EXTIRise_ClearITPendingBit(INT_EXTIF2_RIF_INT8);             /*!< 清除中断标志             */
+    }
+
+    if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF2_FIF_INT8))         /*!< INT8下降沿中断           */
+    {
+
+        HT_EXTIFall_ClearITPendingBit(INT_EXTIF2_FIF_INT8);             /*!< 清除中断标志             */
+    }
+
+
+    if(SET == HT_EXTIRise_ITFlagStatusGet(INT_EXTIF2_RIF_INT9))         /*!< INT9上升沿中断           */
+    {
+
+        HT_EXTIRise_ClearITPendingBit(INT_EXTIF2_RIF_INT9);             /*!< 清除中断标志             */
+    }
+
+    if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF2_FIF_INT9))         /*!< INT9下降沿中断           */
+    {
+
+        HT_EXTIFall_ClearITPendingBit(INT_EXTIF2_FIF_INT9);             /*!< 清除中断标志             */
+    }
 	if (GET_USART_RX() == 0) 
 	{
 		if (pSimUart->recvStat == COM_STOP_BIT) 
@@ -374,7 +572,17 @@ void EXTI4_IRQHandler(void)
 {
     SIM_UART_STR *pSimUart = &gSimUartCtrl[2];
 
-	HT_INT->EXTIF = 0x0000;
+    if(SET == HT_EXTIRise_ITFlagStatusGet(INT_EXTIF_RIF_INT4))         /*!< INT4上升沿中断           */
+    {
+
+        HT_EXTIRise_ClearITPendingBit(INT_EXTIF_RIF_INT4);             /*!< 清除中断标志             */
+    }
+
+    if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF_FIF_INT4))         /*!< INT4下降沿中断           */
+    {
+
+        HT_EXTIFall_ClearITPendingBit(INT_EXTIF_FIF_INT4);             /*!< 清除中断标志             */
+    }
 	if (GET_RX9() == 0) 
 	{
 

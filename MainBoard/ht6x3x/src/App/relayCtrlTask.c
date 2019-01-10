@@ -3,6 +3,7 @@
 #include "includes.h"
 #include "emu.h"
 #include "server.h"
+#include "simuart.h"
 
 
 
@@ -14,6 +15,7 @@ static __IO uint16_t OpenlFlag = 0;
 static __IO uint16_t CloselFlag = 0;
 static __IO uint8_t timerHandle = 0;
 static __IO uint8_t operate = 0; //0--关继电器  1--开继电器
+
 
 
 void EXTI5_CallBack(void)
@@ -452,6 +454,22 @@ void TIMER_4_IRQHandler(void)
         HT_TMR_ClearITPendingBit(HT_TMR2, TMR_TMRIF_CMPIF);                    /*!< 清除中断标志       */
     }
 #endif
+}
+
+void EXTI5_IRQHandler(void)
+{
+    if(SET == HT_EXTIRise_ITFlagStatusGet(INT_EXTIF_RIF_INT5))         /*!< INT4上升沿中断           */
+    {
+
+        HT_EXTIRise_ClearITPendingBit(INT_EXTIF_RIF_INT5);             /*!< 清除中断标志             */
+    }
+
+    if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF_FIF_INT5))         /*!< INT4下降沿中断           */
+    {
+
+        HT_EXTIFall_ClearITPendingBit(INT_EXTIF_FIF_INT5);             /*!< 清除中断标志             */
+    }
+	EXTI5_CallBack();
 }
 
 

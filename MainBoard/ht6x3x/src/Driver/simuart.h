@@ -54,10 +54,16 @@ typedef struct {
 
 
 
-void simutask(void);
-void ShowSimUartErr(SIM_USART_STATI_STR *pStati);
-int SimuUartSendData(UART_INFO_STR*pUart, const uint8_t *pData, uint16_t len);
-int SimuartInit(void);
+extern void simutask(void);
+extern void ShowSimUartErr(SIM_USART_STATI_STR *pStati);
+extern int SimuUartSendData(UART_INFO_STR*pUart, const uint8_t *pData, uint16_t len);
+extern int SimuartInit(void);
+extern void HT_EXTIFall_ClearITPendingBit(uint32_t ITFlag);
+extern ITStatus HT_EXTIFall_ITFlagStatusGet(uint32_t ITFlag);
+extern void HT_EXTIRise_ClearITPendingBit(uint32_t ITFlag);
+extern ITStatus HT_EXTIRise_ITFlagStatusGet(uint32_t ITFlag);
+
+
 
 extern SIM_UART_STR gSimUartCtrl[SIM_UART_CNT];
 

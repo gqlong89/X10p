@@ -38,16 +38,21 @@ uint8_t SendRecordTimers = 0;//订单发送次数
 #endif /* __GNUC__ */
 PUTCHAR_PROTOTYPE
 {
-    if (gWrite < sizeof(gPrintBuff)) {
+    if (gWrite < sizeof(gPrintBuff)) 
+    {
         gPrintBuff[gWrite++] = ch;
-        if ('\n' == ch) {
+        if ('\n' == ch) 
+        {
             UsartSend(DEBUG_UART, gPrintBuff, gWrite);
             gWrite = 0;
         }
-    }else{
+    }
+    else
+    {
 		UsartSend(DEBUG_UART, gPrintBuff, sizeof(gPrintBuff));
         gWrite = 0;
 	}
+    
     return ch;
 }
 
