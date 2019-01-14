@@ -781,7 +781,8 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
     GprsSendCmd(tmp,"CLOSE OK",1000, 0);
     GprsSendCmd("AT+CIPSHUT\r","SHUT OK",1000, 0);
     GprsSendCmd("AT+SAPBR=1,1\r","\r\nOK\r\n",1000, 0);
-    if (GprsSendCmd("AT+SAPBR=2,1\r","+SAPBR: 1,1",2000, 0) != 0) {
+    if (GprsSendCmd("AT+SAPBR=2,1\r","+SAPBR: 1,1",2000, 0) != 0) 
+	{
         CL_LOG("send cmd,err.\n");
         ret = -1;
         goto EXIT1;
@@ -820,18 +821,22 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
     GprsSendCmd(ipconfig,"\r\nOK\r\n",100, 0);
 
     /*ftp get filesize*/
-    if (GprsSendCmdChkNoSpace("AT+FTPSIZE\r", "+FTPSIZE:", 10,1000, NULL) == 0) {
+    if (GprsSendCmdChkNoSpace("AT+FTPSIZE\r", "+FTPSIZE:", 10,1000, NULL) == 0) 
+	{
 		//如此处理是为了防止bin文件中含有相同常量，导致误判
 		sprintf(tmp,"+FTPSIZE:1,%d,",0);
         fsize = restoi((char *)gprsBuffer, tmp,'\r');
-        if (fsize==0) {
+        if (fsize==0) 
+		{
             //文件不存在或网络异常
             CL_LOG("fs=0 fail.\n");
             ret = -2;
             OptFailNotice(53);
             goto EXIT1;
         }
-    }else {
+    }
+	else 
+	{
         CL_LOG("fail.\n");
         ret = -2;
         OptFailNotice(52);
@@ -840,16 +845,19 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
     CL_LOG("fs=%d.\n",fsize);
 
     /*Open the ftp get session*/
-    if (GprsSendCmdChkNoSpace("AT+FTPGET=1\r", "+FTPGET:1,1", 10, 1000, NULL) == 0) {
+    if (GprsSendCmdChkNoSpace("AT+FTPGET=1\r", "+FTPGET:1,1", 10, 1000, NULL) == 0) 
+    {
         ret = 0;
         /*erase flash and set write pos*/
 		appBackupRecordAddr = AppUpBkpAddr;
         over_time = GetRtcCount();
         getLen = 16;
         getCnt = 0;
-        while(1) {
+        while(1) 
+        {
             Feed_WDT();
-            if ((uint32_t)(GetRtcCount() - over_time) > 90) {
+            if ((uint32_t)(GetRtcCount() - over_time) > 90) 
+            {
                 break;
             }
 
@@ -859,43 +867,57 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
             OS_DELAY_MS(10);
             len = 0;
             retry = 0;
-            while (retry++ < 20) {
+            while (retry++ < 20) 
+            {
 				Feed_WDT();
                 memset(gprsBuffer, 0, sizeof(gprsBuffer));
                 UsartGetline(GPRS_UART_PORT, (void*)gprsBuffer, 30, 1000);
                 //CL_LOG("%s",gprsBuffer);
-                for(j=0,k=0; j<strlen((char *)gprsBuffer); j++) {
+                for(j=0,k=0; j<strlen((char *)gprsBuffer); j++) 
+                {
                     if (gprsBuffer[j]!=' ')
+                    {
                         gprsBuffer[k++]=gprsBuffer[j];
+                    }
                 }
                 gprsBuffer[k] = '\0';
-                if (strstr((char *)gprsBuffer,"+FTPGET:2,")) {
+                if (strstr((char *)gprsBuffer,"+FTPGET:2,")) 
+                {
                     len = restoi((char *)gprsBuffer, "+FTPGET:2,",'\0');
                     break;
                 }
             }
             OS_DELAY_MS(5);
-            if (len) {
+            if (len) 
+            {
                 len = GetGPRSBuffer(gprsBuffer, len);
-                if (getCnt < 2) {
-                    if (0 == getCnt) {
+                if (getCnt < 2) 
+                {
+                    if (0 == getCnt) 
+                    {
                         pFwHead = (void*)gprsBuffer;
-                        if ((0xaa == pFwHead->aa) && (0x55 == pFwHead->five)) {
+                        if ((0xaa == pFwHead->aa) && (0x55 == pFwHead->five)) 
+                        {
                             fwCnt = pFwHead->fwCnt;
                             fwVer = pFwHead->fwVer1;
                             getCnt++;
                             CL_LOG("aa55 ok.\n");
-                            if (0 == fwCnt) {
+                            if (0 == fwCnt) 
+                            {
                                 CL_LOG("fwCnt=%d,err.\n",fwCnt);
                                 OptFailNotice(57);
                                 return CL_FAIL;
                             }
-                        }else{
+                        }
+                        else
+                        {
                             CL_LOG("head=%02x,%02x,err.\n",gprsBuffer[0],gprsBuffer[1]);
                             OptFailNotice(58);
                             return CL_FAIL;
                         }
-                    }else if (1 == getCnt) { //读第一个固件信息
+                    }
+                    else if (1 == getCnt) 
+                    { //读第一个固件信息
                         pFwInfo = (void*)gprsBuffer;
                         fsize = pFwInfo->size;
                         chsum_in = pFwInfo->checkSum;
@@ -904,19 +926,23 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                         #else
                         ret = memcmp("X10C", pFwInfo->name, 4);
                         #endif
-                        if (0 == ret) {
-                            if ((system_info.localFwInfo.size == fsize) && (system_info.localFwInfo.checkSum == chsum_in) && (system_info.localFwInfo.ver == fwVer)) {
+                        if (0 == ret) 
+                        {
+                            if ((system_info.localFwInfo.size == fsize) && (system_info.localFwInfo.checkSum == chsum_in) && (system_info.localFwInfo.ver == fwVer)) 
+                            {
                                 CL_LOG("fw same,no need upgrade.\n");
                                 OptSuccessNotice(804);
                                 return CL_OK;
                             }
                             getCnt++;
-                            CL_LOG("fw name ok,fs=%d,cs1=%d,fv=%d.\n",fsize,chsum_in,fwVer);
+                            CL_LOG("fw name ok,fs=%d,sum=%d,fwVer=%d.\n",fsize,chsum_in,fwVer);
                             getLen = 512;
                             memset(&system_info.localFwInfo, 0, sizeof(system_info.localFwInfo));
                             FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
                             FlashEraseAppBackup();
-                        }else{
+                        }
+                        else
+                        {
                             CL_LOG("fw=%s,err.\n",pFwInfo->name);
                             OptFailNotice(59);
                             return CL_FAIL;
@@ -925,7 +951,8 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                     continue;
                 }
 
-                for (i=0; i<len; i++) {
+                for (i=0; i<len; i++) 
+                {
                     checksum += (unsigned)gprsBuffer[i];
                 }
                 cfize += len;
@@ -933,19 +960,26 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                 //PrintfData("ftpget", gprsBuffer, len);
 				FlashWriteAppBackup(appBackupRecordAddr, (unsigned char *)(gprsBuffer), len);
 				appBackupRecordAddr += len;
-            } else {
-                if (cfize < fsize) {
+            } 
+            else 
+            {
+                if (cfize < fsize)
+                {
                     OS_DELAY_MS(500);
                     //CL_LOG("cfize=%d,fsize=%d,error.\n",cfize,fsize);
-                } else {
+                } 
+                else 
+                {
                     break;
                 }
             }
         }
 
         /*file size = rxget file size, write checksum to flash*/
-        if (cfize == fsize) {
-			if (checksum == chsum_in) {
+        if (cfize == fsize) 
+        {
+			if (checksum == chsum_in) 
+            {
 				CL_LOG("size %d,cs %4X,fw=%d,ftp ok.\n", fsize, checksum,fwVer);
 				WriteUpdateInfo(fsize, checksum);
                 system_info.localFwInfo.size = cfize;
@@ -955,19 +989,25 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                 FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
                 ret = 0;
                 OptSuccessNotice(801);
-			}else{
+			}
+            else
+            {
 			    CL_LOG("cs=%d!=cs1=%d,err.\n",checksum,chsum_in);
                 ret = CL_FAIL;
                 OptFailNotice(55);
             }
             goto EXIT1;
-        }else{
+        }
+        else
+        {
             CL_LOG("fs=%d!=cf=%d,err.\n",fsize,cfize);
             ret = -6;
             OptFailNotice(56);
             goto EXIT1;
         }
-    }else {
+    }
+    else 
+    {
         CL_LOG("fail.\n");
         ret = -5;
         OptFailNotice(54);

@@ -764,10 +764,12 @@ void SetUpgradeInfo(DOWN_FW_REQ_STR *pfwInfo)
     memcpy(psw, pfwInfo->psw, sizeof(pfwInfo->psw));
     memcpy(fileName, pfwInfo->fileName, sizeof(pfwInfo->fileName));
     CL_LOG("url=%s,un=%s,psw=%s,fn=%s,cs=%#x.\n",url,usrName,psw,fileName,pfwInfo->checkSum);
-    for (i=0; i<4; i++) {
+    for (i=0; i<4; i++) 
+	{
         Sc8042bSpeech(VOIC_START_UPGRADE);
 		SwitchToUi_EquipUpgrade();
-        if (CL_OK == FtpGet(url, usrName, psw, fileName, pfwInfo->checkSum)) {
+        if (CL_OK == FtpGet(url, usrName, psw, fileName, pfwInfo->checkSum)) 
+		{
             break;
         }
         OS_DELAY_MS(5000);

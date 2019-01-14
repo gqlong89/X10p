@@ -693,7 +693,8 @@ void CheckBlueUpgrade(void)
 
 void BlueProtoProc(BLUE_PROTO_STR *pMsg, uint16_t len)
 {
-    switch (pMsg->head.cmd) {
+    switch (pMsg->head.cmd) 
+	{
 		case B_DEV_REGISTER:	//×¢²áÏìÓ¦
 			CL_LOG("BlueProtoProc dev register ack.\n");
 			BlueDevRegisterACK(pMsg);

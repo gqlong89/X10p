@@ -117,8 +117,27 @@ void SysCfgInit(void)
     CL_LOG("[ip地址: %s], [port号: %d].\n", NET_SERVER_IP, NET_SERVER_PORT);
     PrintSysCfgInfo();
     CL_LOG("[system_info 大小: %d], [gun_info 大小: %d].\n", sizeof(system_info), sizeof(gun_info));
+	CL_LOG("文件编译时间, 月日年 %s 时分秒%s \n", __DATE__, __TIME__);
 }
 
+void qeeerrrtt(void)
+{
+	uint32_t ib = 0;
+	uint8_t sss[1024] = {0,};
+	
+	//for(ib = 0; ib < 1024; ib++)
+	{
+		HT_Flash_ByteRead((void*)&sss[0], AppUpBkpAddr, sizeof(sss));
+	}
+	for(ib = 0; ib < 1024; ib++)
+	{
+		if(0 == (ib%16))
+		{
+			printf("\n");
+		}
+		printf("%x", sss[ib]);
+	}
+}
 
 void LoadSysCfgInfo(void)
 {
@@ -146,6 +165,7 @@ void LoadSysCfgInfo(void)
 		FlashWriteGunInfo(gun_info, sizeof(gun_info), 1);
         Clear_RecordOrder();
     }
+	//qeeerrrtt();
 }
 
 
@@ -289,10 +309,12 @@ void MainTask(void)
         {
             old = GetRtcCount();
             Feed_WDT();
+			#if 0
 			CL_LOG("1111111111111111\n");
 			ReadTempDetection(TBS_ADC3);
 			CL_LOG("2222222222222222\n");
 			ReadTempDetection(TBS_ADC4);
+			#endif
 ////			LcdTurnOnLed();
 			OS_DELAY_MS(500);
 ////			LcdTurnOffLed();

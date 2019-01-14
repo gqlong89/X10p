@@ -9,10 +9,11 @@
 #include "i2c.h"
 #include "server.h"
 #include "FIFO.h"
-
+#include "rtc.h"
 
 #define  __HT60XX_FLASH_C
 
+#define NO_USE_ASM_FLASH			1
 
 
 /*
@@ -24,10 +25,6 @@
 #define M8(adr)     (*((uint8_t * ) (adr)))
 #define M16(adr)    (*((uint16_t *) (adr)))
 #define M32(adr)    (*((uint32_t *) (adr)))
-
-//static const uint32_t RegisterWriteProtect[]={CMU_WPREG_Protected, CMU_WPREG_UnProtected};
-
-//uint8_t TradeRecordGunId=0;
 
 
 /*
@@ -47,7 +44,7 @@
 * 特殊说明: 用户应保证函数执行过程中寄存器写保护状态以及Flash解锁状态不变
 *********************************************************************************************************
 */
-#if 0
+#if NO_USE_ASM_FLASH
 void HT_Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
 {
     /*  assert_param  */
@@ -137,8 +134,6 @@ KEIL_FLASH_BWR_END
 */
 void HT_Flash_ByteRead(uint8_t* pReadByte, uint32_t Address, uint32_t Num)
 {
-    /*  assert_param  */
-
     uint32_t i;
 
     HT_CMU->FLASHCON = CMU_FLASHCON_FOP_READ;                              /*!< Flash读                */
@@ -179,11 +174,9 @@ void FlashReadDataEx(uint8_t *pBuff, uint32_t addr, uint16_t len)
 *           2)用户应保证传递给函数的地址为至少半字对齐
 *********************************************************************************************************
 */
-#if 0
+#if NO_USE_ASM_FLASH
 void HT_Flash_HalfWordWrite(uint16_t* pWriteHalfWord, uint32_t Address, uint32_t Num)
 {
-    /*  assert_param  */
-
     uint32_t i;
     uint32_t writeProtect = RegisterWriteProtect[HT_CMU->WPREG & 0x01];    /*!< 保存当前写保护状态     */
 
@@ -371,7 +364,7 @@ void HT_Flash_ChipErase(void)
 * 特殊说明: 用户应保证函数执行过程中寄存器写保护状态以及Flash解锁状态不变，1K bytes/page
 *********************************************************************************************************
 */
-#if 0
+#if NO_USE_ASM_FLASH
 void HT_Flash_PageErase(uint32_t EraseAddress)
 {
     /*  assert_param  */
@@ -443,9 +436,10 @@ void FlashWriteAppBackup(uint32_t app_backup_record_addr, uint8_t* buffer, uint1
 
 void FlashEraseAppBackup(void)
 {
-    int i;
+    uint32_t i;
 
-    for (i=0; i<(APP_FW_SIZE/1024); i++) {
+    for (i = 0; i < (APP_FW_SIZE / 1024); i++) 
+	{
         HT_Flash_PageErase(AppUpBkpAddr+i*1024);
     }
 }
@@ -666,9 +660,11 @@ int FlashReadGunInfo(uint8_t *pGunInfo, uint16_t size)
 //写计量干扰矩阵系数
 int FlashWritMatrix(uint8_t *data, uint16_t size)
 {
-    if (CL_OK != EepromWriteData(EMUCaliationAddr, data, size)) {
+    if (CL_OK != EepromWriteData(EMUCaliationAddr, data, size)) 
+	{
         return CL_FAIL;
     }
+	
     return CL_OK;
 }
 

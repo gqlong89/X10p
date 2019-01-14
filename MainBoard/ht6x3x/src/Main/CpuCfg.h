@@ -22,9 +22,10 @@
 #define WDT_RESET_SYS()     			HT_WDT->WDTCLR = 0x00           		//立即复位
 
 
-#define AppFlashAddr	    			(uint32_t)0x2000						//App运行入口地址(220k)
-#define AppUpBkpAddr	    			(uint32_t)0x37000 + AppFlashAddr		//app缓存数据存储基地址(220k)
-#define TradeRecordAddr					(uint32_t)0x37000 + AppUpBkpAddr		//订单未上报记录存储基地址	16k
+#define AppFlashAddr	    			(uint32_t)0x2000						//App运行入口地址(210k)
+#define AppUpBkpAddr	    			(uint32_t)0x34800 + AppFlashAddr		//app缓存数据存储基地址(210k)
+#define KeyBoardBackAddr 				(uint32_t)0x34800 + AppUpBkpAddr		//按键板备份区58k
+#define TradeRecordAddr					(uint32_t)0xE800 + KeyBoardBackAddr		//订单未上报记录存储基地址	16k
 #define SysUpInfoAddr	    			(uint32_t)0x4000 + TradeRecordAddr		//升级请求消息(1K)
 #define CHARGER_INFO_FLASH_ADDR 		(uint32_t)0x400 + SysUpInfoAddr         //充电桩重要信息保存地址 1k
 //#define RecordHeadFlashAddr	    	(uint32_t)0x3D400	//订单头信息(1K)
@@ -37,7 +38,8 @@
 #define RECORD_MAX_BLOCK_NUM			(RECORD_FLASH_SIZE/RECORD_BLOCK_SIZE_PER_PAGE)      //最大可存储订单数量 128笔 也是环形队列的深度
 #define MAX_RECORD						(RECORD_MAX_BLOCK_NUM-RECORD_BLOCK_NUM_PER_PAGE)    //实际最大存储订单数量 120笔 需要空一个扇区
 
-#define APP_FW_SIZE                     (AppUpBkpAddr-AppFlashAddr)
+#define APP_FW_SIZE                     (AppUpBkpAddr - AppFlashAddr)
+#define KEY_BOARD_FW_SIZE               (TradeRecordAddr - KeyBoardBackAddr)
 
 
 #define SysInfoEepromAddr	            (uint32_t)0x0000		//系统配置信息eeprom存储基地址  2k

@@ -9,11 +9,13 @@
 #include "include.h"
 
 
-#define AppFlashAddr	    			(uint32_t)0x2000						//App运行入口地址(220k)
-#define AppUpBkpAddr	    			(uint32_t)0x37000 + AppFlashAddr		//app缓存数据存储基地址(220k)
-#define TradeRecordAddr					(uint32_t)0x37000 + AppUpBkpAddr		//订单未上报记录存储基地址	16k
+#define AppFlashAddr	    			(uint32_t)0x2000						//App运行入口地址(210k)
+#define AppUpBkpAddr	    			(uint32_t)0x34800 + AppFlashAddr		//app缓存数据存储基地址(210k)
+#define KeyBoardBackAddr 				(uint32_t)0x34800 + AppUpBkpAddr		//按键板备份区58k
+#define TradeRecordAddr					(uint32_t)0xE800 + KeyBoardBackAddr		//订单未上报记录存储基地址	16k
 #define SysUpInfoAddr	    			(uint32_t)0x4000 + TradeRecordAddr		//升级请求消息(1K)
 #define CHARGER_INFO_FLASH_ADDR 		(uint32_t)0x400 + SysUpInfoAddr         //充电桩重要信息保存地址 1k
+
 #define FLASH_PAGE_SIZE		1024
 
 

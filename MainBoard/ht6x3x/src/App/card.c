@@ -293,42 +293,59 @@ void WholeModuleHandle(CKB_STR* pFrame)
     char name[12] = {0};
     CKB_STATU_REPORT_STR *pStatus = NULL;
 
-	if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_BASIC_INFO) {//基本信息上报
+	if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_BASIC_INFO) 
+	{//基本信息上报
 		SendBasicInfoReportAck(0);
 		CKB_BASIC_INFO_REPORT_STR* basicInfo = (CKB_BASIC_INFO_REPORT_STR*)pFrame->data;
         CL_LOG("ckb fw=%d,state=%d,version=%s,btName=%s.\n", basicInfo->fwVersion,basicInfo->btState,basicInfo->btVersion,basicInfo->btName);
 		//PrintfData("WholeModuleHandle btMacAddr", (void*)basicInfo->btMacAddr, sizeof(basicInfo->btMacAddr));
         memcpy(&gBlueInfo, pFrame->data, sizeof(gBlueInfo));
-        if (system_info.fwVersion != basicInfo->fwVersion) {
+        if (system_info.fwVersion != basicInfo->fwVersion) 
+		{
             system_info.fwVersion = basicInfo->fwVersion;
             FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
         }
-        if (0 == basicInfo->btState) {
+        if (0 == basicInfo->btState) 
+		{
 		    memcpy(system_info.btVersion, basicInfo->btVersion, sizeof(system_info.btVersion));
             DeviceBcd2str(name, &system_info.station_id[3], BLUE_GWADDR_LEN);
-            if (memcmp(basicInfo->btName, name, BLUE_NAME_LEN)) {
+            if (memcmp(basicInfo->btName, name, BLUE_NAME_LEN)) 
+			{
                 system_info.setBtNameFlag = 0;
-                CL_LOG("set bt name.\n");
+                CL_LOG("设置蓝牙名字.\n");
             }
             gChgInfo.netStatus |= 4;
-            if (NULL == strstr((void*)basicInfo->btVersion, "BLE")) {
+            if (NULL == strstr((void*)basicInfo->btVersion, "BLE")) 
+			{
                 gChgInfo.netStatus |= 8;
             }
     	}
-    }else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_OPERATION_MAINTENANCE) { //操作维护
-        if (pFrame->data[0] == 0) {
+    }
+	else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_OPERATION_MAINTENANCE) 
+	{ //操作维护
+        if (pFrame->data[0] == 0) 
+		{
 			//CL_LOG("operation maintenance success.\n");
-		} else {
+		} 
+		else 
+		{
 			CL_LOG("fail.\n");
 		}
-	} else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_STATU_REPORT) {//状态上报
+	} 
+	else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_STATU_REPORT) 
+	{//状态上报
 		pStatus = (void*)pFrame->data;
         BuleStatusSendProc(pStatus->blueStatus);
-	} else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_SET_PCB) {//设置按键板PCB
-		if (pFrame->data[0]) {
+	} 
+	else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_SET_PCB) 
+	{//设置按键板PCB
+		if (pFrame->data[0]) 
+		{
             CL_LOG("set pcb sn fail.\n");
 		}
-	} else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_GET_PCB) {//获取按键板PCB
+	} 
+	else if (pFrame->head.cmd == WHOLE_MESSAGE_CMD_GET_PCB) 
+	{//获取按键板PCB
 		PrintfData("tx kb pcb sn to pc:", pFrame->data, 8);
 		//发送按键板PCB编码到PC机
 		uint8_t tmp[10]={0};
@@ -924,39 +941,57 @@ void CardModuleHandle(CKB_STR* pFrame)
 //蓝牙消息处理
 void BtModuleHandle(CKB_STR* pFrame)
 {
-	if (pFrame->head.cmd == BT_MESSAGE_CMD_SET_NAME) {
+	if (pFrame->head.cmd == BT_MESSAGE_CMD_SET_NAME) 
+	{
 		BT_SET_NAME_REPORT_STR *btSetName = (BT_SET_NAME_REPORT_STR*)pFrame->data;
-		if (btSetName->result == 0) {
+		if (btSetName->result == 0) 
+		{
             system_info.setBtNameFlag = 1;
             FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
-		}else{
+		}
+		else
+		{
             OptFailNotice(115);
         }
         CL_LOG("set bt name=%d.\n",btSetName->result);
-	} else if (pFrame->head.cmd == BT_MESSAGE_CMD_RECIVE) {
+	} 
+	else if (pFrame->head.cmd == BT_MESSAGE_CMD_RECIVE) 
+	{
 		//BtMessageRecAck(0);
 		BT_MESSAGE_RECIVE_STR *btMessageRec = (BT_MESSAGE_RECIVE_STR*)pFrame->data;
         //CL_LOG("recLen=%d,type=%d 0:blue,1:2.4G.\n", btMessageRec->len,btMessageRec->type);
         //PrintfData("BtModuleHandle", btMessageRec->data, btMessageRec->len);
-		if (btMessageRec->type == 0) {//蓝牙
-			for(uint16_t i = 0;i<btMessageRec->len;){
-				if (CL_OK == FIFO_S_Put(&gBlueStatus.rxBtBuff, btMessageRec->data[i])) {
+		if (btMessageRec->type == 0) 
+		{//蓝牙
+			for(uint16_t i = 0;i<btMessageRec->len;)
+			{
+				if (CL_OK == FIFO_S_Put(&gBlueStatus.rxBtBuff, btMessageRec->data[i])) 
+				{
 					i++;
-				}else{
+				}
+				else
+				{
 					CL_LOG("bt buff of.\n");
 					OS_DELAY_MS(2);
 				}
 			}
             LcdTurnOnLed();
-		}else{
+		}
+		else
+		{
             CL_LOG("type=%d,err.\n",btMessageRec->type);
         }
-	} else if (pFrame->head.cmd == BT_MESSAGE_CMD_SEND) {
+	} 
+	else if (pFrame->head.cmd == BT_MESSAGE_CMD_SEND) 
+	{
 	    gWaitMsgAck = 0;
 		BT_MESSAGE_SEND_REPORT_STR *btMessageSendReport = (BT_MESSAGE_SEND_REPORT_STR*)pFrame->data;
-		if (btMessageSendReport->result == 0) {
+		if (btMessageSendReport->result == 0) 
+		{
 			//CL_LOG("bt message send success.\n");
-		} else {
+		} 
+		else 
+		{
 			CL_LOG("bt tx fail.\n");
             OptFailNotice(116);
 		}
@@ -1032,7 +1067,9 @@ void CheckBlueInfo(uint8_t setIndex)
     int i;
     char name[12] = {0};
 
-	if (gBlueInfo.btState != 0) {
+	if (gBlueInfo.btState != 0) 
+	{
+		CL_LOG("蓝牙状态不对.\n");
 		return;
 	}
 
@@ -1225,16 +1262,21 @@ void RecvBtData(void)
     static uint8_t  sum;
     static uint32_t time;
 
-    if (BT_FIND_EE != step) {
-        if (2 < (uint32_t)(GetRtcCount() - time)) {
+    if (BT_FIND_EE != step) 
+	{
+        if (2 < (uint32_t)(GetRtcCount() - time)) 
+		{
             CL_LOG("no rx data,step=%d,err.\n",step);
             step = BT_FIND_EE;
         }
     }
-    while (CL_OK == FIFO_S_Get(&gBlueStatus.rxBtBuff, &data)) {
-        switch (step) {
+    while (CL_OK == FIFO_S_Get(&gBlueStatus.rxBtBuff, &data)) 
+	{
+        switch (step) 
+		{
             case BT_FIND_EE:
-                if (0xee == data) {
+                if (0xee == data) 
+				{
                     time = GetRtcCount();
                     pktLen = 0;
                     pBuff[pktLen++] = data;
@@ -1253,11 +1295,16 @@ void RecvBtData(void)
                 pBuff[pktLen++] = data;
                 sum += data;
                 len = data;
-                if (OUT_NET_PKT_LEN < len) {
+                if (OUT_NET_PKT_LEN < len) 
+				{
                     step = BT_FIND_EE;
-                }else if (0 == len) {
+                }
+				else if (0 == len) 
+				{
                     step = FIND_CHK;
-                }else{
+                }
+				else
+				{
                     step = BT_RX_DATA;
                 }
                 break;
@@ -1265,17 +1312,21 @@ void RecvBtData(void)
             case BT_RX_DATA:
                 pBuff[pktLen++] = data;
                 sum += data;
-                if (0 == --len) {
+                if (0 == --len) 
+				{
                     step = FIND_CHK;
                 }
                 break;
 
            case FIND_CHK:
                 pBuff[pktLen++] = data;
-                if (sum == data) {
+                if (sum == data) 
+				{
                     //PrintfData("RecvBtData", pBuff, pktLen);
 					BlueProtoProc((void*)pBuff, pktLen);
-                }else{
+                }
+				else
+				{
 					PrintfData("RecvBtData", pBuff, pktLen);
                     CL_LOG("sum=%02x,psum=%02x,err.\n",sum,data);
                 }

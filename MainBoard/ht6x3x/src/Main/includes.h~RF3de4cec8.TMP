@@ -112,7 +112,7 @@
 
 #define SPECIAL_NET_CARD				1                   //0:公网卡    1:专网卡    2:X10c
 #define ENVI_TYPE                       0                   //0:正式环境 1:测试环境 2:预发布环境 3:开发环境 4:测试环境2
-#define FW_VERSION                      3
+#define FW_VERSION                      1
 #define FW_VERSION_SUB                  (SPECIAL_NET_CARD)
 
 #if (1 == SPECIAL_NET_CARD) //====================== 专网卡 ========================
