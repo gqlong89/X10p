@@ -683,8 +683,10 @@ void BlueFWDownLoad(BLUE_PROTO_STR *pMsg)
 
 void CheckBlueUpgrade(void)
 {
-    if (gChgInfo.netStatus & (1<<BLUE_UPGRADE)) {
-        if ((8*60) < (uint32_t)(GetRtcCount() - gChgInfo.size)) {
+    if (gChgInfo.netStatus & (1<<BLUE_UPGRADE)) 
+	{
+        if ((8*60) < (uint32_t)(GetRtcCount() - gChgInfo.size)) 
+		{
             gChgInfo.netStatus &= (~(1<<BLUE_UPGRADE));
         }
     }

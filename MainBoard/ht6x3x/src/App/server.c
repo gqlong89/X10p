@@ -900,12 +900,17 @@ void LcdStatusCheck(void)
     uint8_t day[8];
 
     GetRtcTime(day);
-    if ((30*60) < (uint32_t)(GetRtcCount() - gChgInfo.turnOnLcdTime)) {
+    if ((30*60) < (uint32_t)(GetRtcCount() - gChgInfo.turnOnLcdTime)) 
+	{
         gChgInfo.turnOnLcdTime = GetRtcCount();
-        if ((3 < day[4]) && (day[4] < 17)) { //临晨3点到第二天17点时段才超时关闭屏幕
+        if ((3 < day[4]) && (day[4] < 17)) 
+		{ //临晨3点到第二天17点时段才超时关闭屏幕
             LcdTurnOffLed();
-        }else{
-            if (0 == gChgInfo.lcdPowerStatus) {
+        }
+		else
+		{
+            if (0 == gChgInfo.lcdPowerStatus) 
+			{
                 LcdTurnOnLed();
             }
         }

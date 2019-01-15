@@ -181,6 +181,8 @@ typedef struct {
     AES_KEY  enAes;
     AES_KEY  deAes;
     uint32_t second;
+	uint8_t UpgradeIndex;
+	uint8_t  UpgradeRunning;
 }CHG_INFO_STR;
 
 #pragma pack(1)

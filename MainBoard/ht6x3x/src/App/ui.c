@@ -1457,86 +1457,123 @@ void UiStateLoop(void)
 	GetRtcTime(rtcTime);
 	if (ui_Info.Ui_State != UI_POWERON && ui_Info.Ui_State != UI_CARD_CHARGING && ui_Info.Ui_State != UI_ADMINISTRATOR_TEST
 		&& ui_Info.Ui_State != UI_INPUT_CHARGER_SN && ui_Info.Ui_State != UI_INPUT_DEVICE_ID
-		&& ui_Info.Ui_State != UI_SET_PRINT_SWITCH && ui_Info.Ui_State != UI_RELAY_TEST && ui_Info.Ui_State != UI_CARD_CHARGING) {
+		&& ui_Info.Ui_State != UI_SET_PRINT_SWITCH && ui_Info.Ui_State != UI_RELAY_TEST && ui_Info.Ui_State != UI_CARD_CHARGING) 
+	{
 		UiDisplay_Time(rtcTime[4], rtcTime[5], rtcTime[6]);
 	}
 
-	if (ui_Info.Ui_State == UI_STANDBY) {
-        if ((0 == gChgInfo.errCode) && (0 == gChgInfo.inputCode)) {
+	if (ui_Info.Ui_State == UI_STANDBY) 
+	{
+        if ((0 == gChgInfo.errCode) && (0 == gChgInfo.inputCode)) 
+		{
 		    UiDisplay_MonthDay(rtcTime[2], rtcTime[3]);
         }
-        if (gChgInfo.inputCode && (60 < (uint32_t)(GetRtcCount() - gChgInfo.lastInputTime))) {
+        if (gChgInfo.inputCode && (60 < (uint32_t)(GetRtcCount() - gChgInfo.lastInputTime)))
+		{
             gChgInfo.inputCode = 0;
             clearKeyBuf(&keyVal);
         }
 	}
 
     time = currentRtcCount - ui_Info.uiStartTime;
-	if (ui_Info.Ui_State == UI_POWERON) {	//上电
+	if (ui_Info.Ui_State == UI_POWERON) 
+	{	//上电
 		UiProgressLoop();
-	} else if (ui_Info.Ui_State == UI_EQUIP_UPGRADE) {	//升级
+	} 
+	else if (ui_Info.Ui_State == UI_EQUIP_UPGRADE) 
+	{	//升级
 		UiProgressLoop();
-	} else if (ui_Info.Ui_State == UI_STANDBY) {//待机界面
-	} else if(ui_Info.Ui_State == UI_READING_CRAD) {//读卡信息界面
+	} 
+	else if (ui_Info.Ui_State == UI_STANDBY) 
+	{//待机界面
+	} 
+	else if(ui_Info.Ui_State == UI_READING_CRAD) 
+	{//读卡信息界面
 		UiProgressLoop();
 		//读卡信息若30s后台没反应,返回待机界面
-		if (time > 30) {
+		if (time > 30) 
+		{
 			readCardFlg = 0;
             gCardReqFlag = 0;
 			SwitchToUi_Standby();
 			Sc8042bSpeech(VOIC_START_CHARGER_FAIL);
 		}
-	} else if (ui_Info.Ui_State == UI_READ_CARD_SUCCESS) {
-		if (time >= 5) {
+	} 
+	else if (ui_Info.Ui_State == UI_READ_CARD_SUCCESS) 
+	{
+		if (time >= 5) 
+		{
 			//读卡查询余额成功,5s后切换输入插座编号页面
 			SwitchToUi_InputSocketNum();
 			clearKeyBuf(&keyVal);
 			Sc8042bSpeech(VOIC_INPUT_SOCKET_NUM);
 		}
-	} else if (ui_Info.Ui_State == UI_VERIFY_CARD_FAILURE) {//读卡或订单鉴权失败界面
-		if (time >= 5) {
+	} 
+	else if (ui_Info.Ui_State == UI_VERIFY_CARD_FAILURE) 
+	{//读卡或订单鉴权失败界面
+		if (time >= 5) 
+		{
 			SwitchToUi_Standby();
 		}
-	}else if (ui_Info.Ui_State == UI_CARD_CHARGING) {//该卡片有充电中订单界面
+	}
+	else if (ui_Info.Ui_State == UI_CARD_CHARGING) 
+	{//该卡片有充电中订单界面
 		UiProgressLoop();
-		if (time >= 5) {//5s过后返回待机页面
+		if (time >= 5) 
+		{//5s过后返回待机页面
 			SwitchToUi_Standby();
 		}
-	} else if (ui_Info.Ui_State == UI_INPUT_SOCKET_NUM) {//输入插座编号界面
-		if(time > 30) {
+	} 
+	else if (ui_Info.Ui_State == UI_INPUT_SOCKET_NUM) {//输入插座编号界面
+		if(time > 30) 
+		{
 			SwitchToUi_Standby();
 		}
-	}else if(ui_Info.Ui_State == UI_INPUT_CHARGER_MONEY) {//输入充电金额界面
-		if(time > 30) {
+	}
+	else if(ui_Info.Ui_State == UI_INPUT_CHARGER_MONEY) {//输入充电金额界面
+		if(time > 30) 
+		{
 			SwitchToUi_Standby();
 		}
-	} else if(ui_Info.Ui_State == UI_SOCKET_OCCUPY) {//插座被占用
-		if(time > 5) {
+	} 
+	else if(ui_Info.Ui_State == UI_SOCKET_OCCUPY) {//插座被占用
+		if(time > 5) 
+		{
 			Sc8042bSpeech(VOIC_INPUT_SOCKET_NUM);
 			SwitchToUi_InputSocketNum();
 			clearKeyBuf(&keyVal);
 		}
-	}else if(ui_Info.Ui_State == UI_SOCKET_EXCEPTION) {//插座故障
-		if(time > 5) {
+	}
+	else if(ui_Info.Ui_State == UI_SOCKET_EXCEPTION) {//插座故障
+		if(time > 5) 
+		{
 			Sc8042bSpeech(VOIC_INPUT_SOCKET_NUM);
 			SwitchToUi_InputSocketNum();
 			clearKeyBuf(&keyVal);
 		}
 
-	} else if(ui_Info.Ui_State == UI_SOCKET_NOT_EXSIT) {//插座编号不存在
-		if(time > 5) {
+	} 
+	else if(ui_Info.Ui_State == UI_SOCKET_NOT_EXSIT) {//插座编号不存在
+		if(time > 5) 
+		{
 			Sc8042bSpeech(VOIC_INPUT_SOCKET_NUM);
 			SwitchToUi_InputSocketNum();
 			clearKeyBuf(&keyVal);
 		}
-	}  else if(ui_Info.Ui_State == UI_START_CHARGING) {//开启充电中界面
+	}  
+	else if(ui_Info.Ui_State == UI_START_CHARGING) {//开启充电中界面
 		UiProgressLoop();
-		if((time >= 3) && (time < 30)) {
+		if((time >= 3) && (time < 30)) 
+		{
 			SwitchToUi_StartCharging(1);
-		}else if (time >= 30) {//30s后鉴权没结果返回开启充电失败
+		}
+		else if (time >= 30) 
+		{//30s后鉴权没结果返回开启充电失败
 			SwitchToUi_StartChargingFailure();
 		}
-	} else if(ui_Info.Ui_State == UI_START_PAYMENT_CARD_CHARGING) {//支付卡开启充电中界面
+	} 
+	else if(ui_Info.Ui_State == UI_START_PAYMENT_CARD_CHARGING) 
+	{//支付卡开启充电中界面
 		UiProgressLoop();
 		if((time >= 3) && (time < 10))
         {
@@ -1547,16 +1584,22 @@ void UiStateLoop(void)
 			SwitchToUi_Standby();
 		}
 	}
-	else if (ui_Info.Ui_State == UI_START_CHARGING_FAILURE) {//开启充电失败界面
-		if (time >= 5) {//5s后返回待机页面
+	else if (ui_Info.Ui_State == UI_START_CHARGING_FAILURE) 
+	{//开启充电失败界面
+		if (time >= 5) 
+		{//5s后返回待机页面
 			SwitchToUi_Standby();
 		}
 	}
-	else if(ui_Info.Ui_State == UI_CHARGING) {//充电中界面
+	else if(ui_Info.Ui_State == UI_CHARGING) 
+	{//充电中界面
 		UiProgressLoop();
-		if ((time >= 4) && (time < 7)) {
+		if ((time >= 4) && (time < 7)) 
+		{
 			SwitchToUi_Charging(1);
-		} else if (time >= 7) {
+		} 
+		else if (time >= 7) 
+		{
 			SwitchToUi_Standby();
 		}
 	} else if (ui_Info.Ui_State == UI_CARD_MONEY_INSUFFICIENT) {//卡余额不足

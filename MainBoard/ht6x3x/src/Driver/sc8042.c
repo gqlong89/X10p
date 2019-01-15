@@ -38,6 +38,7 @@ void Sc8042bSpeech(int index)
     uint8_t  rtcTime[8];
 
 	GetRtcTime(rtcTime);
+	Feed_WDT();
 	if (gOutNetStatus.mode != 2)
 	{ //以防工厂晚间生产喇叭不会响
 		if (system_info.disturbingStartTime != system_info.disturbingStopTime) 

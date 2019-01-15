@@ -283,8 +283,6 @@ void MainTask(void)
     uint32_t secondOk;
     int ret = 0;
     uint8_t  flag = 0;
-	uint32_t CheckUpgradeTick = 0;
-	uint32_t CheckTaskTick = 0;
 	
    	BspInit();
     
@@ -296,7 +294,7 @@ void MainTask(void)
     OS_DELAY_MS(500);
 	ret |= xTaskCreate((TaskFunction_t)CkbTask,"CkbTask", 640, NULL, 1, NULL);
     OS_DELAY_MS(500);
-    ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask", 384, NULL, 1, &gEmuTaskHandle_t);
+	ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask", 384, NULL, 1, &gEmuTaskHandle_t);
 	OS_DELAY_MS(500);
 	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask", 128, NULL, 1, NULL); 
     OS_DELAY_MS(500);
@@ -308,23 +306,6 @@ void MainTask(void)
 	while(1) 
     {
         OS_DELAY_MS(300);
-		
-		if((CheckUpgradeTick + 60) <= GetRtcCount())
-		{
-			CheckUpgradeTick = GetRtcCount();
-			BswSrv_StartCardBoard_UpgradeTask();
-		}
-		if(((CheckTaskTick + 8 * 60) <= GetRtcCount()))
-		{
-			CheckTaskTick = GetRtcCount();
-
-			if((CardUpgradeHandle_t != NULL))
-			{
-				CL_LOG("强行关闭升级任务.\n");
-				CardUpgradeHandle_t = NULL;
-				vTaskDelete(NULL);
-			}
-		}
 		
         if (GetRtcCount() != old)
         {

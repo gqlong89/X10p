@@ -147,7 +147,7 @@ void App_CB_DownFW(uint8_t package,uint8_t *data,uint16_t len)
 
     fw->index = package;
     memcpy(fw->data, data, len);
-	PrintfData("发送开始升级", (void*)fw, sizeof(CB_DOWN_FW_t));
+//	PrintfData("发送升级数据", (void*)fw, sizeof(CB_DOWN_FW_t));
 	SendCKBPkt(gChgInfo.ckb_sn++, ENUM_MODUL_UPGRADE, ENUM_SEND_UPGRADE_PKT, pkt, len + 1);
     MuxSempGive(&gCKBSendMux);
 }
@@ -172,21 +172,41 @@ void App_CB_Handle_UpgradeInfo(CKB_STR *ptk)
         CB_RESULE_ACK_t *pRet = (void*)ptk->data;
         if(pRet->result == 0)
         {
+        	#if 0
             BswSrv_Upgrade_SendNotify(0);
+			#else
+			gChgInfo.UpgradeRunning = 0xa5;
+			printf("收到按键板可以升级标志\r\n");
+			#endif
         }
+		else
+		{
+			printf("收到不用升级标志\r\n");
+		}
     }
     else if(cmd == ENUM_SEND_UPGRADE_PKT)//固件下发
     {
         CB_DOWN_FW_ACK_t *FWAck = (void*)ptk->data;
         if(FWAck->result == 0)
         {
+			#if 0
             BswSrv_Upgrade_SendNotify(FWAck->index);
-        }        
+			#else
+			gChgInfo.UpgradeRunning = 0xa5;
+			gChgInfo.UpgradeIndex = FWAck->index;
+//			printf("升级index = %d\r\n", gChgInfo.UpgradeIndex);
+			#endif
+        }   
+		else
+		{
+			printf("收到不用下发固件\r\n");
+		}
     }
 }
 
+#if 0
 //重发次数
-#define RETRY_TIMERS    5
+#define RETRY_TIMERS    8
 void CardBoard_UpgradeTask(void)
 {
     uint8_t buf[UPGRADE_PACKAGE_SIZE];
@@ -218,7 +238,7 @@ void CardBoard_UpgradeTask(void)
         result = xTaskNotifyWait(0,                
                                (uint32_t  )0xFFFFFFFF,            //退出函数的时候清除所有的bit
                                (uint32_t*  )&value,               //保存任务通知值
-                               (TickType_t  )2000); 
+                               (TickType_t  )3000); 
         if(result == pdTRUE) 
 		{
             CL_LOG("recv req ack .\r\n");
@@ -237,6 +257,7 @@ void CardBoard_UpgradeTask(void)
     //发送固件
 	while(remain)
 	{
+		printf("www\n");
 		if(remain >= UPGRADE_PACKAGE_SIZE)
 		{
             read_len = UPGRADE_PACKAGE_SIZE;
@@ -302,6 +323,7 @@ void BswSrv_StartCardBoard_UpgradeTask(void)
         CL_LOG("升级任务正在运行,或者刷卡版不在线.\r\n");
     }
 }
+#endif
 
 //操作维护
 int OperateMaintain(uint8_t type, uint8_t para)
@@ -1285,12 +1307,17 @@ void CheckBlueInfo(uint8_t setIndex)
 		return;
 	}
 
-    if (1 == setIndex) {
-        if (0 == system_info.setBtNameFlag) {
-            if (memcmp(gZeroArray, system_info.station_id, sizeof(system_info.station_id))) {
+    if (1 == setIndex) 
+	{
+        if (0 == system_info.setBtNameFlag) 
+		{
+            if (memcmp(gZeroArray, system_info.station_id, sizeof(system_info.station_id))) 
+			{
                 DeviceBcd2str(name, &system_info.station_id[3], 5);
-                for (i=0; i<10; i++) {
-                    if ((0x30 > name[i]) || (0x39 < name[i])) {
+                for (i=0; i<10; i++) 
+				{
+                    if ((0x30 > name[i]) || (0x39 < name[i])) 
+					{
                         CL_LOG("sn err.\n");
                         return;
                     }
@@ -1551,7 +1578,8 @@ void RecvBtData(void)
 
 void ProcKbStatus(void)
 {
-    if (180 < (uint32_t)(GetRtcCount() - gChgInfo.lastRecvKbMsgTime)) {
+    if (180 < (uint32_t)(GetRtcCount() - gChgInfo.lastRecvKbMsgTime)) 
+	{
         gChgInfo.lastRecvKbMsgTime = GetRtcCount();
         gChgInfo.statusErr |= 0x01;
 		CL_LOG("no rx ckbs.\n");
@@ -1566,12 +1594,24 @@ void CkbTask(void)
     uint8_t  btRxBuff[OUT_NET_PKT_LEN];
 	uint32_t old;
     uint32_t second = 0;
-
+    uint32_t package = 0;
+    uint32_t KeyBoardUpgradeTick = GetRtcCount();
+    uint32_t SendUpgradePackTick = GetRtcCount();
+    uint32_t readAddr = 0;
+    uint32_t remain = 0;
+    uint8_t index = 0;
+	uint32_t UpgradeIndex = 0;
+    uint8_t buf[UPGRADE_PACKAGE_SIZE];
+    uint16_t read_len ;
+    
     ResetKeyBoard();
     memset(&gBlueStatus, 0, sizeof(gBlueStatus));
 	FIFO_S_Init(&gBlueStatus.rxBtBuff, (void*)btRxBuff, sizeof(btRxBuff));
 	memset(&gBlueInfo, 0, sizeof(gBlueInfo));
     gBlueInfo.btState = 1;
+    
+    readAddr = KeyBoardBackAddr;
+    remain = system_info.X10KeyBoardFwInfo.filesize;
 
 	while(1) 
     {
@@ -1595,6 +1635,62 @@ void CkbTask(void)
 		ProcKBData();
 		//接收并处理蓝牙数据
 		RecvBtData();
+        
+        if((KeyBoardUpgradeTick + 25) < GetRtcCount())
+        {
+            KeyBoardUpgradeTick = GetRtcCount();
+            printf("检测是否需要升级\r\n");
+            if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0))
+            {
+                //发送升级命令
+                package = system_info.X10KeyBoardFwInfo.filesize / UPGRADE_PACKAGE_SIZE;
+                if((system_info.X10KeyBoardFwInfo.filesize % UPGRADE_PACKAGE_SIZE) != 0)
+                {
+                    package ++;
+                }
+				printf("package大小 = %d\r\n", package);
+                App_CB_SendStartUpgrade(system_info.X10KeyBoardFwInfo.filesize, package, 
+                                        system_info.X10KeyBoardFwInfo.checkSum, 
+                                        system_info.X10KeyBoardFwInfo.fw_verson);
+                CL_LOG("发送升级请求\r\n");
+            }
+        }
+        
+     //   if((SendUpgradePackTick + 1) < GetRtcCount())
+        {
+      //      SendUpgradePackTick = GetRtcCount();
+            if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0xa5))
+            {
+            	Feed_WDT();
+	            if((gChgInfo.UpgradeIndex == index) || (0 == index))
+	            {
+	            	if(remain >= UPGRADE_PACKAGE_SIZE)
+				    {
+				        read_len = UPGRADE_PACKAGE_SIZE;
+				    }
+				    else
+				    {
+				        read_len = remain;
+				    }
+	                remain = remain - read_len;
+	                HT_Flash_ByteRead(&buf[0], readAddr, read_len);
+	                readAddr += read_len;
+	                index = gChgInfo.UpgradeIndex + 1;
+					UpgradeIndex++;
+					printf("index = %d, %d, %d\r\n", gChgInfo.UpgradeIndex, index, UpgradeIndex);
+					if(UpgradeIndex == (package + 1))
+					{
+						system_info.KeyBoard.isUpgradeFlag = 0;
+						FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
+						gChgInfo.UpgradeRunning = 0;
+						ResetSysTem();
+					}
+					gChgInfo.UpgradeIndex = 0;
+	            }
+                //发送数据
+                App_CB_DownFW(index, buf, read_len);
+            }
+        }
 	}
 }
 

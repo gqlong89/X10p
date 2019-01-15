@@ -84,6 +84,7 @@ int UsartSend(int portIndex, const uint8_t *pData, uint16_t len)
     int ret = CL_FAIL;
     UART_INFO_STR *pUart = &gUartPortAddr[portIndex];
 
+	Feed_WDT();
     if (PHY_UART == pUart->type) 
 	{
         ret = UartSendData(pUart, pData, len);
