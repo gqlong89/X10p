@@ -112,7 +112,7 @@
 
 #define SPECIAL_NET_CARD				1                   //0:公网卡    1:专网卡    2:X10c
 #define ENVI_TYPE                       0                   //0:正式环境 1:测试环境 2:预发布环境 3:开发环境 4:测试环境2
-#define FW_VERSION                      3
+#define FW_VERSION                      8
 #define FW_VERSION_SUB                  (SPECIAL_NET_CARD)
 
 #if (1 == SPECIAL_NET_CARD) //====================== 专网卡 ========================
@@ -200,6 +200,11 @@ typedef unsigned long long uint64_t;
 #define CL_TRUE                         1
 #define CL_FALSE                        0
 
+
+#define UPGRADE_PACKAGE_SIZE    		64
+#define UPGRADE_SUCCESS_FLAG    		0x5abe5b6c
+
+
 #define	NOP()				            __NOP()
 #define OS_DELAY_MS                     vTaskDelay
 #define GUN_NUM_MAX				        12
@@ -219,6 +224,12 @@ typedef unsigned long long uint64_t;
 #define clrbit(x,y) 					x &= ~(1<<y)          //将X的第Y位清0
 #define revbit(x,y) 					x ^= (1<<y)           //将X的第Y位反转
 
+
+enum{
+	FW_X10P = 0,  		//X10P
+	FW_X10_KEY_BOARD,  	//刷卡版
+	DW_NUM,     		//固件个数
+};
 
 typedef struct {
     uint8_t  status;                            //信号量状态 0:空闲；非0:占用

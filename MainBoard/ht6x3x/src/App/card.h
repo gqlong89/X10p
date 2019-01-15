@@ -40,6 +40,20 @@ typedef struct {
 	uint8_t SeedKeyA[16];		//KEY_A 种子密钥
 }SECRET_CARD_INFO;//密钥卡信息
 
+typedef struct{
+    uint8_t    index;
+    uint8_t  data[UPGRADE_PACKAGE_SIZE];
+}CB_DOWN_FW_t;
+
+typedef struct{
+    uint8_t result;
+    uint32_t timestamp;
+}CB_RESULE_ACK_t;
+
+typedef struct{
+    uint8_t result;
+    uint8_t index;
+}CB_DOWN_FW_ACK_t;
 
 typedef struct
 {
@@ -94,7 +108,14 @@ typedef enum {
 	KEY_MODULE,
 	CARD_MODULE,
 	BT_MODULE,		//
+	ENUM_MODUL_UPGRADE		= 4,
 }MODULE_ID;
+
+enum {
+	//
+	ENUM_UPGRADE_REQUEST 	= 0x01,
+	ENUM_SEND_UPGRADE_PKT 	= 0x02,
+};
 
 typedef enum {
 	WHOLE_MESSAGE_CMD_BASIC_INFO=0x01,				//基本信息上报
@@ -289,19 +310,22 @@ typedef struct{
 #pragma pack()
 
 
-void CkbTask(void);
-void CkbPowerOn(void);
-void CkbPowerOff(void);
-int SendBlueNetPkt(uint8_t dest, uint8_t *pPkt, uint16_t len);
-int SetBtMac(uint8_t *mac);
-int SendCkbPcbSn(uint8_t *pcb);
-int GetCkbPcbSn(void);
-void OpenBluetoothRadio(void);
-void CloseBluetoothRadio(void);
-int CheckNetMacAddr(uint8_t *pStr);
-int OperateMaintain(uint8_t type, uint8_t para);
+extern void CkbTask(void);
+extern void CkbPowerOn(void);
+extern void CkbPowerOff(void);
+extern int SendBlueNetPkt(uint8_t dest, uint8_t *pPkt, uint16_t len);
+extern int SetBtMac(uint8_t *mac);
+extern int SendCkbPcbSn(uint8_t *pcb);
+extern int GetCkbPcbSn(void);
+extern void OpenBluetoothRadio(void);
+extern void CloseBluetoothRadio(void);
+extern int CheckNetMacAddr(uint8_t *pStr);
+extern int OperateMaintain(uint8_t type, uint8_t para);
+extern int App_CB_SendStartUpgrade(uint32_t fileSize, uint32_t package, uint16_t checkSum, uint8_t verson);
+extern void BswSrv_StartCardBoard_UpgradeTask(void);
 
 extern CKB_BASIC_INFO_REPORT_STR gBlueInfo;
+extern TaskHandle_t CardUpgradeHandle_t;
 
 #endif //__CARD_H__
 

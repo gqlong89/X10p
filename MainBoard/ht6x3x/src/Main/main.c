@@ -131,7 +131,7 @@ void qeeerrrtt(void)
 	}
 	for(ib = 0; ib < 1024; ib++)
 	{
-		if(0 == (ib%16))
+		if(0 == (ib % 16))
 		{
 			printf("\n");
 		}
@@ -165,6 +165,7 @@ void LoadSysCfgInfo(void)
 		FlashWriteGunInfo(gun_info, sizeof(gun_info), 1);
         Clear_RecordOrder();
     }
+    CardUpgradeHandle_t = NULL;
 	//qeeerrrtt();
 }
 
@@ -282,22 +283,24 @@ void MainTask(void)
     uint32_t secondOk;
     int ret = 0;
     uint8_t  flag = 0;
-
+	uint32_t CheckUpgradeTick = 0;
+	uint32_t CheckTaskTick = 0;
+	
    	BspInit();
     
 	memset(&gChgInfo, 0, sizeof(gChgInfo));
 
-    ret  = xTaskCreate((TaskFunction_t)ServerTask,"ServerTask",512,NULL,1,&ServerTaskHandle_t);
+    ret  = xTaskCreate((TaskFunction_t)ServerTask,"ServerTask", 512, NULL, 1, &ServerTaskHandle_t);
     OS_DELAY_MS(500);
-	ret |= xTaskCreate((TaskFunction_t)SysTask,"SysTask",400,NULL,1,NULL);
+	ret |= xTaskCreate((TaskFunction_t)SysTask,"SysTask", 400, NULL, 1, NULL);
     OS_DELAY_MS(500);
-	ret |= xTaskCreate((TaskFunction_t)CkbTask,"CkbTask",512+128,NULL,1,NULL);
+	ret |= xTaskCreate((TaskFunction_t)CkbTask,"CkbTask", 640, NULL, 1, NULL);
     OS_DELAY_MS(500);
-    ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask",256+128,NULL,1,&gEmuTaskHandle_t);
+    ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask", 384, NULL, 1, &gEmuTaskHandle_t);
 	OS_DELAY_MS(500);
-	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask",128,NULL,1,NULL); 
+	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask", 128, NULL, 1, NULL); 
     OS_DELAY_MS(500);
-    CL_LOG("task init, ret=%d.\n",ret);
+    CL_LOG("task init, ret=%d.\n", ret);
 
     ShowCostTemplate();
     RestoreGunStatus();
@@ -305,6 +308,24 @@ void MainTask(void)
 	while(1) 
     {
         OS_DELAY_MS(300);
+		
+		if((CheckUpgradeTick + 60) <= GetRtcCount())
+		{
+			CheckUpgradeTick = GetRtcCount();
+			BswSrv_StartCardBoard_UpgradeTask();
+		}
+		if(((CheckTaskTick + 8 * 60) <= GetRtcCount()))
+		{
+			CheckTaskTick = GetRtcCount();
+
+			if((CardUpgradeHandle_t != NULL))
+			{
+				CL_LOG("强行关闭升级任务.\n");
+				CardUpgradeHandle_t = NULL;
+				vTaskDelete(NULL);
+			}
+		}
+		
         if (GetRtcCount() != old)
         {
             old = GetRtcCount();

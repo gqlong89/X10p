@@ -209,8 +209,19 @@ typedef struct{
     uint16_t checkSum;                          //校验码
 }CHARGER_STR;
 
-
 #pragma pack()
+
+typedef struct{
+    uint32_t filesize;
+    uint32_t package;
+    uint16_t checkSum;
+    uint8_t  fw_verson;
+}START_UPGRADE_REQUEST_STR, *pSTART_UPGRADE_REQUEST_STR;
+
+typedef struct{
+    uint32_t isUpgradeFlag;
+}KEY_BOARD_UPGRADE_FLAG_STR, *pKEY_BOARD_UPGRADE_FLAG_STR;
+
 
 //该结构体暂时不能放在 pack(1) 里面
 typedef struct{
@@ -250,7 +261,10 @@ typedef struct{
 	uint16_t voiceFlag;                         //语音提示开关魔术字
 	uint16_t cfgFlag;                           //拔枪、充满自停开关及时间魔术字
 	uint32_t logOpenTime;
-    uint8_t  rsv[490];
+	START_UPGRADE_REQUEST_STR X10KeyBoardFwInfo;
+	KEY_BOARD_UPGRADE_FLAG_STR KeyBoard;
+	uint8_t  fwType;
+    uint8_t  rsv[477];
 }system_info_t;
 
 

@@ -18,6 +18,8 @@
 #include "server.h"
 #include "proto.h"
 
+TaskHandle_t CardUpgradeHandle_t  = NULL;
+
 uint8_t readCardFlg = 0;
 extern KEY_VALUES keyVal;
 
@@ -103,6 +105,202 @@ int SendBasicInfoReportAck(uint8_t result)
 	SendCKBPkt(gChgInfo.ckb_sn++, WHOLE_MODULE, WHOLE_MESSAGE_CMD_BASIC_INFO, pkt, sizeof(CKB_BASIC_INFO_REPORT_ACK_STR));
     MuxSempGive(&gCKBSendMux);
     return CL_OK;
+}
+
+/**
+ * 启动升级
+ */ 
+int App_CB_SendStartUpgrade(uint32_t fileSize, uint32_t package, uint16_t checkSum, uint8_t verson)
+{
+    CKB_STR *pkt = (void*)gCKBSendBuff;
+    START_UPGRADE_REQUEST_STR *startUpgrade = (void*)pkt->data;
+	
+	MuxSempTake(&gCKBSendMux);
+    memset(startUpgrade, 0, sizeof(START_UPGRADE_REQUEST_STR));
+
+    startUpgrade->filesize = fileSize;
+    startUpgrade->package = package;
+    startUpgrade->checkSum = checkSum;
+    startUpgrade->fw_verson = verson;
+    
+	PrintfData("发送开始升级", (void*)startUpgrade, sizeof(START_UPGRADE_REQUEST_STR));
+	SendCKBPkt(gChgInfo.ckb_sn++, ENUM_MODUL_UPGRADE, ENUM_UPGRADE_REQUEST, pkt, sizeof(START_UPGRADE_REQUEST_STR));
+    MuxSempGive(&gCKBSendMux);
+    return CL_OK;
+}
+
+/**
+ * 固件下发
+ */ 
+void App_CB_DownFW(uint8_t package,uint8_t *data,uint16_t len)
+{
+	CKB_STR *pkt = (void*)gCKBSendBuff;
+    CB_DOWN_FW_t *fw = (void*)pkt->data;
+	
+	if(len > UPGRADE_PACKAGE_SIZE)
+    {
+        CL_LOG("fw length is too loog.\r\n");
+        return;
+    } 
+	MuxSempTake(&gCKBSendMux);
+    memset(fw, 0, sizeof(CB_DOWN_FW_t));
+
+    fw->index = package;
+    memcpy(fw->data, data, len);
+	PrintfData("发送开始升级", (void*)fw, sizeof(CB_DOWN_FW_t));
+	SendCKBPkt(gChgInfo.ckb_sn++, ENUM_MODUL_UPGRADE, ENUM_SEND_UPGRADE_PKT, pkt, len + 1);
+    MuxSempGive(&gCKBSendMux);
+}
+
+void BswSrv_Upgrade_SendNotify(uint8_t transAction)
+{
+   if(CardUpgradeHandle_t != NULL)
+   {
+       xTaskNotify((TaskHandle_t  )CardUpgradeHandle_t,    //接收任务通知的任务句柄
+                   (uint32_t    )transAction,            //任务通知值
+                   (eNotifyAction  )eSetValueWithOverwrite);  //覆写的方式发送任务通知
+   }
+}
+
+//远程升级
+void App_CB_Handle_UpgradeInfo(CKB_STR *ptk)
+{
+    uint8_t cmd = ptk->head.cmd;
+	
+    if(cmd == ENUM_UPGRADE_REQUEST) //开始升级
+    {
+        CB_RESULE_ACK_t *pRet = (void*)ptk->data;
+        if(pRet->result == 0)
+        {
+            BswSrv_Upgrade_SendNotify(0);
+        }
+    }
+    else if(cmd == ENUM_SEND_UPGRADE_PKT)//固件下发
+    {
+        CB_DOWN_FW_ACK_t *FWAck = (void*)ptk->data;
+        if(FWAck->result == 0)
+        {
+            BswSrv_Upgrade_SendNotify(FWAck->index);
+        }        
+    }
+}
+
+//重发次数
+#define RETRY_TIMERS    5
+void CardBoard_UpgradeTask(void)
+{
+    uint8_t buf[UPGRADE_PACKAGE_SIZE];
+ //   FW_HEAD_INFO_T info;
+    uint8_t index = 0;
+    uint32_t package = 0;
+    uint32_t readAddr = 0;
+    uint32_t remain = 0;
+    uint16_t read_len ;
+    uint32_t i = 0;
+    BaseType_t result;
+    uint32_t value;
+
+    CL_LOG("刷卡版升级任务启动..\r\n");
+
+    OS_DELAY_MS(1000);
+
+    package = system_info.X10KeyBoardFwInfo.filesize / UPGRADE_PACKAGE_SIZE;
+    if((system_info.X10KeyBoardFwInfo.filesize % UPGRADE_PACKAGE_SIZE) != 0)
+    {
+        package ++;
+    }
+    for(i = 0;i < RETRY_TIMERS; i++)
+    {
+        //发送升级命令
+        App_CB_SendStartUpgrade(system_info.X10KeyBoardFwInfo.filesize, package, system_info.X10KeyBoardFwInfo.checkSum, system_info.X10KeyBoardFwInfo.fw_verson);
+        CL_LOG("SendStartUpgrade...\r\n");
+        //等待响应
+        result = xTaskNotifyWait(0,                
+                               (uint32_t  )0xFFFFFFFF,            //退出函数的时候清除所有的bit
+                               (uint32_t*  )&value,               //保存任务通知值
+                               (TickType_t  )2000); 
+        if(result == pdTRUE) 
+		{
+            CL_LOG("recv req ack .\r\n");
+            break;
+        }
+    }
+    if(i >= RETRY_TIMERS)
+    {
+        CL_LOG("no recv req ack.. \r\n");
+        goto EXIT;
+    }
+	
+	readAddr = KeyBoardBackAddr;
+    remain = system_info.X10KeyBoardFwInfo.filesize;
+
+    //发送固件
+	while(remain)
+	{
+		if(remain >= UPGRADE_PACKAGE_SIZE)
+		{
+            read_len = UPGRADE_PACKAGE_SIZE;
+        }
+		else
+		{
+            read_len = remain;
+        }
+        remain = remain - read_len;
+		HT_Flash_ByteRead(&buf[0], readAddr, read_len);
+		readAddr += read_len;
+		
+        for(i = 0; i < RETRY_TIMERS; i++)
+        {
+            //发送数据
+            App_CB_DownFW(index, buf, read_len);
+            //等待响应
+            result = xTaskNotifyWait(0,
+                               (uint32_t  )0xFFFFFFFF,  
+                               (uint32_t*  )&value,  
+                               (TickType_t  )2000); 
+            if(result == pdTRUE && index == value) 
+			{
+                break;
+            }
+		//	CL_LOG("wwwwww index=%d value=%d \r\n",index, value);
+            if(index != value)
+			{
+                CL_LOG("index error..index=%d value=%d \r\n",index, value);
+            }
+        }
+        if(i >= RETRY_TIMERS)
+        {
+            CL_LOG("no recv fw ack..index=%d \r\n",index);
+            goto EXIT;
+        }
+    
+        index++;
+		OS_DELAY_MS(50);
+	}
+	CL_LOG("按键板升级成功.\r\n");
+    system_info.KeyBoard.isUpgradeFlag = 0;
+    FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
+EXIT:
+    CL_LOG("刷卡版升级退出..\r\n");
+    CardUpgradeHandle_t = NULL;
+	vTaskDelete(NULL);
+}
+
+void BswSrv_StartCardBoard_UpgradeTask(void)
+{
+	if(UPGRADE_SUCCESS_FLAG != system_info.KeyBoard.isUpgradeFlag)
+    {
+        CL_LOG("没有升级任务.\r\n");
+		return;
+    }
+    if((CardUpgradeHandle_t == NULL))
+    {
+        xTaskCreate((TaskFunction_t)CardBoard_UpgradeTask, "CardBoard_UpgradeTask", 256, NULL, 1, &CardUpgradeHandle_t);    
+    }
+    else
+    {
+        CL_LOG("升级任务正在运行,或者刷卡版不在线.\r\n");
+    }
 }
 
 //操作维护
@@ -268,16 +466,22 @@ void BuleStatusSendProc(uint8_t status)
 {
     uint8_t  sendStatus = status ? EVENT_RECOVER : EVENT_OCCUR;
 
-    if (status) {
+    if (status) 
+	{
         CL_LOG("bt status=%d,err.\n",status);
     }
 
-    if (status != gChgInfo.lastBlueStatus) {
-        if (CL_OK == IsSysOnLine()) {
-            if (gChgInfo.sendBlueStatus < 10) {
+    if (status != gChgInfo.lastBlueStatus) 
+	{
+        if (CL_OK == IsSysOnLine()) 
+		{
+            if (gChgInfo.sendBlueStatus < 10) 
+			{
                 SendEventNotice(0, EVENT_CHIP_FAULT, CHIP_BLUE, 0, sendStatus, NULL);
                 gChgInfo.sendBlueStatus++;
-            }else{
+            }
+			else
+			{
                 gChgInfo.lastBlueStatus = status;
                 gChgInfo.sendBlueStatus = 0;
             }
@@ -1042,6 +1246,14 @@ void HandleCKBData(void *pPkt)
 		{
 			BtModuleHandle(pFrame);
 		}
+		break;
+		case ENUM_MODUL_UPGRADE:	//按键板升级
+		{
+			App_CB_Handle_UpgradeInfo(pFrame);
+		}
+		break;
+		default:
+			CL_LOG("错误.\n");
 		break;
 	}
 }

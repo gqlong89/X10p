@@ -746,13 +746,13 @@ void CostTemplateProc(PKT_STR *pPkt)
     SendCostTemplateAck(pPkt->head.sn, ret, pcost->gunId);
 }
 
-
 void SetUpgradeInfo(DOWN_FW_REQ_STR *pfwInfo)
 {
     char url[50] = {0};
     char usrName[6] = {0};
     char psw[6] = {0};
     char fileName[10] = {0};
+	uint8_t UpgradeOkFlag = 0;
     int i;
 
 	vTaskDelete(MainTaskHandle_t);
@@ -770,11 +770,30 @@ void SetUpgradeInfo(DOWN_FW_REQ_STR *pfwInfo)
 		SwitchToUi_EquipUpgrade();
         if (CL_OK == FtpGet(url, usrName, psw, fileName, pfwInfo->checkSum)) 
 		{
+			UpgradeOkFlag = 0xa5;
             break;
         }
         OS_DELAY_MS(5000);
     }
-    ResetSysTem();
+	if(FW_X10P == system_info.fwType)
+	{
+    	ResetSysTem();
+	}
+	else if((0xa5 == UpgradeOkFlag) && (FW_X10_KEY_BOARD == system_info.fwType))
+	{
+		//App_CB_SendStartUpgrade(system_info.X10KeyBoardFwInfo.filesize, 
+		//						system_info.X10KeyBoardFwInfo.package, 
+		//						system_info.X10KeyBoardFwInfo.checkSum, 
+		//						system_info.X10KeyBoardFwInfo.fw_verson);
+		CL_LOG("·¢ËÍÉý¼¶ [filesize:%d, package:%d, checkSum:%d, fw_verson:%d].\n", system_info.X10KeyBoardFwInfo.filesize, 
+								system_info.X10KeyBoardFwInfo.package, 
+								system_info.X10KeyBoardFwInfo.checkSum, 
+								system_info.X10KeyBoardFwInfo.fw_verson);
+		if(system_info.KeyBoard.isUpgradeFlag == UPGRADE_SUCCESS_FLAG)
+		{
+			BswSrv_StartCardBoard_UpgradeTask();
+		}
+	}
 }
 
 

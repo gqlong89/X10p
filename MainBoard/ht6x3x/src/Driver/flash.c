@@ -444,6 +444,16 @@ void FlashEraseAppBackup(void)
     }
 }
 
+void FlashEraseKeyBoardBackup(void)
+{
+    uint32_t i;
+
+    for (i = 0; i < (KEY_BOARD_FW_SIZE / 1024); i++) 
+	{
+        HT_Flash_PageErase(KeyBoardBackAddr+i*1024);
+    }
+}
+
 
 void WriteUpdateInfo(uint32_t fsize, uint32_t checkSum)
 {
@@ -599,8 +609,10 @@ int EepromWriteData(uint32_t addr, void *pInfo, uint16_t size)
 {
     int i;
 
-    for (i=0; i<4; i++) {
-    	if (CL_OK == at24c64_eepromWrite(addr, pInfo, size)) {
+    for (i=0; i<4; i++) 
+	{
+    	if (CL_OK == at24c64_eepromWrite(addr, pInfo, size)) 
+		{
             return CL_OK;
         }
         vTaskDelay(1000);
@@ -612,7 +624,8 @@ int EepromWriteData(uint32_t addr, void *pInfo, uint16_t size)
 //写系统信息
 int FlashWriteSysInfo(void *pSysInfo, uint16_t size, uint8_t readBack)
 {
-    if (CL_OK != EepromWriteData(SysInfoEepromAddr, pSysInfo, size)) {
+    if (CL_OK != EepromWriteData(SysInfoEepromAddr, pSysInfo, size)) 
+	{
         SendEventNotice(0, EVENT_CHIP_FAULT, CHIP_E2PROM, 0, EVENT_OCCUR, NULL);
         return CL_FAIL;
     }

@@ -33,6 +33,7 @@ extern int FlashWriteTradeRecord(void *pTradeRecord, uint16_t size);
 extern void FlashReadDataEx(uint8_t *pBuff, uint32_t addr, uint16_t len);
 extern void E2promReadDataEx(uint8_t *pBuff, uint32_t addr, uint16_t len);
 extern int E2promWriteDataEx(uint32_t addr, void* pBuff, uint16_t len);
+extern void FlashEraseKeyBoardBackup(void);
 
 //extern uint8_t TradeRecordGunId;
 #endif // __FLASH_H__

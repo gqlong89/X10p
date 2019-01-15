@@ -774,7 +774,7 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
     uint32_t appBackupRecordAddr;
     FW_INFO_STR *pFwInfo = NULL;
     FW_HEAD_STR *pFwHead = NULL;
-
+	
     Feed_WDT();
 	gprsBuffer[0] = 0;
     sprintf(tmp, "AT+CIPCLOSE=%d\r", SOCKET_ID);
@@ -848,8 +848,6 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
     if (GprsSendCmdChkNoSpace("AT+FTPGET=1\r", "+FTPGET:1,1", 10, 1000, NULL) == 0) 
     {
         ret = 0;
-        /*erase flash and set write pos*/
-		appBackupRecordAddr = AppUpBkpAddr;
         over_time = GetRtcCount();
         getLen = 16;
         getCnt = 0;
@@ -911,7 +909,7 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                         }
                         else
                         {
-                            CL_LOG("head=%02x,%02x,err.\n",gprsBuffer[0],gprsBuffer[1]);
+                            CL_LOG("head=%02x,%02x,err.\n", gprsBuffer[0], gprsBuffer[1]);
                             OptFailNotice(58);
                             return CL_FAIL;
                         }
@@ -921,26 +919,48 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                         pFwInfo = (void*)gprsBuffer;
                         fsize = pFwInfo->size;
                         chsum_in = pFwInfo->checkSum;
-                        #if (0 == X10C_TYPE)
+						#if (0 == X10C_TYPE)
                         ret = memcmp("X10", pFwInfo->name, 3);
                         #else
                         ret = memcmp("X10C", pFwInfo->name, 4);
                         #endif
-                        if (0 == ret) 
-                        {
-                            if ((system_info.localFwInfo.size == fsize) && (system_info.localFwInfo.checkSum == chsum_in) && (system_info.localFwInfo.ver == fwVer)) 
+						if (0 == ret) 
+						{
+							system_info.fwType = FW_X10P;
+							appBackupRecordAddr = AppUpBkpAddr;
+							if ((system_info.localFwInfo.size == fsize) && (system_info.localFwInfo.checkSum == chsum_in) && (system_info.localFwInfo.ver == fwVer)) 
                             {
                                 CL_LOG("fw same,no need upgrade.\n");
                                 OptSuccessNotice(804);
                                 return CL_OK;
                             }
+							
                             getCnt++;
-                            CL_LOG("fw name ok,fs=%d,sum=%d,fwVer=%d.\n",fsize,chsum_in,fwVer);
+                            CL_LOG("check X10P fw name ok,fs=%d,sum=%d,fwVer=%d.\n",fsize,chsum_in,fwVer);
                             getLen = 512;
                             memset(&system_info.localFwInfo, 0, sizeof(system_info.localFwInfo));
                             FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
                             FlashEraseAppBackup();
-                        }
+							checksum = 0;
+	                        cfize = 0;
+	                    }
+						else if (0 == (ret = memcmp("U8C", pFwInfo->name, 3))) 
+						{
+	                        system_info.fwType = FW_X10_KEY_BOARD;
+							appBackupRecordAddr = KeyBoardBackAddr;
+	                        getCnt++;
+	                        CL_LOG("check x6 fw name ok,fsize=%d,chsum_in=%d.\n",fsize,chsum_in);
+	                        getLen = 512;
+	                        //if ((fsize == system_info.x6FwInfo.size) && (chsum_in == system_info.x6FwInfo.checkSum)) {
+	                        //    CL_LOG("fw is the same, no need to download.\n");
+	                        //    return CL_OK;
+	                        //}
+	                        memset(&system_info.X10KeyBoardFwInfo, 0, sizeof(system_info.X10KeyBoardFwInfo));
+	                        FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
+	                        FlashEraseKeyBoardBackup();
+	                        checksum = 0;
+	                        cfize = 0;
+	                    }
                         else
                         {
                             CL_LOG("fw=%s,err.\n",pFwInfo->name);
@@ -951,7 +971,7 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                     continue;
                 }
 
-                for (i=0; i<len; i++) 
+                for (i = 0; i < len; i++) 
                 {
                     checksum += (unsigned)gprsBuffer[i];
                 }
@@ -976,19 +996,46 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
         }
 
         /*file size = rxget file size, write checksum to flash*/
-        if (cfize == fsize) 
+        if (cfize >= fsize) 
         {
 			if (checksum == chsum_in) 
             {
-				CL_LOG("size %d,cs %4X,fw=%d,ftp ok.\n", fsize, checksum,fwVer);
-				WriteUpdateInfo(fsize, checksum);
-                system_info.localFwInfo.size = cfize;
-                system_info.localFwInfo.checkSum = checksum;
-                system_info.localFwInfo.ver = fwVer;
-                system_info.localFwInfo.sum = GetPktSum((void*)&system_info.localFwInfo, sizeof(system_info.localFwInfo)-1);
-                FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
-                ret = 0;
-                OptSuccessNotice(801);
+            	CL_LOG("write file size %d, checksum %4X,fwType = %d,ftp ok! .\n", fsize, checksum, system_info.fwType);
+                if (FW_X10P == system_info.fwType)
+                {
+				    CL_LOG("size %d,cs %4X,fw=%d,ftp ok.\n", fsize, checksum,fwVer);
+					WriteUpdateInfo(fsize, checksum);
+	                system_info.localFwInfo.size = cfize;
+	                system_info.localFwInfo.checkSum = checksum;
+	                system_info.localFwInfo.ver = fwVer;
+	                system_info.localFwInfo.sum = GetPktSum((void*)&system_info.localFwInfo, sizeof(system_info.localFwInfo)-1);
+	                FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
+	                ret = 0;
+	                OptSuccessNotice(801);
+			    }
+				else if (FW_X10_KEY_BOARD == system_info.fwType)
+				{
+                    system_info.X10KeyBoardFwInfo.filesize = fsize;
+                    system_info.X10KeyBoardFwInfo.checkSum = checksum;
+					system_info.X10KeyBoardFwInfo.fw_verson = fwVer;
+					if(0 == (fsize % 64))
+					{
+						system_info.X10KeyBoardFwInfo.package = fsize / 64;
+					}
+					else
+					{
+						system_info.X10KeyBoardFwInfo.package = (fsize / 64) + 1;
+					}
+					CL_LOG("按键板版本号[%d], [%d].\n", system_info.X10KeyBoardFwInfo.fw_verson, fwVer);
+                  //  system_info.X10KeyBoardFwInfo.checkSum = GetPktSum((void*)&system_info.X10KeyBoardFwInfo, sizeof(system_info.X10KeyBoardFwInfo)-1);
+				//	memset(&system_info.isUpgradeOk, 0, sizeof(system_info.isUpgradeOk));
+					system_info.KeyBoard.isUpgradeFlag = UPGRADE_SUCCESS_FLAG;
+				  	CL_LOG("按键板升级标志[%#x].\n", system_info.KeyBoard.isUpgradeFlag);
+                    FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
+				  	Feed_WDT();
+				    Sc8042bSpeech(VOIC_SUCCESS);
+				    vTaskDelay(600);
+                }
 			}
             else
             {
