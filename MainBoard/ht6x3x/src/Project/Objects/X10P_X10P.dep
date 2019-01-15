@@ -1,1279 +1,0 @@
-Dependencies for Project 'X10P', Target 'X10P': (DO NOT MODIFY !)
-F (..\Main\CpuCfg.c)(0x5C32E715)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\cpucfg.o --omf_browse .\objects\cpucfg.crf --depend .\objects\cpucfg.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-F (..\Main\main.c)(0x5C3D54C6)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\simuart.h)(0x5C36DC2F)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\i2c.h)(0x5C21AAD1)
-I (..\App\productTest.h)(0x5C21AAD1)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\App\blueProto.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\Driver\ntcad.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\upgrade.h)(0x5C21AAD1)
-I (..\Driver\TempDetection.h)(0x5C345D1A)
-I (..\App\relayCtrlTask.h)(0x5C35CE03)
-F (..\App\blueProto.c)(0x5C3D732A)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\blueproto.o --omf_browse .\objects\blueproto.crf --depend .\objects\blueproto.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\blueProto.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\Driver\ntcad.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\upgrade.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-F (..\App\card.c)(0x5C3D854B)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\card.o --omf_browse .\objects\card.crf --depend .\objects\card.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\App\blueProto.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\App\productTest.h)(0x5C21AAD1)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-F (..\App\emu.c)(0x5C35CC86)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\emu.o --omf_browse .\objects\emu.crf --depend .\objects\emu.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\simuart.h)(0x5C36DC2F)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\App\gun.h)(0x5C24697F)
-F (..\App\gun.c)(0x5C35C949)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\gun.o --omf_browse .\objects\gun.crf --depend .\objects\gun.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\gun.h)(0x5C24697F)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\relayCtrlTask.h)(0x5C35CE03)
-F (..\App\history_order.c)(0x5C23420F)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\history_order.o --omf_browse .\objects\history_order.crf --depend .\objects\history_order.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-F (..\App\outNetProto.c)(0x5C36E299)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\outnetproto.o --omf_browse .\objects\outnetproto.crf --depend .\objects\outnetproto.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\productTest.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\blueProto.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-F (..\App\productTest.c)(0x5C246957)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\producttest.o --omf_browse .\objects\producttest.crf --depend .\objects\producttest.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\productTest.h)(0x5C21AAD1)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-F (..\App\proto.c)(0x5C3D5741)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\proto.o --omf_browse .\objects\proto.crf --depend .\objects\proto.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\md5.h)(0x5C21AAD1)
-I (..\Driver\ntcad.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-F (..\App\server.c)(0x5C3D73B8)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\server.o --omf_browse .\objects\server.crf --depend .\objects\server.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-I (..\Driver\ntcad.h)(0x5C21AAD1)
-F (..\App\sim800c.c)(0x5C3C6C56)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\sim800c.o --omf_browse .\objects\sim800c.crf --depend .\objects\sim800c.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\upgrade.h)(0x5C21AAD1)
-F (..\App\tfs.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\tfs.o --omf_browse .\objects\tfs.crf --depend .\objects\tfs.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-F (..\App\ui.c)(0x5C3D74A6)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\ui.o --omf_browse .\objects\ui.crf --depend .\objects\ui.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\App\gun.h)(0x5C24697F)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-F (..\App\upgrade.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\upgrade.o --omf_browse .\objects\upgrade.crf --depend .\objects\upgrade.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\upgrade.h)(0x5C21AAD1)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-F (..\App\relayCtrlTask.c)(0x5C36DC54)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\relayctrltask.o --omf_browse .\objects\relayctrltask.crf --depend .\objects\relayctrltask.d)
-I (..\App\relayCtrlTask.h)(0x5C35CE03)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\App\gun.h)(0x5C24697F)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\emu.h)(0x5C35DB0B)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\simuart.h)(0x5C36DC2F)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-F (..\Driver\aes.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\aes.o --omf_browse .\objects\aes.crf --depend .\objects\aes.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-F (..\Driver\cmu.c)(0x5C36AA80)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\cmu.o --omf_browse .\objects\cmu.crf --depend .\objects\cmu.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\rtc.h)(0x5C36AA65)
-F (..\Driver\FIFO.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\fifo.o --omf_browse .\objects\fifo.crf --depend .\objects\fifo.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-F (..\Driver\flash.c)(0x5C3C6CC4)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\flash.o --omf_browse .\objects\flash.crf --depend .\objects\flash.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\flash.h)(0x5C3C3D65)
-I (..\Driver\i2c.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-F (..\Driver\gpio.c)(0x5C36AA8B)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\gpio.o --omf_browse .\objects\gpio.crf --depend .\objects\gpio.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\rtc.h)(0x5C36AA65)
-F (..\Driver\i2c.c)(0x5C36DCAF)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\i2c.o --omf_browse .\objects\i2c.crf --depend .\objects\i2c.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\i2c.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\simuart.h)(0x5C36DC2F)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-F (..\Driver\lcd.c)(0x5C2352D1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\lcd.o --omf_browse .\objects\lcd.crf --depend .\objects\lcd.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\lcd.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-F (..\Driver\md5.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\md5.o --omf_browse .\objects\md5.crf --depend .\objects\md5.d)
-I (..\Driver\md5.h)(0x5C21AAD1)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-F (..\Driver\ntcad.c)(0x5C345BB9)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\ntcad.o --omf_browse .\objects\ntcad.crf --depend .\objects\ntcad.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\ntcad.h)(0x5C21AAD1)
-F (..\Driver\rtc.c)(0x5C36AA12)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\rtc.o --omf_browse .\objects\rtc.crf --depend .\objects\rtc.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-F (..\Driver\sc8042.c)(0x5C3D7F3D)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\sc8042.o --omf_browse .\objects\sc8042.crf --depend .\objects\sc8042.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\sc8042.h)(0x5C21AAD1)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\rtc.h)(0x5C36AA65)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\App\ui.h)(0x5C21AAD1)
-F (..\Driver\simuart.c)(0x5C36DB77)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\simuart.o --omf_browse .\objects\simuart.crf --depend .\objects\simuart.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\simuart.h)(0x5C36DC2F)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-F (..\Driver\systick.c)(0x5C234289)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\systick.o --omf_browse .\objects\systick.crf --depend .\objects\systick.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-F (..\Driver\usart.c)(0x5C3D7E6C)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\usart.o --omf_browse .\objects\usart.crf --depend .\objects\usart.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\usart.h)(0x5C21AAD1)
-I (..\Driver\FIFO.h)(0x5C21AAD1)
-I (..\Driver\simuart.h)(0x5C36DC2F)
-I (..\App\sim800c.h)(0x5C21AAD1)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-F (..\Driver\TempDetection.c)(0x5C36B24B)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\tempdetection.o --omf_browse .\objects\tempdetection.crf --depend .\objects\tempdetection.d)
-I (..\Main\includes.h)(0x5C3C6BEB)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdio.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\Driver\systick.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\Main\CpuCfg.h)(0x5C3BFD47)
-I (..\Driver\cmu.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-I (..\Driver\gpio.h)(0x5C21AAD1)
-I (..\freertos\include\semphr.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\time.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\math.h)(0x54C245B8)
-I (..\Driver\TempDetection.h)(0x5C345D1A)
-I (..\App\server.h)(0x5C3D56C7)
-I (..\App\proto.h)(0x5C22DB0B)
-I (..\App\tfs.h)(0x5C21AAD1)
-I (..\App\history_order.h)(0x5C21AAD1)
-I (..\App\card.h)(0x5C3C7AF7)
-I (..\App\outNetProto.h)(0x5C21AAD1)
-I (..\Driver\aes.h)(0x5C21AAD1)
-F (..\Libraries\CMSIS\CoreSupport\core_cm0.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\core_cm0.o --omf_browse .\objects\core_cm0.crf --depend .\objects\core_cm0.d)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-F (..\Libraries\CMSIS\DeviceSupport\system_ht6xxx.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\system_ht6xxx.o --omf_browse .\objects\system_ht6xxx.crf --depend .\objects\system_ht6xxx.d)
-I (..\Libraries\CMSIS\DeviceSupport\Ht6xxx.h)(0x5C25BF36)
-I (..\Libraries\CMSIS\CoreSupport\core_cm0.h)(0x5C22F932)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\Libraries\CMSIS\CoreSupport\core_cmInstr.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\CoreSupport\core_cmFunc.h)(0x5C21AAD1)
-I (..\Libraries\CMSIS\DeviceSupport\system_ht6xxx.h)(0x5C21AAD1)
-F (..\Libraries\Startup\startup_ht6x3x.s)(0x5C2476F4)(--cpu Cortex-M0 --li -g --apcs=interwork --pd "__MICROLIB SETA 1"-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"--pd "__UVISION_VERSION SETA 518" --pd "ARMCM0 SETA 1"--list .\listings\startup_ht6x3x.lst --xref -o .\objects\startup_ht6x3x.o --depend .\objects\startup_ht6x3x.d)
-F (..\freertos\list.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\list.o --omf_browse .\objects\list.crf --depend .\objects\list.d)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-F (..\freertos\queue.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\queue.o --omf_browse .\objects\queue.crf --depend .\objects\queue.d)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\queue.h)(0x5C21AAD1)
-F (..\freertos\tasks.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\tasks.o --omf_browse .\objects\tasks.crf --depend .\objects\tasks.d)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\string.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-I (..\freertos\include\timers.h)(0x5C21AAD1)
-I (..\freertos\include\StackMacros.h)(0x5C21AAD1)
-F (..\freertos\portable\Keil\ARM_CM0\port.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\port.o --omf_browse .\objects\port.crf --depend .\objects\port.d)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)
-F (..\freertos\portable\MemMang\heap_4.c)(0x5C21AAD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB --li -g -O0 --apcs=interwork --split_sections -I ..\Main -I ..\Libraries\CMSIS\CoreSupport -I ..\Libraries\CMSIS\DeviceSupport -I ..\Libraries\Startup -I ..\freertos\include -I ..\freertos\portable\Keil\ARM_CM0 -I ..\freertos\portable\MemMang -I ..\freertos\portable\RVDS -I ..\Driver -I ..\App-I F:\WORK\X10p\MainBoard\ht6x3x\src\Project\RTE-I "D:\Program Files\keil5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include"-I "D:\Program Files\keil5\ARM\CMSIS\Include"-D__UVISION_VERSION="518" -DARMCM0 -DHT6x3x-o .\objects\heap_4.o --omf_browse .\objects\heap_4.crf --depend .\objects\heap_4.d)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdlib.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOS.h)(0x5C21AAD1)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stddef.h)(0x54C245B8)
-I (D:\Program Files\keil5\ARM\ARMCC\include\stdint.h)(0x54C245B8)
-I (..\freertos\include\FreeRTOSConfig.h)(0x5C3D36A6)
-I (..\freertos\include\projdefs.h)(0x5C21AAD1)
-I (..\freertos\include\portable.h)(0x5C21AAD1)
-I (..\freertos\include\deprecated_definitions.h)(0x5C21AAD1)
-I (..\freertos\portable\Keil\ARM_CM0\portmacro.h)(0x5C21AAD1)
-I (..\freertos\include\mpu_wrappers.h)(0x5C21AAD1)
-I (..\freertos\include\task.h)(0x5C21AAD1)
-I (..\freertos\include\list.h)(0x5C21AAD1)

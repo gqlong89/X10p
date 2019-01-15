@@ -166,7 +166,8 @@ void BswSrv_Upgrade_SendNotify(uint8_t transAction)
 void App_CB_Handle_UpgradeInfo(CKB_STR *ptk)
 {
     uint8_t cmd = ptk->head.cmd;
-	
+	static uint8_t IndexTimesFlag = 0;
+		
     if(cmd == ENUM_UPGRADE_REQUEST) //开始升级
     {
         CB_RESULE_ACK_t *pRet = (void*)ptk->data;
@@ -195,11 +196,20 @@ void App_CB_Handle_UpgradeInfo(CKB_STR *ptk)
 			gChgInfo.UpgradeRunning = 0xa5;
 			gChgInfo.UpgradeIndex = FWAck->index;
 //			printf("升级index = %d\r\n", gChgInfo.UpgradeIndex);
+			IndexTimesFlag = 0;
 			#endif
         }   
 		else
 		{
 			printf("收到不用下发固件\r\n");
+			IndexTimesFlag++;
+			if(20 < IndexTimesFlag)
+			{
+				printf("cxsj\n");
+				OptFailNotice(208);
+				gChgInfo.UpgradeRunning = 0;
+				ResetSysTem();
+			}
 		}
     }
 }
@@ -1349,6 +1359,7 @@ void ProcKBData(void)
     }
 	while (CL_OK == FIFO_S_Get(&gUartPortAddr[1].rxBuffCtrl, &data)) 
 	{
+	//	printf("data = %x\n", data);
     	switch (step) 
 		{
     		case CKB_FIND_AA:
@@ -1600,7 +1611,7 @@ void CkbTask(void)
     uint32_t readAddr = 0;
     uint32_t remain = 0;
     uint8_t index = 0;
-	uint32_t UpgradeIndex = 0;
+	uint32_t UpgradeIndexSum = 0;
     uint8_t buf[UPGRADE_PACKAGE_SIZE];
     uint16_t read_len ;
     
@@ -1610,9 +1621,6 @@ void CkbTask(void)
 	memset(&gBlueInfo, 0, sizeof(gBlueInfo));
     gBlueInfo.btState = 1;
     
-    readAddr = KeyBoardBackAddr;
-    remain = system_info.X10KeyBoardFwInfo.filesize;
-
 	while(1) 
     {
         vTaskDelay(20);
@@ -1639,15 +1647,19 @@ void CkbTask(void)
         if((KeyBoardUpgradeTick + 25) < GetRtcCount())
         {
             KeyBoardUpgradeTick = GetRtcCount();
-            printf("检测是否需要升级\r\n");
+           // printf("检测是否需要升级\r\n");
             if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0))
             {
+            	readAddr = KeyBoardBackAddr;
+    			remain = system_info.X10KeyBoardFwInfo.filesize;
                 //发送升级命令
                 package = system_info.X10KeyBoardFwInfo.filesize / UPGRADE_PACKAGE_SIZE;
                 if((system_info.X10KeyBoardFwInfo.filesize % UPGRADE_PACKAGE_SIZE) != 0)
                 {
                     package ++;
                 }
+				index = 0;
+				UpgradeIndexSum = 0;
 				printf("package大小 = %d\r\n", package);
                 App_CB_SendStartUpgrade(system_info.X10KeyBoardFwInfo.filesize, package, 
                                         system_info.X10KeyBoardFwInfo.checkSum, 
@@ -1676,19 +1688,26 @@ void CkbTask(void)
 	                HT_Flash_ByteRead(&buf[0], readAddr, read_len);
 	                readAddr += read_len;
 	                index = gChgInfo.UpgradeIndex + 1;
-					UpgradeIndex++;
-					printf("index = %d, %d, %d\r\n", gChgInfo.UpgradeIndex, index, UpgradeIndex);
-					if(UpgradeIndex == (package + 1))
+					UpgradeIndexSum++;
+				//	printf("index = %d, %d, %d\r\n", gChgInfo.UpgradeIndex, index, UpgradeIndexSum);
+					printf("total %d [%d%%].\n", package, UpgradeIndexSum * 100 / package);
+					if(UpgradeIndexSum == (package + 1))
 					{
 						system_info.KeyBoard.isUpgradeFlag = 0;
 						FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
 						gChgInfo.UpgradeRunning = 0;
+						//Sc8042bSpeech(VOIC_SUCCESS);
+						printf("升级成功\r\n");
+    					vTaskDelay(1000);
 						ResetSysTem();
 					}
 					gChgInfo.UpgradeIndex = 0;
 	            }
-                //发送数据
-                App_CB_DownFW(index, buf, read_len);
+				if (60 > (uint32_t)(GetRtcCount() - gChgInfo.lastRecvKbMsgTime)) 
+				{
+					//发送数据
+                	App_CB_DownFW(index, buf, read_len);
+				}
             }
         }
 	}
