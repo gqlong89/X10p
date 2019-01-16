@@ -1189,17 +1189,17 @@ void BtModuleHandle(CKB_STR* pFrame)
 		{
             OptFailNotice(115);
         }
-        CL_LOG("set bt name=%d.\n",btSetName->result);
+        CL_LOG("set bt name=%d.\n", btSetName->result);
 	} 
 	else if (pFrame->head.cmd == BT_MESSAGE_CMD_RECIVE) 
 	{
 		//BtMessageRecAck(0);
 		BT_MESSAGE_RECIVE_STR *btMessageRec = (BT_MESSAGE_RECIVE_STR*)pFrame->data;
-        //CL_LOG("recLen=%d,type=%d 0:blue,1:2.4G.\n", btMessageRec->len,btMessageRec->type);
-        //PrintfData("BtModuleHandle", btMessageRec->data, btMessageRec->len);
+        CL_LOG("recLen=%d,type=%d 0:blue,1:2.4G.\n", btMessageRec->len,btMessageRec->type);
+        PrintfData("BtModuleHandle", btMessageRec->data, btMessageRec->len);
 		if (btMessageRec->type == 0) 
 		{//蓝牙
-			for(uint16_t i = 0;i<btMessageRec->len;)
+			for(uint16_t i = 0; i < btMessageRec->len;)
 			{
 				if (CL_OK == FIFO_S_Put(&gBlueStatus.rxBtBuff, btMessageRec->data[i])) 
 				{
@@ -1359,7 +1359,7 @@ void ProcKBData(void)
     }
 	while (CL_OK == FIFO_S_Get(&gUartPortAddr[1].rxBuffCtrl, &data)) 
 	{
-	//	printf("data = %x\n", data);
+//		printf("data = %x\n", data);
     	switch (step) 
 		{
     		case CKB_FIND_AA:
@@ -1482,6 +1482,7 @@ void ProcKBData(void)
     			if (data == sum) 
 				{
     				gChgInfo.lastRecvKbMsgTime = GetRtcCount();
+				//	PrintfData("接收按键板数据", (uint8_t*)pktBuff, pktLen + sizeof(CKB_HEAD_STR) + 2);
     				HandleCKBData((void*)pktBuff);
     			} 
 				else 
@@ -1572,12 +1573,12 @@ void RecvBtData(void)
                 pBuff[pktLen++] = data;
                 if (sum == data) 
 				{
-                    //PrintfData("RecvBtData", pBuff, pktLen);
+                 //   PrintfData("接收蓝牙数据", pBuff, pktLen);
 					BlueProtoProc((void*)pBuff, pktLen);
                 }
 				else
 				{
-					PrintfData("RecvBtData", pBuff, pktLen);
+				//	PrintfData("接收蓝牙数据", pBuff, pktLen);
                     CL_LOG("sum=%02x,psum=%02x,err.\n",sum,data);
                 }
                 step = BT_FIND_EE;

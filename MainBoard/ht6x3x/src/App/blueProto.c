@@ -271,29 +271,33 @@ void BlueSendHeartBeat(void)
     pHeart->simSignal = GetNetSignal();
     pHeart->temp = GetCpuTemp() + 50;
     pHeart->portCnt = GUN_NUM_MAX;
-    for (i=1; i<=GUN_NUM_MAX; i++) {
+    for (i=1; i<=GUN_NUM_MAX; i++) 
+	{
 		//pGunCharging = &gChgInfo.gunCharging[i-1];
         pGunHeart->port = i;
         pGunInfo = &gun_info[i-1];
-        if (pGunInfo->is_load_on) {
+        if (pGunInfo->is_load_on) 
+		{
             pGunHeart->status = 1;
             leftTime = GetLeftChargingTime(i);
             pGunHeart->errCode = (255 <= leftTime) ? 255 : leftTime;
-        }else{
-            //if (pGunCharging->isTesting) {
-            //    pGunHeart->status = 1;
-            //}else{
-                pGunHeart->status = 0;
-                GetGunStatus(i, &gunStatus);
-                if (0 == gunStatus.status) {
-                    if (CL_OK != IsSysOnLine()) {
-                        pGunHeart->status = 3;
-                    }
-                }else{
-                    pGunHeart->errCode = pGunHeart->status;
-                    pGunHeart->status = 2;
+        }
+		else
+		{
+            pGunHeart->status = 0;
+            GetGunStatus(i, &gunStatus);
+            if (0 == gunStatus.status) 
+			{
+                if (CL_OK != IsSysOnLine()) 
+				{
+                    pGunHeart->status = 3;
                 }
-            //}
+            }
+			else
+			{
+                pGunHeart->errCode = pGunHeart->status;
+                pGunHeart->status = 2;
+            }
         }
         pGunHeart++;
     }
@@ -302,7 +306,7 @@ void BlueSendHeartBeat(void)
     pBluePkt->head.len = sizeof(HEART_BEAT_STR);
     pBluePkt->data[pBluePkt->head.len] = GetPktSum((void*)pBluePkt, sizeof(BLUE_PROTO_HEAD_STR)+pBluePkt->head.len);
     SendBlueNetPkt(NODE_BLUE, (void*)pBluePkt, sizeof(BLUE_PROTO_HEAD_STR)+pBluePkt->head.len+1);
-    PrintfData("BlueSendHeartBeat", (void*)pBluePkt, sizeof(BLUE_PROTO_HEAD_STR)+pBluePkt->head.len+1);
+    PrintfData("BlueSendHeartBeat 发送BT心跳包", (void*)pBluePkt, sizeof(BLUE_PROTO_HEAD_STR)+pBluePkt->head.len+1);
 }
 
 
@@ -702,35 +706,35 @@ void BlueProtoProc(BLUE_PROTO_STR *pMsg, uint16_t len)
 			BlueDevRegisterACK(pMsg);
 			break;
         case B_SHAKE_REQ:	//握手请求
-            PrintfData("BlueProtoProc shake req", (void*)pMsg, len);
+            PrintfData("蓝牙握手请求", (void*)pMsg, len);
             ShakeReqProc(pMsg);
             break;
         case B_OPPO_SITE_AUTH:	//
-            PrintfData("BlueProtoProc auth", (void*)pMsg, len);
+            PrintfData("用户鉴权", (void*)pMsg, len);
             OppoSiteAuthProc(pMsg);
             break;
         case B_START_CHARGING:	//开启充电
-            PrintfData("BlueProtoProc start charging", (void*)pMsg, len);
+            PrintfData("开启充电", (void*)pMsg, len);
             BlueStartCharging(pMsg);
             break;
         case B_STOP_CHARGING:	//结束充电
-            PrintfData("BlueProtoProc stop charging", (void*)pMsg, len);
+            PrintfData("结束充电", (void*)pMsg, len);
             BlueStopCharging(pMsg);
             break;
 		case B_HEART_BEAT:	//心跳
             gBlueStatus.lastRecvHeartBeat = GetRtcCount();
-			CL_LOG("BlueProtoProc heart beat ack.\n");
+			CL_LOG("蓝牙心跳.\n");
 			break;
         case B_REQ_COST_TEMPLATE://请求计费模板
-            PrintfData("BlueProtoProc req cost template", (void*)pMsg, len);
+            PrintfData("请求计费模板", (void*)pMsg, len);
             BlueSendCostTemplate(pMsg);
             break;
 		case B_COST_TEMPLATE_DOWNLOAD://计费模板下发
-			CL_LOG("BlueProtoProc cost template download.\n");
+			CL_LOG("计费模板下发.\n");
 			BlueCostTemplateDown(pMsg);
 			break;
         case B_REQ_BREAK:	//请求断开蓝牙链接
-            PrintfData("BlueProtoProc req break", (void*)pMsg, len);
+            PrintfData("请求断开蓝牙链接", (void*)pMsg, len);
             BlueReqBreak(pMsg);
             break;
         case BT_CMD_SET_CHARGER_SN:	//设置充电桩编号
@@ -743,11 +747,11 @@ void BlueProtoProc(BLUE_PROTO_STR *pMsg, uint16_t len)
             RemoCtrlProc(pMsg);
             break;
 		case B_HISTORY_ORDER_UPLOAD:	//历史订单上传ack
-			CL_LOG("BlueProtoProc upload history order ack.\n");
+			CL_LOG("历史订单上传ack.\n");
 			BlueHistoryOrderUpload_ACK(pMsg);
 			break;
 		case B_HISTORY_ORDER_ENSURE://历史订单确认
-			CL_LOG("BlueProtoProc order ensure.\n");
+			CL_LOG("历史订单确认.\n");
 			BlueHistoryOrderEnsure(pMsg);
 			break;
 		case B_FW_UPGRADE_NOTICE:	//固件升级开始通知

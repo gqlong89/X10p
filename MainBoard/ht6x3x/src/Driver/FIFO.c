@@ -251,21 +251,27 @@ int FIFO_S_Put(FIFO_S_t* pFIFO, uint8_t Element)
 {
     int datalen;
 
-    if (pFIFO->writeIndex >= pFIFO->readIndex) {
+    if (pFIFO->writeIndex >= pFIFO->readIndex) 
+	{
         datalen = pFIFO->writeIndex - pFIFO->readIndex + 1;
-    }else{
+    }
+	else
+	{
         datalen = pFIFO->writeIndex + pFIFO->buffSize - pFIFO->readIndex + 1;
     }
 
-    if (pFIFO->buffSize > datalen) {
+    if (pFIFO->buffSize > datalen) 
+	{
         pFIFO->pStartAddr[pFIFO->writeIndex++] = Element;
         pFIFO->usedLen++;
-        if (pFIFO->buffSize <= pFIFO->writeIndex) {
+        if (pFIFO->buffSize <= pFIFO->writeIndex) 
+		{
             pFIFO->writeIndex = 0;
         }
         return 0;
     }
     pFIFO->overFlowCnt++;
+	
     return CL_FAIL;
 }
 

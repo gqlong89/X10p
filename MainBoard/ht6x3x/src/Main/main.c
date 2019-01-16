@@ -281,6 +281,7 @@ void MainTask(void)
 {
     uint32_t old;
     uint32_t secondOk;
+	uint32_t BlueHeartTick = 0;
     int ret = 0;
     uint8_t  flag = 0;
 	
@@ -489,8 +490,10 @@ void MainTask(void)
 			if (gBlueStatus.status && (upgradeInfo.upgradeFlag == 0)) 
 			{
 				//·¢ËÍÐÄÌø
-				if (0 == (gChgInfo.second % 10)) 
+				//if (0 == (gChgInfo.second % 10)) 
+				if ((BlueHeartTick + 10) <= GetRtcCount()) 
 				{
+					BlueHeartTick = GetRtcCount();
 					BlueSendHeartBeat();
 					//CL_LOG("BlueSendHeartBeat.\n");
 				}

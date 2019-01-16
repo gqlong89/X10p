@@ -65,7 +65,7 @@ void PrintfData(void *pfunc, uint8_t *pdata, int len)
 	{
     //    return;
     }
-	CL_LOG("call by %s,len=%d,pdata:",(char*)pfunc,len);
+	PRINTF_LOG("call by %s,len=%d, pdata:",(char*)pfunc,len);
     Feed_WDT();
 	for (i=0; i<len; i++) 
 	{
