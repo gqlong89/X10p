@@ -394,6 +394,62 @@ int ReadEMUIF(int no)
 }
 
 void RelayCtrlTask(void)
+#if 0
+{
+    uint32_t tick = 0;
+    uint32_t i = 0;
+	
+    while(1)
+    {
+        vTaskDelay(100);
+     	gChgInfo.ZeroDetectFlag = gChgInfo.ZeroDetectFlag & 0x0fff;
+     	if(gChgInfo.ZeroDetectFlag)
+        {
+        //	clrbit(gChgInfo.ZeroDetectFlag, (gunId - 1));
+        	gChgInfo.ZeroDetectFlag = 0;
+		
+            //继电器开
+            if((OpenlFlag != 0) || (CloselFlag != 0))
+            {
+                ATTFlag = 0;
+                //清中断标志
+				for(i = 0; i < 3; i++)
+				{
+					if(ReadEMUIF(EMUID[6]) == CL_OK)
+					{
+						break;
+					}
+				}
+                tick = xTaskGetTickCount();
+                while(1)
+                {
+                    if(ATTFlag)
+                    {
+                        PRINTF("llllllllllllllllll \n");
+                        break;
+                    }
+                    //最多等待130ms (120ms零点检测+10ms控制延时)
+                    if(xTaskGetTickCount() > (uint32_t)(tick + 130))
+                    {
+                    	PRINTF("mmmmmmmmmmmmmm强制控制继电器mmmmmmmmmmmmmmmm\n");
+                        //零点检测失败-强制控制继电器
+                        if(operate == 0)
+                        {
+                            CrtlRelay_OFF();//关
+                        }
+                        else if(operate == 1)
+                        {
+                            CrtlRelay_ON();//控制继电器-开
+                        }
+                        break;
+                    }
+                    vTaskDelay(10);
+                }
+            }
+        }
+    }
+}
+#else
 {
     uint32_t tick = xTaskGetTickCount();
     uint32_t i = 0;
@@ -459,6 +515,8 @@ void RelayCtrlTask(void)
 		vTaskDelay(100);
     }
 }
+
+#endif
 
 void TIMER_4_IRQHandler(void)
 {
