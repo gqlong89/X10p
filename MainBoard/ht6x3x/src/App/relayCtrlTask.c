@@ -8,8 +8,8 @@
 
 
 extern Gun_GPIO_Port_t Gun_GPIO_PortTable[GUN_NUM_MAX];
+extern QueueHandle_t sem;
 
-static QueueHandle_t sem = NULL;
 static __IO uint8_t  ATTFlag = 0; 
 static __IO uint16_t OpenlFlag = 0;
 static __IO uint16_t CloselFlag = 0;
@@ -23,15 +23,15 @@ void EXTI5_CallBack(void)
 	if(READ_ATT_IRQ() == 0)//电压过零点中断
 	{
         //检测到过零点中断，需要开启6.5ms的定时器（用于开继电器）和8.5ms的定时器（用于关继电器）
-        if(OpenlFlag != 0)//开继电器
+        if(OpenlFlag != 0)	//开继电器
         {
             operate = 1;
-            StartRelayTimer(62);	//具体时间需要根据继电器时间调试
+         //   StartRelayTimer(3000);	//具体时间需要根据继电器时间调试
         }
-        else//关继电器
+        else if(CloselFlag != 0)	//关继电器
         {
             operate = 0;
-            StartRelayTimer(45);	//具体时间需要根据继电器时间调试
+        //    StartRelayTimer(3000);	//具体时间需要根据继电器时间调试
         }
 	}
 }
@@ -40,13 +40,14 @@ void EXTI5_CallBack(void)
 void CrtlRelay_ON(void)
 {
     uint8_t i = 0;
+	
     while(OpenlFlag)
     {
         //开继电器
-        if((OpenlFlag>>i) & 0x01)
+        if((OpenlFlag >> i) & 0x01)
         {
             GPIO_SetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
-            clrbit(OpenlFlag,i);
+            clrbit(OpenlFlag, i);
         }
         i++;
     }
@@ -55,13 +56,14 @@ void CrtlRelay_ON(void)
 void CrtlRelay_OFF(void)
 {
     uint8_t i = 0;
+	
     while(CloselFlag)
     {
         //关继电器
-        if((CloselFlag>>i) & 0x01)
+        if((CloselFlag >> i) & 0x01)
         {
             GPIO_ResetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
-            clrbit(CloselFlag,i);
+            clrbit(CloselFlag, i);
         }
         i++;
     }
@@ -69,32 +71,46 @@ void CrtlRelay_OFF(void)
 
 void relayOn_direct(uint8_t gunId,uint8_t on)
 {
+    uint8_t i = 0;
+    
     if(gunId == 0)
     {
-        for (int i = 0; i < GUN_NUM_MAX; i++) 
+        for (i = 0; i < GUN_NUM_MAX; i++) 
         {
             if(on)
 			{
                 GPIO_SetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
+               // printf("[枪头 %d 已开启].\n", i + 1);
             }
 			else
 			{
                 GPIO_ResetBits(Gun_GPIO_PortTable[i].port, Gun_GPIO_PortTable[i].pin);
+               // printf("[枪头 %d 已关闭].\n", i + 1);
             }
         }
+        #if 1
+        if(on)
+        {
+            printf("枪头全部开启.\n");
+        }
+        else
+        {
+            printf("枪头全部关闭.\n");
+        }
+        #endif
     }
 	else
 	{
         if(on)
 		{
             GPIO_SetBits(Gun_GPIO_PortTable[gunId-1].port, Gun_GPIO_PortTable[gunId-1].pin);
+            printf("[枪头 %d 已开启].\n", gunId);
         }
 		else
 		{
             GPIO_ResetBits(Gun_GPIO_PortTable[gunId-1].port, Gun_GPIO_PortTable[gunId-1].pin);
+            printf("[枪头 %d 已关闭].\n", gunId);
         }
-        
-        CL_LOG("open gunid=%d.\n", gunId);
     }
 }
 
@@ -255,7 +271,7 @@ void HT_TMRExt_Init(HT_TMR_TypeDef* TMRx, TMRExt_InitTypeDef* TMR_InitStruct)
     {
         TMRx->TMRCON &= (~TMR_TMRCON_CNTEN);               /*!< 关闭定时器使能             */
         TMRx->TMRDIV = TMR_InitStruct->TimerPreDiv;        /*!< 设置定时器预分频器          */
-        TMRx->TMRPRD = TMR_InitStruct->TimerPeriod;        /*!< 设置定时器周期寄存器        */
+       // TMRx->TMRPRD = TMR_InitStruct->TimerPeriod;        /*!< 设置定时器周期寄存器        */
         TMRx->TMRCMP = TMR_InitStruct->TimerCompare;       /*!< 设置定时器比较寄存器        */
         TMRx->TMRCNT = 0;                                  /*!< 清空定时器计数寄存器        */
      //   tempreg = TMR_TMRCON_CNTEN;                        /*!< 定时器使能                 */
@@ -297,7 +313,7 @@ int timer4_init(uint16_t period)
 
 	//TMRExt_InitStructure.TimerSource = TMR_TMRCON_CLKSEL_PLL;            /*!< Timer选择时钟源       */
     TMRExt_InitStructure.TimerMode = TIMExtCycleTiming;                  /*!< Timer设定为定时器功能       */
-    TMRExt_InitStructure.TimerPreDiv = 0x00;                          	/*!< Timer时钟等于系统时钟       */
+    TMRExt_InitStructure.TimerPreDiv = 4400 - 1;                          	/*!< Timer时钟等于系统时钟       */
     TMRExt_InitStructure.TimerPeriod = 0x1000;                        	/*!< 定时周期设定                */
     TMRExt_InitStructure.TimerCompare = 0x00;                         	/*!< 比较寄存器设定              */
 	HT_TMRExt_Init(HT_TMR4, &TMRExt_InitStructure);
@@ -334,23 +350,31 @@ void openRelay_Async(uint8_t gunId,uint8_t on)
             setbit(CloselFlag,(gunId-1));
         }
     }
+	#if 1
+	setbit(gChgInfo.ZeroDetectFlag, (gunId - 1));
+     CL_LOG("发送信号量 \n");
+	#else
     if(xSemaphoreGive(sem) != pdPASS)
     {
         //信号量激活失败  -- 直接控制继电器
+        PRINTF("信号量激活失败  -- 直接控制继电器\n");
         relayOn_direct(gunId,on);
     }
+	#endif
 }
 
 void RelayCtrl(uint8_t gunId,uint8_t on)
 {
     if(EMUIFIFlag == 1)
 	{
-        openRelay_Async(gunId,on);
+	//	CL_LOG("走过零点检测 走过零点检测 走过零点检测 \n");
+        openRelay_Async(gunId, on);
     }
     else
     {
+     //   CL_LOG("走过直接控制继电器 \n");
         //计量芯片未初始化成功  -- 直接控制继电器
-        relayOn_direct(gunId,on);
+        relayOn_direct(gunId, on);
     }
 }
 
@@ -371,21 +395,23 @@ int ReadEMUIF(int no)
 
 void RelayCtrlTask(void)
 {
-    uint32_t tick = 0;
-    
-    sem = xSemaphoreCreateCounting(12,0);//创建信号量
-
+    uint32_t tick = xTaskGetTickCount();
+    uint32_t i = 0;
+	
     while(1)
     {
-        //等待信号量--如果没有信号该任务一直阻塞
-        if(xSemaphoreTake(sem,3000) == pdPASS)
+     	gChgInfo.ZeroDetectFlag = gChgInfo.ZeroDetectFlag & 0x0fff;
+     	if(gChgInfo.ZeroDetectFlag)
         {
+        //	clrbit(gChgInfo.ZeroDetectFlag, (gunId - 1));
+        	gChgInfo.ZeroDetectFlag = 0;
+		
             //继电器开
-            if(OpenlFlag != 0 || CloselFlag != 0)
+            if((OpenlFlag != 0) || (CloselFlag != 0))
             {
                 ATTFlag = 0;
                 //清中断标志
-				for(uint8_t i = 0;i<3;i++)
+				for(i = 0; i < 3; i++)
 				{
 					if(ReadEMUIF(EMUID[6]) == CL_OK)
 					{
@@ -393,30 +419,44 @@ void RelayCtrlTask(void)
 					}
 				}
                 tick = xTaskGetTickCount();
-                while(1)
-                {
-                    if(ATTFlag)
-                    {
-                        break;
-                    }
-                    //最多等待30ms (20ms零点检测+10ms控制延时)
-                    if(xTaskGetTickCount() > (uint32_t)(tick+30))
-                    {
-                        //零点检测失败-强制控制继电器
-                        if(operate == 0)
-                        {
-                            CrtlRelay_OFF();//关
-                        }
-                        else if(operate == 1)
-                        {
-                            CrtlRelay_ON();//控制继电器-开
-                        }
-                        break;
-                    }
-                    vTaskDelay(5);
-                }
+                gChgInfo.CloseFlag = 0xa5;
             }
         }
+
+		if((((OpenlFlag & 0x0fff) != 0) || ((CloselFlag & 0x0fff) != 0))/* && (gChgInfo.CloseFlag == 0xa5) */)
+        {
+            if(ATTFlag)
+            {
+                PRINTF_LOG("llllllllllllllllll \n");
+				tick = xTaskGetTickCount();
+				gChgInfo.CloseFlag = 0;
+            }
+			else
+			{
+				//最多等待330ms (320ms零点检测+10ms控制延时)
+	            if(xTaskGetTickCount() > (uint32_t)(tick + 330))
+	            {
+	            	PRINTF_LOG("mmmmmmmmmmmmmm强制控制继电器mmmmmmmmmmmmmmmm\n");
+	                //零点检测失败-强制控制继电器
+	                if(operate == 0)
+	                {
+	                    CrtlRelay_OFF();//关
+	                }
+	                else if(operate == 1)
+	                {
+	                    CrtlRelay_ON();//控制继电器-开
+	                }
+					gChgInfo.CloseFlag = 0;
+	              //  break;
+	            }
+			}
+        }
+		else
+		{
+			tick = xTaskGetTickCount();
+		}
+		
+		vTaskDelay(100);
     }
 }
 
@@ -466,10 +506,10 @@ void EXTI5_IRQHandler(void)
 
     if(SET == HT_EXTIFall_ITFlagStatusGet(INT_EXTIF_FIF_INT5))         /*!< INT4下降沿中断           */
     {
-
         HT_EXTIFall_ClearITPendingBit(INT_EXTIF_FIF_INT5);             /*!< 清除中断标志             */
+        
+        EXTI5_CallBack();
     }
-	EXTI5_CallBack();
 }
 
 

@@ -116,8 +116,8 @@
 #define FW_VERSION_SUB                  (SPECIAL_NET_CARD)
 
 #if (1 == SPECIAL_NET_CARD) //====================== 专网卡 ========================
-#define X10C_TYPE                       0                   //0:正常x10  1:x10c
-#define ID2                             1                   //0:不加密	 1:加密
+	#define X10C_TYPE                       0                   //0:正常x10  1:x10c
+	#define ID2                             1                   //0:不加密	 1:加密
 	#if (0 == ENVI_TYPE)
 	#define NET_SERVER_IP                   "www.access.com"    //正式环境
 	#define NET_SERVER_PORT                 10010
@@ -135,11 +135,11 @@
 	#define NET_SERVER_PORT                 10010
 	#endif
 
-#define REGISTER_CODE					"928698494848"
-
+//	#define REGISTER_CODE					"928698494848"
+	#define REGISTER_CODE					"259787389784"
 #elif (0 == SPECIAL_NET_CARD) //====================== 公网卡 ========================
-#define X10C_TYPE                       0                   //0:正常x10  1:x10c
-#define ID2                             0                   //0:不加密	 1:加密
+	#define X10C_TYPE                       0                   //0:正常x10  1:x10c
+	#define ID2                             0                   //0:不加密	 1:加密
 
 	#if (0 == ENVI_TYPE)
 	#define NET_SERVER_IP                   "access.sharecharger.com"     //正式环境
@@ -158,13 +158,13 @@
 	#define NET_SERVER_PORT                 10010
 	#endif
 	
-#define REGISTER_CODE					"928698494847"
+//	#define REGISTER_CODE					"928698494847"
 #elif (2 == SPECIAL_NET_CARD) //====================== X10C ========================
-#define X10C_TYPE                       1                   //0:正常x10  1:x10c
-#define NET_SERVER_IP                   "www.access.com"     //正式环境
-#define NET_SERVER_PORT                 10010
-#define ID2                             0                    //0:不加密	 1:加密
-#define REGISTER_CODE					"830484693193"
+	#define X10C_TYPE                       1                   //0:正常x10  1:x10c
+	#define NET_SERVER_IP                   "www.access.com"     //正式环境
+	#define NET_SERVER_PORT                 10010
+	#define ID2                             0                    //0:不加密	 1:加密
+//	#define REGISTER_CODE					"830484693193"
 #endif
 
 #define IS_CPU_DOU_FRE                  1                   //是否倍频  0不倍频；  1倍频
@@ -190,7 +190,7 @@ typedef unsigned long long uint64_t;
 #define MAGIC_NUM_BASE                  0x123456ab
 #define STATION_MACHINE_TYPE            "DEVICE_CHARGER_CL_XA"
 #define CHARGER_TYPE                    2  //1:x9；2:x10
-#define CHARGER_NAME                    "X10"
+#define CHARGER_NAME                    "X10P"
 
 #define THIS_LINE                       __LINE__
 #define CL_LINE                         THIS_LINE

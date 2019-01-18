@@ -15,6 +15,7 @@
 #include "server.h"
 #include "flash.h"
 #include "gun.h"
+#include "relayCtrlTask.h"
 
 
 EMU_CAL EmuCalation;
@@ -690,9 +691,10 @@ int ReadCheckSum(int no, uint32_t *pSum)
 
 int WritecalparaByGunId(uint8_t gunId)
 {
-    uint8_t  chipIndex = (gunId+1) >> 1;
+    uint8_t  chipIndex = (gunId + 1) >> 1;
 
-    gEmuResetFlag |= (1<<chipIndex);
+    gEmuResetFlag |= (1 << chipIndex);
+	
     return CL_OK;
 }
 
@@ -945,9 +947,11 @@ void TIMER_2_IRQHandler(void)
 	int i;
     EMU_CTRL_STR *pEmu = NULL;
 
-    if (HT_TMR2->TMRIF == 1) {
+    if (HT_TMR2->TMRIF == 1) 
+	{
         HT_TMR2->TMRIF = 0;
-        for (i=1; i<13; i++) {
+        for (i=1; i<13; i++) 
+		{
             pEmu = &gEmuCtrl[i];
 			pEmu->elec += (float)(gun[i].power); //1s积分
         }
@@ -959,7 +963,8 @@ int ElecHandle(void)
 {
 	EMU_CTRL_STR *pEmu = NULL;
 
-	for (int i=1; i<13; i++) {
+	for (int i=1; i<13; i++) 
+	{
         pEmu = &gEmuCtrl[i];
 		gun[i].elec = (uint32_t)(pEmu->elec/360000); //36000000 / 100
 	}
@@ -970,16 +975,20 @@ int ElecHandle(void)
 //判断是否只有1路充电，并返回电流
 int IsOneGunCharging(uint16_t *sample)
 {
-	if(GetChargingGunCnt() != 1){
+	if(GetChargingGunCnt() != 1)
+	{
 		return CL_FAIL;
 	}
 
-	for (int i=0; i < GUN_NUM_MAX; i++) {
-		if (gun_info[i].is_load_on && sampleCur[i] >= 300) {//300mA(66W)以上才能自学习
+	for (int i=0; i < GUN_NUM_MAX; i++) 
+	{
+		if (gun_info[i].is_load_on && sampleCur[i] >= 300) 
+		{//300mA(66W)以上才能自学习
 			*sample = sampleCur[i];
 			return i+1;		//返回枪头id
 		}
 	}
+	
 	return CL_FAIL;
 }
 
@@ -1089,7 +1098,8 @@ void emuTask(void)
     uint32_t sum;
     uint32_t checkSum[8];
     uint8_t  failFlag = 0x7e;
-
+	uint32_t qqqqqz = GetRtcCount();
+	
 	CL_LOG("emu task start!!!!\n");
     memset(gEmuStatic, 0, sizeof(gEmuStatic));
     memset(gEmuCtrl, 0, sizeof(gEmuCtrl));
@@ -1160,29 +1170,50 @@ void emuTask(void)
 				//}
 				//printf("...................\n");
             }
-			#if 0
-			if (0 == (second % 20)) 
+			#if 1
+			if (((qqqqqz + 30) <= GetRtcCount())) 
 			{
+				qqqqqz = GetRtcCount();
 //				AutoLearnMatrix();
 				if(openFlag == 0)
 				{
 					openFlag = 1;
+					#if 0
 					TurnOnAllGun();
-					CL_LOG("TurnOnAllGun...............\r\n");
+					#else
+					for(uint32_t i = 1; i <= 1; i++)
+					{
+						printf("打开枪头号[%d]\n", i);
+						RelayCtrl(i,1);
+					//	vTaskDelay(2000);
+					}
+					#endif
+				//	CL_LOG("TurnOnAllGun wwwwwwwwwwwwwwwwwr\n");
+					gEmuResetFlag = 2;
 				}
 				else
 				{
 					openFlag = 0;
+					#if 0
 					TurnOffAllGun();
-					CL_LOG("TurnOffAllGun...............\r\n");
+					#else
+					for(uint32_t i = 1; i <= 1; i++)
+					{
+						printf("关闭枪头号[%d]\n", i);
+						RelayCtrl(i,0);
+					//	vTaskDelay(2000);
+					}
+					#endif
+				//	CL_LOG("TurnOffAllGun wwwwwwwwwwwwwwwwwr\n");
 				}
             }
 			#endif
+			
             if (gEmuResetFlag) 
 			{
                 for (i = 1; i < 7; i++) 
 				{
-                    if (gEmuResetFlag & (1<<i)) 
+                    if (gEmuResetFlag & (1 << i)) 
 					{
                         HT7017_Write(EMUID[i], VAR_SRSTREG, 0x55);
                         vTaskDelay(1000);
@@ -1194,19 +1225,19 @@ void emuTask(void)
                                 break;
                             }
                         }
-                        gEmuResetFlag = gEmuResetFlag & (~(1<<i));
+                        gEmuResetFlag = gEmuResetFlag & (~(1 << i));
                     }
                 }
                 #if 1
 				if(EnableZXIE(EMUID[6]) != CL_FAIL)
 				{
-					CL_LOG("enable ZXIE success..\r\n");
+				//	CL_LOG("打开走过零点标志 \r\n");
 					EMUIFIFlag = 1;
 				}
 				else
 				{
 					EMUIFIFlag = 0;
-					CL_LOG("enable ZXIE failed..\r\n");
+					CL_LOG("关闭走过零点标志 \r\n");
 				}
                 #endif
             }

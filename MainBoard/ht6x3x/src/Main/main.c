@@ -50,7 +50,7 @@ uint16_t oneUploadTradeNum = 0;
 uint32_t uploadHistoryOrderTimes = 0;
 const uint8_t gStationId[8] = {0x00,0x00,0x00,0x14,0x72,0x58,0x36,0x90};
 uint32_t gLastResetReason;
-
+QueueHandle_t sem = NULL;
 
 //******************************************************************
 //! \brief  	delay
@@ -92,23 +92,28 @@ void SysCfgInit(void)
     system_info.isRecvStartUpAck = 0;
     system_info.netType = 0;
 
-    if (((150*60) < system_info.chargingFullTime) || (system_info.chargingFullTime < (30*60))) {
+    if (((150*60) < system_info.chargingFullTime) || (system_info.chargingFullTime < (30*60))) 
+	{
         system_info.chargingFullTime = CHARGING_FULL_TIME;
     }
-    if (0xaa55 != system_info.noLoadFlag) {
+    if (0xaa55 != system_info.noLoadFlag) 
+	{
         system_info.noLoadFlag = 0xaa55;
         memset(system_info.noLoadCnt, 0, sizeof(system_info.noLoadCnt));
     }
-    if (0xaa55 != system_info.voiceFlag) {
+    if (0xaa55 != system_info.voiceFlag) 
+	{
         system_info.voiceFlag = 0xaa55;
         system_info.disturbingStartTime = CLOSE_VIOCE_START_IIME;
         system_info.disturbingStopTime = CLOSE_VIOCE_END_IIME;
     }
-    if (0x55aa != system_info.cfgFlag) {
+    if (0x55aa != system_info.cfgFlag) 
+	{
         system_info.pullGunStopTime = PUT_OUT_GUN_TIME;
         system_info.cfgFlag = 0x55aa;
     }
-    if (0xee != system_info.changePowerFlag) {
+    if (0xee != system_info.changePowerFlag) 
+	{
         system_info.changePower = 60;
         system_info.changePowerFlag = 0xee;
     }
@@ -142,6 +147,7 @@ void qeeerrrtt(void)
 void LoadSysCfgInfo(void)
 {
 	FlashReadSysInfo((void*)&system_info, sizeof(system_info));
+    
     if ((MAGIC_NUM_BASE) == system_info.magic_number) 
 	{
 	//	printf("\n\n\n########################################################################################### \n");
@@ -273,22 +279,25 @@ void BspInit(void)
 	
 	CL_LOG("BspInit OK.\n");
 	printf("\n########################################################################################### \n");
-        
+    
 	return;
 }
+
 
 void MainTask(void)
 {
     uint32_t old;
     uint32_t secondOk;
 	uint32_t BlueHeartTick = 0;
+	uint32_t TimeTick = GetRtcCount();
     int ret = 0;
     uint8_t  flag = 0;
 	
    	BspInit();
     
 	memset(&gChgInfo, 0, sizeof(gChgInfo));
-
+//	sem = xSemaphoreCreateCounting(12, 0);//´´½¨ÐÅºÅÁ¿
+	
     ret  = xTaskCreate((TaskFunction_t)ServerTask,"ServerTask", 512, NULL, 1, &ServerTaskHandle_t);
     OS_DELAY_MS(500);
 	ret |= xTaskCreate((TaskFunction_t)SysTask,"SysTask", 400, NULL, 1, NULL);
@@ -297,7 +306,7 @@ void MainTask(void)
     OS_DELAY_MS(500);
 	ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask", 384, NULL, 1, &gEmuTaskHandle_t);
 	OS_DELAY_MS(500);
-	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask", 128, NULL, 1, NULL); 
+	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask", 384, NULL, 1, NULL); 
     OS_DELAY_MS(500);
     CL_LOG("task init, ret=%d.\n", ret);
 
@@ -307,6 +316,11 @@ void MainTask(void)
 	while(1) 
     {
         OS_DELAY_MS(300);
+
+		if ((TimeTick + 30) <= GetRtcCount()) 
+		{
+			TimeTick = GetRtcCount();
+		}
 		
         if (GetRtcCount() != old)
         {
@@ -497,7 +511,7 @@ void MainTask(void)
 					BlueSendHeartBeat();
 					//CL_LOG("BlueSendHeartBeat.\n");
 				}
-				if(memcmp(system_info.idCode,gZeroArray,sizeof(system_info.idCode)) != 0) 
+				if(memcmp(system_info.idCode, gZeroArray, sizeof(system_info.idCode)) != 0) 
 				{
 					//ÅÐ¶ÏÀ¶ÑÀÀëÏß
 					ProcBtHeartBeat();
@@ -509,7 +523,7 @@ void MainTask(void)
 					if (0 == (gChgInfo.second & 0x07)) 
 					{
 						BlueRegister();
-						CL_LOG("blue register.\n");
+						CL_LOG("À¶ÑÀ×¢²á.\n");
 					}
 				}
             }

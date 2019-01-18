@@ -48,8 +48,10 @@ extern void RelayCtrl(uint8_t gunId,uint8_t on);
 extern void RelayCtrlTask(void);
 extern void StartRelayTimer(uint16_t period);
 extern int timer4_init(uint16_t period);
+extern void RelayCtrl(uint8_t gunId,uint8_t on);
 
 extern const char EMUID[7];		//´Ó1¿ªÊ¼
+
 #define READ_ATT_IRQ()		GPIO_ReadInputDataBit(HT_GPIOA, GPIO_Pin_10)
 
 #endif

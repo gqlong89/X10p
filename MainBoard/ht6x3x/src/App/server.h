@@ -183,6 +183,8 @@ typedef struct {
     uint32_t second;
 	uint8_t UpgradeIndex;
 	uint8_t  UpgradeRunning;
+	uint16_t ZeroDetectFlag;
+	uint8_t  CloseFlag;
 }CHG_INFO_STR;
 
 #pragma pack(1)
@@ -284,6 +286,14 @@ char* GetCurrentTime(void);
 #define PRINTF_LOG(fmt,args...) do { \
 printf("[X10p %s]"fmt,GetCurrentTime(), ##args); \
 }while(0)
+
+#define PRINTF(fmt,args...) do { \
+	if (0 == system_info.printSwitch) \
+	{\
+		printf(""fmt, ##args); \
+	}\
+}while(0)
+
 #endif
 
 void ServerTask(void);
