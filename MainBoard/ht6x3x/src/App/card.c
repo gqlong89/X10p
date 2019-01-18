@@ -17,6 +17,7 @@
 #include "lcd.h"
 #include "server.h"
 #include "proto.h"
+#include "relayCtrlTask.h"
 
 TaskHandle_t CardUpgradeHandle_t  = NULL;
 
@@ -1587,6 +1588,79 @@ void RecvBtData(void)
     }
 }
 
+void KeyBoardUpgradeCheck(void)
+{
+	static uint32_t package = 0;
+    static uint32_t readAddr = 0;
+    static uint32_t remain = 0;
+    static uint8_t index = 0;
+	static uint32_t UpgradeIndexSum = 0;
+    uint8_t buf[UPGRADE_PACKAGE_SIZE];
+    static uint16_t read_len ;
+	
+	if((gChgInfo.KeyBoardUpgradeTick + 25) < GetRtcCount())
+    {
+        gChgInfo.KeyBoardUpgradeTick = GetRtcCount();
+       // printf("检测是否需要升级\r\n");
+        if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0))
+        {
+        	readAddr = KeyBoardBackAddr;
+			remain = system_info.X10KeyBoardFwInfo.filesize;
+            //发送升级命令
+            package = system_info.X10KeyBoardFwInfo.filesize / UPGRADE_PACKAGE_SIZE;
+            if((system_info.X10KeyBoardFwInfo.filesize % UPGRADE_PACKAGE_SIZE) != 0)
+            {
+                package ++;
+            }
+			index = 0;
+			UpgradeIndexSum = 0;
+			printf("package大小 = %d\r\n", package);
+            App_CB_SendStartUpgrade(system_info.X10KeyBoardFwInfo.filesize, package, 
+                                    system_info.X10KeyBoardFwInfo.checkSum, 
+                                    system_info.X10KeyBoardFwInfo.fw_verson);
+            CL_LOG("发送升级请求\r\n");
+        }
+    }
+
+	if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0xa5))
+    {
+    	Feed_WDT();
+        if((gChgInfo.UpgradeIndex == index) || (0 == index))
+        {
+        	if(remain >= UPGRADE_PACKAGE_SIZE)
+		    {
+		        read_len = UPGRADE_PACKAGE_SIZE;
+		    }
+		    else
+		    {
+		        read_len = remain;
+		    }
+            remain = remain - read_len;
+            HT_Flash_ByteRead(&buf[0], readAddr, read_len);
+            readAddr += read_len;
+            index = gChgInfo.UpgradeIndex + 1;
+			UpgradeIndexSum++;
+		//	printf("index = %d, %d, %d\r\n", gChgInfo.UpgradeIndex, index, UpgradeIndexSum);
+			printf("total %d [%d%%].\n", package, UpgradeIndexSum * 100 / package);
+			if(UpgradeIndexSum == (package + 1))
+			{
+				system_info.KeyBoard.isUpgradeFlag = 0;
+				FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
+				gChgInfo.UpgradeRunning = 0;
+				//Sc8042bSpeech(VOIC_SUCCESS);
+				printf("升级成功\r\n");
+				vTaskDelay(1000);
+				ResetSysTem();
+			}
+			gChgInfo.UpgradeIndex = 0;
+        }
+		if (60 > (uint32_t)(GetRtcCount() - gChgInfo.lastRecvKbMsgTime)) 
+		{
+			//发送数据
+        	App_CB_DownFW(index, buf, read_len);
+		}
+    }
+}
 
 void ProcKbStatus(void)
 {
@@ -1606,15 +1680,7 @@ void CkbTask(void)
     uint8_t  btRxBuff[OUT_NET_PKT_LEN];
 	uint32_t old;
     uint32_t second = 0;
-    uint32_t package = 0;
-    uint32_t KeyBoardUpgradeTick = GetRtcCount();
-    uint32_t SendUpgradePackTick = GetRtcCount();
-    uint32_t readAddr = 0;
-    uint32_t remain = 0;
-    uint8_t index = 0;
-	uint32_t UpgradeIndexSum = 0;
-    uint8_t buf[UPGRADE_PACKAGE_SIZE];
-    uint16_t read_len ;
+    
     
     ResetKeyBoard();
     memset(&gBlueStatus, 0, sizeof(gBlueStatus));
@@ -1645,72 +1711,8 @@ void CkbTask(void)
 		//接收并处理蓝牙数据
 		RecvBtData();
         
-        if((KeyBoardUpgradeTick + 25) < GetRtcCount())
-        {
-            KeyBoardUpgradeTick = GetRtcCount();
-           // printf("检测是否需要升级\r\n");
-            if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0))
-            {
-            	readAddr = KeyBoardBackAddr;
-    			remain = system_info.X10KeyBoardFwInfo.filesize;
-                //发送升级命令
-                package = system_info.X10KeyBoardFwInfo.filesize / UPGRADE_PACKAGE_SIZE;
-                if((system_info.X10KeyBoardFwInfo.filesize % UPGRADE_PACKAGE_SIZE) != 0)
-                {
-                    package ++;
-                }
-				index = 0;
-				UpgradeIndexSum = 0;
-				printf("package大小 = %d\r\n", package);
-                App_CB_SendStartUpgrade(system_info.X10KeyBoardFwInfo.filesize, package, 
-                                        system_info.X10KeyBoardFwInfo.checkSum, 
-                                        system_info.X10KeyBoardFwInfo.fw_verson);
-                CL_LOG("发送升级请求\r\n");
-            }
-        }
-        
-     //   if((SendUpgradePackTick + 1) < GetRtcCount())
-        {
-      //      SendUpgradePackTick = GetRtcCount();
-            if((UPGRADE_SUCCESS_FLAG == system_info.KeyBoard.isUpgradeFlag) && (gChgInfo.UpgradeRunning == 0xa5))
-            {
-            	Feed_WDT();
-	            if((gChgInfo.UpgradeIndex == index) || (0 == index))
-	            {
-	            	if(remain >= UPGRADE_PACKAGE_SIZE)
-				    {
-				        read_len = UPGRADE_PACKAGE_SIZE;
-				    }
-				    else
-				    {
-				        read_len = remain;
-				    }
-	                remain = remain - read_len;
-	                HT_Flash_ByteRead(&buf[0], readAddr, read_len);
-	                readAddr += read_len;
-	                index = gChgInfo.UpgradeIndex + 1;
-					UpgradeIndexSum++;
-				//	printf("index = %d, %d, %d\r\n", gChgInfo.UpgradeIndex, index, UpgradeIndexSum);
-					printf("total %d [%d%%].\n", package, UpgradeIndexSum * 100 / package);
-					if(UpgradeIndexSum == (package + 1))
-					{
-						system_info.KeyBoard.isUpgradeFlag = 0;
-						FlashWriteSysInfo(&system_info, sizeof(system_info), 1);
-						gChgInfo.UpgradeRunning = 0;
-						//Sc8042bSpeech(VOIC_SUCCESS);
-						printf("升级成功\r\n");
-    					vTaskDelay(1000);
-						ResetSysTem();
-					}
-					gChgInfo.UpgradeIndex = 0;
-	            }
-				if (60 > (uint32_t)(GetRtcCount() - gChgInfo.lastRecvKbMsgTime)) 
-				{
-					//发送数据
-                	App_CB_DownFW(index, buf, read_len);
-				}
-            }
-        }
+        KeyBoardUpgradeCheck();
+	 	RelayCtrlTask();
 	}
 }
 

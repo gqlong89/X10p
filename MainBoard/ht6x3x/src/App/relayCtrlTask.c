@@ -26,12 +26,12 @@ void EXTI5_CallBack(void)
         if(OpenlFlag != 0)	//开继电器
         {
             operate = 1;
-         //   StartRelayTimer(3000);	//具体时间需要根据继电器时间调试
+            StartRelayTimer(300);	//具体时间需要根据继电器时间调试
         }
         else if(CloselFlag != 0)	//关继电器
         {
             operate = 0;
-        //    StartRelayTimer(3000);	//具体时间需要根据继电器时间调试
+            StartRelayTimer(300);	//具体时间需要根据继电器时间调试
         }
 	}
 }
@@ -451,10 +451,10 @@ void RelayCtrlTask(void)
 }
 #else
 {
-    uint32_t tick = xTaskGetTickCount();
+    static uint32_t tick = 0;
     uint32_t i = 0;
 	
-    while(1)
+   // while(1)
     {
      	gChgInfo.ZeroDetectFlag = gChgInfo.ZeroDetectFlag & 0x0fff;
      	if(gChgInfo.ZeroDetectFlag)
@@ -512,7 +512,7 @@ void RelayCtrlTask(void)
 			tick = xTaskGetTickCount();
 		}
 		
-		vTaskDelay(100);
+	//	vTaskDelay(100);
     }
 }
 

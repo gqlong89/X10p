@@ -306,8 +306,8 @@ void MainTask(void)
     OS_DELAY_MS(500);
 	ret |= xTaskCreate((TaskFunction_t)emuTask,"emuTask", 384, NULL, 1, &gEmuTaskHandle_t);
 	OS_DELAY_MS(500);
-	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask", 384, NULL, 1, NULL); 
-    OS_DELAY_MS(500);
+//	ret |= xTaskCreate((TaskFunction_t)RelayCtrlTask,"RelayCtrlTask", 384, NULL, 1, NULL); 
+//    OS_DELAY_MS(500);
     CL_LOG("task init, ret=%d.\n", ret);
 
     ShowCostTemplate();

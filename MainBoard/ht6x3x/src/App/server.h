@@ -185,6 +185,7 @@ typedef struct {
 	uint8_t  UpgradeRunning;
 	uint16_t ZeroDetectFlag;
 	uint8_t  CloseFlag;
+	uint32_t KeyBoardUpgradeTick;
 }CHG_INFO_STR;
 
 #pragma pack(1)
