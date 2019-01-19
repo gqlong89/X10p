@@ -1170,42 +1170,50 @@ void emuTask(void)
 				//}
 				//printf("...................\n");
             }
-			#if 1
+			#if 0
 			if (((qqqqqz + 30) <= GetRtcCount())) 
 			{
+				uint8_t  PayCardOrder[ORDER_SECTION_LEN] = {0,};
 				qqqqqz = GetRtcCount();
+				
+				#if 1
 //				AutoLearnMatrix();
 				if(openFlag == 0)
 				{
 					openFlag = 1;
 					#if 0
 					TurnOnAllGun();
-					#else
+					#elif 0
 					for(uint32_t i = 1; i <= 1; i++)
 					{
 						printf("打开枪头号[%d]\n", i);
 						RelayCtrl(i,1);
 					//	vTaskDelay(2000);
 					}
+					#else
+					StartChargingqqqqqq((ORDER_AUTH_CARD == gChgInfo.cardType) ? START_TYPE_AUTH_CARD : START_TYPE_MONTH_CARD, 2*100, gChgInfo.current_usr_card_id, PayCardOrder, ORDER_SOURCE_AUTH_CARD);
 					#endif
 				//	CL_LOG("TurnOnAllGun wwwwwwwwwwwwwwwwwr\n");
-					gEmuResetFlag = 2;
+					//gEmuResetFlag = 2;
 				}
 				else
 				{
 					openFlag = 0;
 					#if 0
 					TurnOffAllGun();
-					#else
+					#elif 0
 					for(uint32_t i = 1; i <= 1; i++)
 					{
 						printf("关闭枪头号[%d]\n", i);
 						RelayCtrl(i,0);
 					//	vTaskDelay(2000);
 					}
+					#else
+					StopCharging(2);
 					#endif
 				//	CL_LOG("TurnOffAllGun wwwwwwwwwwwwwwwwwr\n");
 				}
+				#endif
             }
 			#endif
 			
@@ -1228,18 +1236,6 @@ void emuTask(void)
                         gEmuResetFlag = gEmuResetFlag & (~(1 << i));
                     }
                 }
-                #if 1
-				if(EnableZXIE(EMUID[6]) != CL_FAIL)
-				{
-				//	CL_LOG("打开走过零点标志 \r\n");
-					EMUIFIFlag = 1;
-				}
-				else
-				{
-					EMUIFIFlag = 0;
-					CL_LOG("关闭走过零点标志 \r\n");
-				}
-                #endif
             }
 
 			if (0 == (second & 0x7f)) 

@@ -317,25 +317,26 @@ void MainTask(void)
     {
         OS_DELAY_MS(300);
 
-		if ((TimeTick + 30) <= GetRtcCount()) 
+		if ((TimeTick + 5) <= GetRtcCount()) 
 		{
 			TimeTick = GetRtcCount();
+			#if 1
+			ReadResistanceValue(TBS_ADC3);
+			ReadResistanceValue(TBS_ADC4);
+			//GetCpuTemp();
+			#endif
+
+//			LcdTurnOnLed();
+//			OS_DELAY_MS(500);
+//			LcdTurnOffLed();
+//			OS_DELAY_MS(500);
 		}
 		
         if (GetRtcCount() != old)
         {
             old = GetRtcCount();
             Feed_WDT();
-			#if 0
-			CL_LOG("1111111111111111\n");
-			ReadTempDetection(TBS_ADC3);
-			CL_LOG("2222222222222222\n");
-			ReadTempDetection(TBS_ADC4);
-			#endif
-////			LcdTurnOnLed();
-			OS_DELAY_MS(500);
-////			LcdTurnOffLed();
-			OS_DELAY_MS(500);
+			
             //socket已经建立连接
             if ((system_info.is_socket_0_ok == CL_TRUE) && ((LOCAL_NET == system_info.netType) || (OUT_485_NET == system_info.netType))) 
 			{
@@ -549,7 +550,7 @@ int main(void)
 //	UsartInit();
 	
     //由于系统资源限制，目前不能启动大于5个线程
-    xTaskCreate((TaskFunction_t)MainTask,"MainTask",512,NULL,1,&MainTaskHandle_t);
+    xTaskCreate((TaskFunction_t)MainTask, "MainTask", 512, NULL, 1, &MainTaskHandle_t);
     vTaskStartScheduler();
 	while(1) 
 	{

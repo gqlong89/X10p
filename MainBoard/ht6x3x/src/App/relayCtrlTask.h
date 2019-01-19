@@ -48,7 +48,6 @@ extern void RelayCtrl(uint8_t gunId,uint8_t on);
 extern void RelayCtrlTask(void);
 extern void StartRelayTimer(uint16_t period);
 extern int timer4_init(uint16_t period);
-extern void RelayCtrl(uint8_t gunId,uint8_t on);
 
 extern const char EMUID[7];		//´Ó1¿ªÊ¼
 

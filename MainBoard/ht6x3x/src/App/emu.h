@@ -203,7 +203,7 @@ extern void emuTask(void);
 extern int SIMU_USART_Send(int no,uint8_t *buf, uint8_t len);
 extern int WritecalparaByGunId(uint8_t gunId);
 extern int HT7017_Read(int no,uint8_t RegAdd,uint8_t *Data);
-
+extern int EnableZXIE(int no);
 
 #define EMU_CAL_SIZE		582  	//(2+2+576+2)
 

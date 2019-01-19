@@ -105,20 +105,33 @@ int CheckGunStatu(uint8_t gunId)
 
 int GunTurnOn(uint8_t gunId)
 {
-    if((1 <= gunId) && (gunId <=GUN_NUM_MAX)){
-        GPIO_SetBits(Gun_GPIO_PortTable[gunId-1].port, Gun_GPIO_PortTable[gunId-1].pin);
-        CL_LOG("open gunid=%d.\n",gunId);
-        return 0;
-    }else{
-        return -1;
-    }
+#if 1
+	RelayCtrl(gunId, 1);
+    CL_LOG("开启%d号枪头 \n", gunId);
+    return 0;
+#else    
+	if((1 <= gunId) && (gunId <=GUN_NUM_MAX))
+	{
+		GPIO_SetBits(Gun_GPIO_PortTable[gunId-1].port, Gun_GPIO_PortTable[gunId-1].pin);
+		CL_LOG("open gunid=%d.\n",gunId);
+		return 0;
+	}
+	else
+	{
+		return -1;
+	}
+#endif
 }
 
 int GunTurnOff(uint8_t gunId)
 {
 	//printf("turn %u gun off\r\n", gunId);
-
-    if((1 <= gunId) && (gunId <= GUN_NUM_MAX))
+#if 1
+	RelayCtrl(gunId, 0);
+    CL_LOG("关闭%d号枪头 \n", gunId);
+    return 0;
+#else    
+	if((1 <= gunId) && (gunId <= GUN_NUM_MAX))
 	{
         GPIO_ResetBits(Gun_GPIO_PortTable[gunId-1].port, Gun_GPIO_PortTable[gunId-1].pin);
         return 0;
@@ -127,6 +140,7 @@ int GunTurnOff(uint8_t gunId)
 	{
         return -1;
     }
+#endif
 }
 
 

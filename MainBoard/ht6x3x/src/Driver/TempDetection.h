@@ -5,6 +5,11 @@
 #include "includes.h"
 
 
+#define TOTAL_RESISTANCE                 	25
+#define DIVIDER_RESISTANCE             		10
+#define DIVIDER_MULTIPLE                 	100
+
+
 
 typedef enum
 {
@@ -85,12 +90,15 @@ typedef enum                             /* 目前只限温度测量 */
 }TBS_ADCFilterCntTypeDef;                /*!< end of group TBS_ADCFilterCntTypeDef */
 
 
-
-
+typedef struct{
+	int32_t Temperature;
+    uint32_t Resistance;
+}TempWithResistanceTypedef;
 
 
 extern void ADC_Init(void);
-extern int16_t ReadTempDetection(TBS_SubModuleTypeDef SubModule);
+extern int32_t ReadTempDetection(TBS_SubModuleTypeDef SubModule);
+extern float ReadResistanceValue(TBS_SubModuleTypeDef SubModule);
 
 
 

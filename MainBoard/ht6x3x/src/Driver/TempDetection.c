@@ -10,6 +10,61 @@
 
 
 
+const float T2 = (273.15+25.0);//T2
+const float Ka = 273.15;
+
+//Rt = R *EXP(B*(1/T1-1/T2))
+float ConvertTemp(float Rt)
+{
+	const float Rp = 100000.0; //100K
+	const float Bx = 4250;//B
+	float temp;
+  //like this R=100000, T2=273.15+25,B=3470, RT=100000*EXP(3470*(1/T1-1/(273.15+25))
+	temp = log(Rt / Rp);//ln(Rt/Rp)
+	temp /= Bx;		//ln(Rt/Rp)/B
+	temp += (1 / T2);
+	temp = 1 / (temp);
+	temp -= Ka;
+	
+	return temp;
+}
+
+//TempWithResistanceTypedef TempWithResistanceValue = {
+////	{-40	, 42000},
+////	{-35	, 30000},
+////	{-30	, 22000},
+////	{-25	, 16000},
+////	{-20	, 12000},
+////	{-15	, 9000},
+////	{-10	, 6000},
+////	{-5 	, 5000},
+////	{0 		, 3800},
+//	{5		, 2900},
+//	{10		, 2000},
+//	{15		, 1600},
+//	{20		, 1200},
+//	{25		, 1000},
+//	{30		, 850},
+//	{35		, 650},
+//	{40		, 500},
+//	{45		, 400},
+//	{50		, 350},
+//	{55		, 290},
+//	{60		, 240},
+//	{65		, 200},
+//	{70		, 160},
+//	{75		, 130},
+//	{80		, 110},
+//	{85		, 90},
+//	{90		, 80},
+//	{95		, 60},
+//	{100	, 50},
+//	{105	, 48},
+//	{110	, 40},
+//	{115	, 35},
+//	{120	, 30}
+//};
+
 /**********************************************************************************************************
 *                                     CONFIGUE TBS MODULE
 *
@@ -444,20 +499,111 @@ void ADC_Init(void)
 	HT_TBS_ADCTriSample(TBS_TRI_ADC4);
 }
 
-//VADCIN0 = 0.0259*ADC0DATA + 0.4276 (mv)
-int16_t ReadTempDetection(TBS_SubModuleTypeDef SubModule)
-{
-	int16_t VoltageValue = 0;
-	CL_LOG("VoltageValue1 = %d.\n", VoltageValue);
-	VoltageValue = HT_TBS_ValueRead(SubModule);
-	CL_LOG("VoltageValue2 = %d.\n", VoltageValue);
-	VoltageValue = 0.0259 * VoltageValue + 0.4276;
-	CL_LOG("VoltageValue3 = %d.\n", VoltageValue);
-    
-    return 0;
+/*******************************************************
+函数原型:   void swap(int *a, int *b)    
+函数参数:  交换数据的亮变量
+函数功能:   交换变量值
+返回值  :   无
+********************************************************/
+void swap(int *a, int *b)    
+{  
+    int temp;  
+  
+    temp = *a;  
+    *a = *b;  
+    *b = temp;  
+  
+    return ;  
 }
 
+/*******************************************************
+函数原型:   void quicksort(int array[], int maxlen, int begin, int end)
+函数参数:   array  需要排序的数组，maxlen:数组的总大小
+            begin  数组的开始位置，end数组的结束位置
+函数功能:   快速排序
+返回值  :   无
+********************************************************/
+void quicksort(int array[], int maxlen, int begin, int end)  
+{  
+    int i, j;  
+  
+    if(begin < end)  
+    {  
+        i = begin + 1;  
+        j = end;        
+            
+        while(i < j)  
+        {  
+            if(array[i] > array[begin])  
+            {  
+                swap(&array[i], &array[j]);  
+                j--;  
+            }  
+            else  
+            {  
+                i++;  
+            }  
+        }  
+        if(array[i] >= array[begin])  
+        {  
+            i--;  
+        }  
+        swap(&array[begin], &array[i]);  
+          
+        quicksort(array, maxlen, begin, i);  
+        quicksort(array, maxlen, j, end);  
+    }  
+}
 
+//VADCIN0 = 0.0259*ADC0DATA + 0.4276 (mv)
+int32_t ReadTempDetection(TBS_SubModuleTypeDef SubModule)
+{
+	int32_t VoltageValue = 0;
+	uint8_t i = 0;
+	int temp[10] = {0};
+	
+	for (i = 0; i < 10; i++) 
+	{
+		temp[i] = HT_TBS_ValueRead(SubModule);
+		VoltageValue += temp[i];
+		OS_DELAY_MS(50);
+	}
+	quicksort(temp,10,0,9);
+	VoltageValue = VoltageValue - temp[0];
+    VoltageValue = VoltageValue - temp[9];
+	
+	VoltageValue = VoltageValue / 8;
+	VoltageValue = (VoltageValue * 0.0259)  + 0.4276;
+	CL_LOG("VoltageValue = %d.\n", VoltageValue);
+    
+    return VoltageValue;
+}
+
+float ReadResistanceVoltage(TBS_SubModuleTypeDef SubModule)
+{
+	float ResistVoltageValue = 0;
+	
+	ResistVoltageValue = ReadTempDetection(SubModule);
+	ResistVoltageValue = ResistVoltageValue * TOTAL_RESISTANCE / 10;
+	CL_LOG("ResistVoltageValue = %f.\n", ResistVoltageValue);
+
+	return ResistVoltageValue;
+}
+
+float ReadResistanceValue(TBS_SubModuleTypeDef SubModule)
+{
+	float ResistVoltageValue = 0;
+	float Rt;
+	float ntcTemp;
+	
+	ResistVoltageValue = ReadResistanceVoltage(SubModule);
+	Rt = (float)(20000 * ResistVoltageValue) / (3300 - ResistVoltageValue);
+	CL_LOG("电阻 = %f.\n", Rt);
+	ntcTemp = ConvertTemp(Rt);
+	CL_LOG("温度ntcTemp = %f.\n", ntcTemp);
+    
+    return ntcTemp;
+}
 
 
 

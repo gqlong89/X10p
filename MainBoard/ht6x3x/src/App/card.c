@@ -720,12 +720,15 @@ void WritePayCardHandle(CKB_STR* pFrame)
     Sc8042bSpeech(VOIC_CARD);
     vTaskDelay(100);
 
-	if (pWriteCard->result == 0) {  //写卡成功
+	if (pWriteCard->result == 0) 
+{  //写卡成功
         CL_LOG("gun=%d.\n", gChgInfo.current_usr_gun_id);
         gChgInfo.mode = 1;
         gChgInfo.subsidyType = 0;
         StartCharging(START_TYPE_WALLET_CARD, gChgInfo.money*100, gChgInfo.current_usr_card_id, PayCardOrder, (uint8_t)ORDER_SOURCE_PAYMENT_CARD);
-    }else {
+    }
+	else 
+	{
         Sc8042bSpeech(VOIC_START_CHARGER_FAIL);
         CL_LOG("fail\n");
 	}

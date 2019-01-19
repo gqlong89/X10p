@@ -1,6 +1,7 @@
 #include "includes.h"
 #include "ntcad.h"
 #include "gpio.h"
+#include "TempDetection.h"
 
 
 int InitTmp(void)//adcin3 G2 AF2
@@ -19,7 +20,9 @@ int GetCpuTemp(void)
 {
 	int16_t temp;
 //	temp = 12.9852 - (int16_t)(HT_TBS->TMPDAT+1500) * 0.0028;
-	//printf("TMPDAT=%d,temp==%d.\n",(int16_t)HT_TBS->TMPDAT,temp);
+	temp = (int16_t)ReadResistanceValue(TBS_ADC4);
+	printf("temp==%d.\n", temp);
+	
 	return temp;
 }
 

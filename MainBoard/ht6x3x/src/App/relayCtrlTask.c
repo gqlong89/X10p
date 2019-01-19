@@ -26,12 +26,12 @@ void EXTI5_CallBack(void)
         if(OpenlFlag != 0)	//开继电器
         {
             operate = 1;
-            StartRelayTimer(300);	//具体时间需要根据继电器时间调试
+            StartRelayTimer(100);	//具体时间需要根据继电器时间调试
         }
         else if(CloselFlag != 0)	//关继电器
         {
             operate = 0;
-            StartRelayTimer(300);	//具体时间需要根据继电器时间调试
+            StartRelayTimer(100);	//具体时间需要根据继电器时间调试
         }
 	}
 }
@@ -332,10 +332,12 @@ void openRelay_Async(uint8_t gunId,uint8_t on)
     {
         if(on)
 		{
+			operate = 1;
             OpenlFlag = 0x0FFF;
         }
 		else
 		{
+			operate = 0;
             CloselFlag = 0x0FFF;
         }
     }
@@ -343,10 +345,12 @@ void openRelay_Async(uint8_t gunId,uint8_t on)
     {
         if(on)
 		{
+			operate = 1;
             setbit(OpenlFlag,(gunId-1));
         }
 		else
 		{
+			operate = 0;
             setbit(CloselFlag,(gunId-1));
         }
     }
