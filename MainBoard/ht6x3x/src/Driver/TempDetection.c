@@ -9,16 +9,34 @@
 #include "server.h"
 
 
+#if 0
+const float Ka = 273.15;
 
+//Rt = Rp *EXP(Bx * (1/T1-1/T2))
+float ConvertTemp(float Rt)
+{
+	const float Rp = 100000.0; 	//100K
+	const float Bx = 4250;	//B
+	const float T2 = (25.0);//T2
+	float temp;
+	
+  	temp = (Rt / (Rp * Bx)) + (1 / T2);
+	CL_LOG("temptemptemptemp = %f.\n", temp);
+	temp = 1 / temp;
+	
+	return temp;
+}
+#else
 const float T2 = (273.15+25.0);//T2
 const float Ka = 273.15;
 
 //Rt = R *EXP(B*(1/T1-1/T2))
 float ConvertTemp(float Rt)
 {
-	const float Rp = 100000.0; //100K
-	const float Bx = 4250;//B
+	const float Rp = 100000.0; 	//100K
+	const float Bx = 4250;	//B
 	float temp;
+	
   //like this R=100000, T2=273.15+25,B=3470, RT=100000*EXP(3470*(1/T1-1/(273.15+25))
 	temp = log(Rt / Rp);//ln(Rt/Rp)
 	temp /= Bx;		//ln(Rt/Rp)/B
@@ -28,6 +46,7 @@ float ConvertTemp(float Rt)
 	
 	return temp;
 }
+#endif
 
 //TempWithResistanceTypedef TempWithResistanceValue = {
 ////	{-40	, 42000},

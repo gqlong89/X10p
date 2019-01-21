@@ -140,9 +140,8 @@ void HT_Flash_ByteRead(uint8_t* pReadByte, uint32_t Address, uint32_t Num)
 
     for(i = 0; i < Num; i++)
     {
-        pReadByte[i] = M8(Address+i);                                      /*!< 执行Flash读            */
+        pReadByte[i] = M8(Address + i);                                      /*!< 执行Flash读            */
     }
-
 }
 
 
@@ -150,8 +149,9 @@ void FlashReadDataEx(uint8_t *pBuff, uint32_t addr, uint16_t len)
 {
     uint16_t i;
 
-    for (i=0; i<len; i++) {
-        HT_Flash_ByteRead(&pBuff[i], addr+i, 1);
+    for (i=0; i<len; i++) 
+	{
+        HT_Flash_ByteRead(&pBuff[i], addr + i, 1);
     }
 }
 
@@ -227,7 +227,7 @@ void HT_Flash_HalfWordRead(uint16_t* pReadHalfWord, uint32_t Address, uint32_t N
 
     HT_CMU->FLASHCON = CMU_FLASHCON_FOP_READ;                              /*!< Flash读                */
     Address &= 0xFFFFFFFE;                                                 /*!< 保证半字对齐           */
-    for(i=0; i<Num; i++)
+    for(i = 0; i < Num; i++)
     {
         pReadHalfWord[i] = M16(Address+i*2);                               /*!< 执行Flash读            */
     }
@@ -348,7 +348,6 @@ void HT_Flash_ChipErase(void)
     HT_CMU->WPREG = writeProtect;                                          /*!< 恢复之前写保护设置     */
 	MASTER_INT_EN();
 }
-
 #endif
 
 /*
