@@ -20,6 +20,7 @@
 #include "lcd.h"
 #include "gun.h"
 #include "ntcad.h"
+#include "TempDetection.h"
 
 
 
@@ -524,7 +525,7 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
         if (1 == pGunCharging->isFull) 
 		{
             powerAll = 0;
-            for (i=0; i<POWER_CHECK_CNT; i++) 
+            for (i = 0; i < POWER_CHECK_CNT; i++) 
 			{
                 powerAll += pGunCharging->power[i];
             }
@@ -719,29 +720,52 @@ void ChargingCtrlProc(void)
     int i;
     uint16_t  chargingPower = 0;
 
-    for (i=1; i<=GUN_NUM_MAX; i++) {
+    for (i = 1; i <= GUN_NUM_MAX; i++) 
+	{
         pGunInfo = &gun_info[i-1];
         pGunCharging = &gChgInfo.gunCharging[i-1];
         GetGunStatus(i, &gunStatus);
         //CL_LOG("gun %d,voltage=%d,currentPower=%d,current=%d.\n",i,gunStatus.voltage,gunStatus.power,gunStatus.current);
-        if (pGunInfo->is_load_on) {
-            if (gunStatus.status) {
-                if (gunStatus.status & 0x01) {
+        if (pGunInfo->is_load_on) 
+		{
+            if (gunStatus.status) 
+			{
+                if (gunStatus.status & 0x01) 
+				{
                     pGunInfo->stopReason = STOP_CHARGER_FAULT;
                     pGunInfo->reasonDetail = REASON_COMM_ERR;
-                }else {
+                }
+				else 
+				{
                     pGunInfo->stopReason = (gunStatus.status & 0x04) ? STOP_OVER_VOLTAGE : STOP_OVER_LOAD;
                     pGunInfo->reasonDetail = pGunInfo->stopReason;
                     Sc8042bSpeech(VOIC_POWER_TOO_LARGE);
                 }
                 CL_LOG("fault stop,gunid=%d,status=%d.\n",i,gunStatus.status);
                 SendEventNotice(i, EVENT_CHIP_FAULT, CHIP_EMU, gunStatus.status, EVENT_OCCUR,NULL);
-            }else {
-                if (STOP_UNKNOW == pGunInfo->stopReason) {
-                    if (gunStatus.elec > pGunInfo->startElec) {
+            }
+			else 
+			{
+                if ((ReadResistanceValue(TBS_ADC3) >= 100) || (ReadResistanceValue(TBS_ADC3) >= 100)) 
+				{
+                    if (4 < ++pGunCharging->tempHightCnt) 
+					{
+                        pGunInfo->stopReason = STOP_TEMP_HIGHT;
+                    }
+                }
+				else if ((ReadResistanceValue(TBS_ADC3) < 55) &&((ReadResistanceValue(TBS_ADC4) < 55))) 
+				{
+                    pGunCharging->tempHightCnt = 0;
+                }
+                if (STOP_UNKNOW == pGunInfo->stopReason) 
+				{
+                    if (gunStatus.elec > pGunInfo->startElec) 
+					{
                         pGunInfo->chargingElec += gunStatus.elec - pGunInfo->startElec;
                         pGunInfo->startElec = gunStatus.elec;
-                    }else if (gunStatus.elec < pGunInfo->startElec) {
+                    }
+					else if (gunStatus.elec < pGunInfo->startElec) 
+					{
                         //CL_LOG("startElec=%d,elec=%d,error.\n",pGunInfo->startElec,gunStatus.elec);
                         pGunInfo->startElec = gunStatus.elec;
                     }
@@ -749,19 +773,26 @@ void ChargingCtrlProc(void)
                 }
             }
 
-            if (STOP_UNKNOW != pGunInfo->stopReason) {
+            if (STOP_UNKNOW != pGunInfo->stopReason) 
+			{
                 StopCharging(i);
-            }else{
-                if (CHARGING_POWER_LIMIT <= (chargingPower + pGunCharging->currentPower/10)) {
+            }
+			else
+			{
+                if (CHARGING_POWER_LIMIT <= (chargingPower + pGunCharging->currentPower/10)) 
+				{
                     pGunInfo->stopReason = STOP_POWER_TOO_BIG;
                     pGunInfo->reasonDetail = REASON_TOTAL_POWER_LARGE;
                     StopCharging(i);
-                }else{
+                }
+				else
+				{
                     chargingPower += pGunCharging->currentPower/10;
                 }
             }
 
-            if (60 <= (uint32_t)(GetRtcCount() - pGunCharging->chargingTime)) {
+            if (60 <= (uint32_t)(GetRtcCount() - pGunCharging->chargingTime)) 
+			{
                 pGunCharging->chargingTime = GetRtcCount();
                 pGunInfo->realChargingTime++;
         	    CL_LOG("cgp=%d,cp=%d,m=%d,e=%d,ct=%dm,rct=%d,ilo=%d,cflt=%dm,gun=%d.\n",
@@ -782,15 +813,19 @@ void ChargingProc(void)
     gun_info_t *pGunInfo = NULL;
     int i;
 
-	for (i=1; i<=GUN_NUM_MAX; i++) {
+	for (i=1; i<=GUN_NUM_MAX; i++) 
+	{
         pGunInfo = &gun_info[i-1];
-		if (pGunInfo->is_load_on) {
+		if (pGunInfo->is_load_on) 
+		{
             cnt = 1;
-            if ((COST_UNIFY == pGunInfo->cost_mode) || ((COST_POWER == pGunInfo->cost_mode) && pGunInfo->getPowerFlag)) {
+            if ((COST_UNIFY == pGunInfo->cost_mode) || ((COST_POWER == pGunInfo->cost_mode) && pGunInfo->getPowerFlag)) 
+			{
                 pPowerSement = &pGunInfo->powerInfo.segmet[pGunInfo->powerSemenIndex];
     			pGunInfo->money = pGunInfo->realChargingTime * pPowerSement->price / pPowerSement->duration;
 				//充电费用大于用户充电金额,停止充电
-				if (pGunInfo->money >= pGunInfo->current_usr_money) {
+				if (pGunInfo->money >= pGunInfo->current_usr_money) 
+				{
 					CL_LOG("money=%d>=usr_money=%d stop,time=%d min,gunId=%d.\n",pGunInfo->money,pGunInfo->current_usr_money,(GetRtcCount()-pGunInfo->start_time)/60,i);
 					pGunInfo->money = pGunInfo->current_usr_money;
 					pGunInfo->stopReason = STOP_NORMAL;
@@ -800,7 +835,8 @@ void ChargingProc(void)
 				}
             }
 
-            if ((pGunInfo->realChargingTime > CHARGING_MAX_TIME) || ((24*60*60)<(uint32_t)(GetRtcCount()-pGunInfo->start_time))) {//智能充满超过最大充电时长12小时
+            if ((pGunInfo->realChargingTime > CHARGING_MAX_TIME) || ((24*60*60)<(uint32_t)(GetRtcCount()-pGunInfo->start_time))) 
+			{//智能充满超过最大充电时长12小时
 			    pGunInfo->money = CHARGING_MAX_TIME * pPowerSement->price / pPowerSement->duration;
 				pGunInfo->stopReason = STOP_OTHER;
                 pGunInfo->reasonDetail = REASON_OVER_23H;
@@ -810,8 +846,10 @@ void ChargingProc(void)
 		}
 	}
 
-    if (cnt) {
-        if (20*60 < (uint32_t)(GetRtcCount() - chargingOldTime)) {
+    if (cnt) 
+	{
+        if (20*60 < (uint32_t)(GetRtcCount() - chargingOldTime)) 
+		{
             chargingOldTime = GetRtcCount();
             FlashWriteGunInfo(gun_info, sizeof(gun_info), 1);
             UpdataGunDataSum();
@@ -935,23 +973,36 @@ void ProcGunStatus(void)
     GUN_CHARGING_STR *pGunCharging = gChgInfo.gunCharging;
     uint8_t  stop;
 
-    for (i=1; i<=GUN_NUM_MAX; i++) {
-        if (pGunCharging->isTesting) {
+    for (i=1; i<=GUN_NUM_MAX; i++) 
+	{
+        if (pGunCharging->isTesting) 
+		{
             stop = 0;
             GetGunStatus(i, &gunStatus);
             //CL_LOG("gun %d,voltage=%d,Power=%d,current=%d.\n",i,gunStatus.voltage,gunStatus.power,gunStatus.current);
-            if (gunStatus.status) {
+            if (gunStatus.status) 
+			{
                 stop = 1;
-            }else{
+            }
+			else
+			{
                 time = GetRtcCount() - pGunCharging->beginTime;
-                if (pGunCharging->timeLimit < time) {
-                    if (TEST_OPEN == pGunCharging->isTesting) {
+                if (pGunCharging->timeLimit < time) 
+				{
+                    if (TEST_OPEN == pGunCharging->isTesting) 
+					{
                         stop = 2;
-                    }else{
-                        if (gunStatus.power < (2*PUT_OUT_GUN_POWER)) {
+                    }
+					else
+					{
+                        if (gunStatus.power < (2*PUT_OUT_GUN_POWER)) 
+						{
                             stop = 3;
-                        }else{
-                            if ((8*60*60) <= time) {
+                        }
+						else
+						{
+                            if ((8*60*60) <= time) 
+							{
                                 stop = 4;
                             }
                         }

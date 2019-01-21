@@ -1640,6 +1640,7 @@ void KeyBoardUpgradeCheck(void)
 		    }
             remain = remain - read_len;
             HT_Flash_ByteRead(&buf[0], readAddr, read_len);
+			//PrintfData("[qqqqqqqqqqqq]", &buf[0], UPGRADE_PACKAGE_SIZE);
             readAddr += read_len;
             index = gChgInfo.UpgradeIndex + 1;
 			UpgradeIndexSum++;
@@ -1652,8 +1653,8 @@ void KeyBoardUpgradeCheck(void)
 				gChgInfo.UpgradeRunning = 0;
 				//Sc8042bSpeech(VOIC_SUCCESS);
 				printf("Éý¼¶³É¹¦\r\n");
-				vTaskDelay(1000);
-				ResetSysTem();
+			//	vTaskDelay(1000);
+			//	ResetSysTem();
 			}
 			gChgInfo.UpgradeIndex = 0;
         }

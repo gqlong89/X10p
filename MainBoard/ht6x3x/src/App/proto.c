@@ -459,11 +459,12 @@ int SendHeartBeatFun(uint8_t gun_id)
     MuxSempTake(&gProtoSendMux);
 	memset(gProtoSendBuff, 0, sizeof(gProtoSendBuff));
     mqtt_heart_beat->netSigle = GetNetSignal();
-    mqtt_heart_beat->envTemp = GetCpuTemp() + 50;
+    mqtt_heart_beat->envTemp = GetCpuTemp();
     mqtt_heart_beat->status = gChgInfo.statusErr;
     mqtt_heart_beat->learnFlag = EmuCalation.autoLearnFlag;
     mqtt_heart_beat->gunCnt = GUN_NUM_MAX;
-    for (i=1; i<=GUN_NUM_MAX; i++) {
+    for (i = 1; i <= GUN_NUM_MAX; i++) 
+	{
         len += MakeGunHearBeatInfo((void*)((char*)pGunInfo + len), i);
     }
     PrintfData("SendHeartBeatFun", (void*)mqtt_heart_beat, len+7);

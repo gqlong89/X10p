@@ -292,6 +292,13 @@ void MainTask(void)
 	uint32_t TimeTick = GetRtcCount();
     int ret = 0;
     uint8_t  flag = 0;
+
+	
+//	uint32_t readAddr;
+//	uint32_t read_len;
+//	uint8_t buf[UPGRADE_PACKAGE_SIZE];
+
+
 	
    	BspInit();
     
@@ -317,7 +324,7 @@ void MainTask(void)
     {
         OS_DELAY_MS(300);
 
-		if ((TimeTick + 5) <= GetRtcCount()) 
+		if ((TimeTick + 120) <= GetRtcCount()) 
 		{
 			TimeTick = GetRtcCount();
 			#if 1
@@ -326,6 +333,9 @@ void MainTask(void)
 			//GetCpuTemp();
 			#endif
 
+			//readAddr = KeyBoardBackAddr;
+			//HT_Flash_ByteRead(&buf[0], readAddr, UPGRADE_PACKAGE_SIZE);
+		//	PrintfData("[qqqqqqqqqqqq]", &buf[0], UPGRADE_PACKAGE_SIZE);
 //			LcdTurnOnLed();
 //			OS_DELAY_MS(500);
 //			LcdTurnOffLed();

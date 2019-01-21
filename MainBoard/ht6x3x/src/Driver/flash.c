@@ -144,7 +144,6 @@ void HT_Flash_ByteRead(uint8_t* pReadByte, uint32_t Address, uint32_t Num)
     }
 }
 
-
 void FlashReadDataEx(uint8_t *pBuff, uint32_t addr, uint16_t len)
 {
     uint16_t i;

@@ -7,32 +7,15 @@
 #include "includes.h"
 #include "TempDetection.h"
 #include "server.h"
+#include "sc8042.h"
 
 
-#if 0
-const float Ka = 273.15;
-
-//Rt = Rp *EXP(Bx * (1/T1-1/T2))
-float ConvertTemp(float Rt)
-{
-	const float Rp = 100000.0; 	//100K
-	const float Bx = 4250;	//B
-	const float T2 = (25.0);//T2
-	float temp;
-	
-  	temp = (Rt / (Rp * Bx)) + (1 / T2);
-	CL_LOG("temptemptemptemp = %f.\n", temp);
-	temp = 1 / temp;
-	
-	return temp;
-}
-#else
-const float T2 = (273.15+25.0);//T2
-const float Ka = 273.15;
 
 //Rt = R *EXP(B*(1/T1-1/T2))
 float ConvertTemp(float Rt)
 {
+	const float T2 = (273.15+25.0);//T2
+	const float Ka = 273.15;
 	const float Rp = 100000.0; 	//100K
 	const float Bx = 4250;	//B
 	float temp;
@@ -46,7 +29,6 @@ float ConvertTemp(float Rt)
 	
 	return temp;
 }
-#endif
 
 //TempWithResistanceTypedef TempWithResistanceValue = {
 ////	{-40	, 42000},
@@ -585,7 +567,7 @@ int32_t ReadTempDetection(TBS_SubModuleTypeDef SubModule)
 	{
 		temp[i] = HT_TBS_ValueRead(SubModule);
 		VoltageValue += temp[i];
-		OS_DELAY_MS(50);
+		OS_DELAY_MS(20);
 	}
 	quicksort(temp,10,0,9);
 	VoltageValue = VoltageValue - temp[0];
@@ -614,10 +596,35 @@ float ReadResistanceValue(TBS_SubModuleTypeDef SubModule)
 	float ResistVoltageValue = 0;
 	float Rt;
 	float ntcTemp;
-	
+	const float Resist = 25000.0;
+		
 	ResistVoltageValue = ReadResistanceVoltage(SubModule);
 	Rt = (float)(20000 * ResistVoltageValue) / (3300 - ResistVoltageValue);
-	CL_LOG("电阻 = %f.\n", Rt);
+//	CL_LOG("电阻1 = %f.\n", Rt);
+	
+	if(Rt >= Resist)
+	{
+		if(Rt > Resist)
+		{
+			SoundCode(210);
+			OS_DELAY_MS(500);
+			Rt = 10000000;
+		}
+		else
+		{
+			//TempNotice(ret);
+			SoundCode(209);
+			OS_DELAY_MS(500);
+			Rt = 10000000;
+		}
+	//	CL_LOG("电阻2 = %f.\n", Rt);
+	}
+	else
+	{
+		Rt = 1 / ((1 / Rt) - (1 / Resist));
+//	CL_LOG("电阻2 = %f.\n", Rt);
+	}
+	
 	ntcTemp = ConvertTemp(Rt);
 	CL_LOG("温度ntcTemp = %f.\n", ntcTemp);
     
