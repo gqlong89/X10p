@@ -919,11 +919,7 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
                         pFwInfo = (void*)gprsBuffer;
                         fsize = pFwInfo->size;
                         chsum_in = pFwInfo->checkSum;
-						#if (0 == X10C_TYPE)
-                        ret = memcmp("X10", pFwInfo->name, 3);
-                        #else
                         ret = memcmp("X10C", pFwInfo->name, 4);
-                        #endif
 						if (0 == ret) 
 						{
 							system_info.fwType = FW_X10P;

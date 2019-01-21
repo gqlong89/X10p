@@ -303,7 +303,6 @@ void MainTask(void)
    	BspInit();
     
 	memset(&gChgInfo, 0, sizeof(gChgInfo));
-//	sem = xSemaphoreCreateCounting(12, 0);//创建信号量
 	
     ret  = xTaskCreate((TaskFunction_t)ServerTask,"ServerTask", 512, NULL, 1, &ServerTaskHandle_t);
     OS_DELAY_MS(500);
