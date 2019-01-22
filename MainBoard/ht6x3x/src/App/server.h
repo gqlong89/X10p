@@ -283,13 +283,19 @@ char* GetCurrentTime(void);
 #define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10c %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
 #endif
 #else
-#define CL_LOG(fmt,args...) do { if (0 == system_info.printSwitch) printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
+#define CL_LOG(fmt,args...) do { \
+	if (1 == system_info.printSwitch) \
+	{ \
+		printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); \
+	} \
+}while(0)
+
 #define PRINTF_LOG(fmt,args...) do { \
-printf("[X10p %s]"fmt,GetCurrentTime(), ##args); \
+	printf("[X10p %s]"fmt,GetCurrentTime(), ##args); \
 }while(0)
 
 #define PRINTF(fmt,args...) do { \
-	if (0 == system_info.printSwitch) \
+	if (1 == system_info.printSwitch) \
 	{\
 		printf(""fmt, ##args); \
 	}\
