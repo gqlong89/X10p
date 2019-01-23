@@ -62,9 +62,9 @@ void PrintfData(void *pfunc, uint8_t *pdata, int len)
 {
 	uint32_t i;
 
-    if (0 == system_info.printSwitch) 
+    if (LOG_OPEN == system_info.printSwitch) 
 	{
-    //    return;
+        return;
     }
 	PRINTF_LOG("call by %s,len=%d, pdata:",(char*)pfunc,len);
     Feed_WDT();
@@ -417,7 +417,7 @@ void ChargerInfoProc(void)
         HT_Flash_PageErase(CHARGER_INFO_FLASH_ADDR);
         HT_Flash_ByteWrite((void*)&charger, CHARGER_INFO_FLASH_ADDR, sizeof(charger));
     }
-//	#if 0
+//	#if 1
 //	printf("qqqqqqqqqqqqqqqqqqq\n");
 //    charger.station_id[3] = 0x78;
 //	charger.station_id[4] = 0x22;

@@ -200,6 +200,8 @@ typedef unsigned long long uint64_t;
 #define CL_TRUE                         1
 #define CL_FALSE                        0
 
+#define LOG_OPEN                        1
+
 
 #define UPGRADE_PACKAGE_SIZE    		64
 #define UPGRADE_SUCCESS_FLAG    		0x5abe5b6c

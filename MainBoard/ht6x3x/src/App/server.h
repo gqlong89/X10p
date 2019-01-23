@@ -284,7 +284,7 @@ char* GetCurrentTime(void);
 #endif
 #else
 #define CL_LOG(fmt,args...) do { \
-	if (1 == system_info.printSwitch) \
+	if (LOG_OPEN == system_info.printSwitch) \
 	{ \
 		printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); \
 	} \
@@ -295,7 +295,7 @@ char* GetCurrentTime(void);
 }while(0)
 
 #define PRINTF(fmt,args...) do { \
-	if (1 == system_info.printSwitch) \
+	if (LOG_OPEN == system_info.printSwitch) \
 	{\
 		printf(""fmt, ##args); \
 	}\
