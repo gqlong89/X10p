@@ -119,30 +119,15 @@ void SysCfgInit(void)
     }
 
     CL_LOG("[fwVer: %03d], [subVer: %d].\n", FW_VERSION, FW_VERSION_SUB);
+#if ENVI_TYPE
+	CL_LOG("[测试版本号: %03d]\n", TEST_VERSION);
+#endif
     CL_LOG("[ip地址: %s], [port号: %d].\n", NET_SERVER_IP, NET_SERVER_PORT);
     PrintSysCfgInfo();
     CL_LOG("[system_info 大小: %d], [gun_info 大小: %d].\n", sizeof(system_info), sizeof(gun_info));
 	CL_LOG("文件编译时间, 月日年 %s 时分秒%s \n", __DATE__, __TIME__);
 }
 
-void qeeerrrtt(void)
-{
-	uint32_t ib = 0;
-	uint8_t sss[1024] = {0,};
-	
-	//for(ib = 0; ib < 1024; ib++)
-	{
-		HT_Flash_ByteRead((void*)&sss[0], AppUpBkpAddr, sizeof(sss));
-	}
-	for(ib = 0; ib < 1024; ib++)
-	{
-		if(0 == (ib % 16))
-		{
-			printf("\n");
-		}
-		printf("%x", sss[ib]);
-	}
-}
 
 void LoadSysCfgInfo(void)
 {
@@ -172,7 +157,6 @@ void LoadSysCfgInfo(void)
         Clear_RecordOrder();
     }
     CardUpgradeHandle_t = NULL;
-	//qeeerrrtt();
 }
 
 
@@ -325,8 +309,7 @@ void MainTask(void)
 		{
 			TimeTick = GetRtcCount();
 			#if 1
-			ReadResistanceValue(TBS_ADC3);
-			ReadResistanceValue(TBS_ADC4);
+			CL_LOG("仓盖1温度: %3.1f, 仓盖2温度: %3.1f.\n", ReadResistanceValue(TBS_ADC3), ReadResistanceValue(TBS_ADC4));
 			//GetCpuTemp();
 			#endif
 

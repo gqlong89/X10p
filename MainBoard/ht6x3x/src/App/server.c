@@ -62,17 +62,16 @@ void PrintfData(void *pfunc, uint8_t *pdata, int len)
 {
 	uint32_t i;
 
-    if (LOG_OPEN == system_info.printSwitch) 
+  //  if (LOG_OPEN == system_info.printSwitch) 
 	{
-        return;
+		PRINTF_LOG("call by %s,len=%d, pdata:",(char*)pfunc,len);
+	    Feed_WDT();
+		for (i=0; i<len; i++) 
+		{
+			printf("%02x",pdata[i]);
+		}
+		printf("\n");
     }
-	PRINTF_LOG("call by %s,len=%d, pdata:",(char*)pfunc,len);
-    Feed_WDT();
-	for (i=0; i<len; i++) 
-	{
-		printf("%02x",pdata[i]);
-	}
-	printf("\n");
 }
 
 

@@ -274,33 +274,40 @@ typedef struct{
 
 
 char* GetCurrentTime(void);
-#if 0
-#if (0 == SPECIAL_NET_CARD)
-#define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10 %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
-#elif (1 == SPECIAL_NET_CARD)
-#define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10m %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
-#elif (2 == SPECIAL_NET_CARD)
-#define CL_LOG(fmt,args...) do { if (system_info.printSwitch) printf("X10c %s %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); }while(0)
-#endif
+#if 1
+    #define CL_LOG(fmt,args...) do { 	\
+        { \
+            printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); \
+        } \
+    }while(0)
+
+    #define PRINTF_LOG(fmt,args...) do { \
+        printf("[X10p %s]"fmt,GetCurrentTime(), ##args); \
+    }while(0)
+
+    #define PRINTF(fmt,args...) do { \
+        {\
+            printf(""fmt, ##args); \
+        }\
+    }while(0)
 #else
-#define CL_LOG(fmt,args...) do { \
-	if (LOG_OPEN == system_info.printSwitch) \
-	{ \
-		printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); \
-	} \
-}while(0)
+    #define CL_LOG(fmt,args...) do { 	\
+        if (LOG_OPEN == system_info.printSwitch) \
+        { \
+            printf("[X10p %s] %s:(%d) "fmt,GetCurrentTime(), __func__, __LINE__, ##args); \
+        } \
+    }while(0)
 
-#define PRINTF_LOG(fmt,args...) do { \
-	printf("[X10p %s]"fmt,GetCurrentTime(), ##args); \
-}while(0)
+    #define PRINTF_LOG(fmt,args...) do { \
+        printf("[X10p %s]"fmt,GetCurrentTime(), ##args); \
+    }while(0)
 
-#define PRINTF(fmt,args...) do { \
-	if (LOG_OPEN == system_info.printSwitch) \
-	{\
-		printf(""fmt, ##args); \
-	}\
-}while(0)
-
+    #define PRINTF(fmt,args...) do { \
+        if (LOG_OPEN == system_info.printSwitch) \
+        {\
+            printf(""fmt, ##args); \
+        }\
+    }while(0)
 #endif
 
 void ServerTask(void);

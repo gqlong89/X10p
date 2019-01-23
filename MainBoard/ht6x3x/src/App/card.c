@@ -343,7 +343,8 @@ int OperateMaintain(uint8_t type, uint8_t para)
 	CKB_OPERATION_MAINTENANCE_STR* OperatePkt = (void*)pkt->data;
     MuxSempTake(&gCKBSendMux);
 	OperatePkt->type = type;
-	if (type == 3) {
+	if (type == 3) 
+	{
 		OperatePkt->rsv = para;
 	}
     PrintfData("OperateMaintain", (void*)OperatePkt, sizeof(CKB_OPERATION_MAINTENANCE_STR));

@@ -575,7 +575,7 @@ int32_t ReadTempDetection(TBS_SubModuleTypeDef SubModule)
 	
 	VoltageValue = VoltageValue / 8;
 	VoltageValue = (VoltageValue * 0.0259)  + 0.4276;
-	CL_LOG("VoltageValue = %d.\n", VoltageValue);
+//	CL_LOG("VoltageValue = %d.\n", VoltageValue);
     
     return VoltageValue;
 }
@@ -586,7 +586,7 @@ float ReadResistanceVoltage(TBS_SubModuleTypeDef SubModule)
 	
 	ResistVoltageValue = ReadTempDetection(SubModule);
 	ResistVoltageValue = ResistVoltageValue * TOTAL_RESISTANCE / 10;
-	CL_LOG("ResistVoltageValue = %f.\n", ResistVoltageValue);
+//	CL_LOG("ResistVoltageValue = %f.\n", ResistVoltageValue);
 
 	return ResistVoltageValue;
 }
@@ -626,7 +626,6 @@ float ReadResistanceValue(TBS_SubModuleTypeDef SubModule)
 	}
 	
 	ntcTemp = ConvertTemp(Rt);
-	CL_LOG("ÎÂ¶ÈntcTemp = %f.\n", ntcTemp);
     
     return ntcTemp;
 }
