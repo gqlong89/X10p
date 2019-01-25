@@ -78,23 +78,14 @@ void SwitchTo_Fpll(void)
 	uint32_t writeProtect = RegisterWriteProtect[HT_CMU->WPREG & 0x01];    /*!< 保存当前写保护状态     */
 
     HT_CMU->WPREG = CMU_WPREG_UnProtected;                                 /*!< 关闭写保护功能         */
-
-	//EnWr_WPREG();
-
-//	HT_CMU->PREFETCH=0x01;
-//	HT_CMU->CLKCTRL0 |= 0x0010;				//使能PLL
-////	Delay_mSec(2);
-//	HT_CMU->SYSCLKDIV = 0x0002;			//Fcpu=Fsys/4
-//	HT_CMU->SYSCLKCFG = 0x0083;			//Fsys = Fpll
-
     HT_CMU->PREFETCH = 0x01;
     HT_CMU->CLKCTRL0 |= 0x0010;				//使能PLL
     Delay_mSec(100);
-    #if (0 == IS_CPU_DOU_FRE)
-    HT_CMU->SYSCLKDIV = 0x0000;			//Fcpu=22M
-    #else
-    HT_CMU->SYSCLKDIV = 0x0008;			//Fcpu=44M
-    #endif
+#if (0 == IS_CPU_DOU_FRE)
+	HT_CMU->SYSCLKDIV = 0x0000;			//Fcpu=22M
+#else
+	HT_CMU->SYSCLKDIV = 0x0008;			//Fcpu=44M
+#endif
     HT_CMU->SYSCLKCFG = 0x0083;			//Fsys = Fpll
 
 	//DisWr_WPREG();

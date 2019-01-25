@@ -1090,7 +1090,7 @@ int EnableZXIE(int no)
 //emu 3 5  usart 5 1
 void emuTask(void)
 {
-	uint8_t openFlag = 0;
+//	uint8_t openFlag = 0;
     uint32_t old;
     uint32_t second = 0;
     int i;
@@ -1098,7 +1098,7 @@ void emuTask(void)
     uint32_t sum;
     uint32_t checkSum[8];
     uint8_t  failFlag = 0x7e;
-	uint32_t qqqqqz = GetRtcCount();
+//	uint32_t qqqqqz = GetRtcCount();
 	
 	CL_LOG("emu task start!!!!\n");
     memset(gEmuStatic, 0, sizeof(gEmuStatic));

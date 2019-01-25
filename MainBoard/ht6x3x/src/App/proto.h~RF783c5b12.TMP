@@ -609,3 +609,9 @@ extern uint32_t SendStartChargingNoticeTime;
 
 #endif //__PROTO_H__
 
+LEN+1];
+extern uint32_t SendTradeRecordNoticeTime;
+extern uint32_t SendStartChargingNoticeTime;
+
+#endif //__PROTO_H__
+

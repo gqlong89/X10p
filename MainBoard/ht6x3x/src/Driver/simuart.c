@@ -203,37 +203,41 @@ uint8_t check_sum(unsigned char revbyte)//返回偶校验值
 
 int OpenTimer(uint8_t timer, uint16_t us)
 {
-    if (0 == timer) {
+	uint32_t tick;
+
+#if (0 == IS_CPU_DOU_FRE)
+	tick = 22;
+#else
+	tick = 44;
+#endif
+    if (0 == timer) 
+	{
     	HT_TMR0->TMRCON = (0x3<<1) | (0<<0); //向上计数   //MODE周期计数
-    	#if (0 == IS_CPU_DOU_FRE)
-    	HT_TMR0->TMRDIV = 22 - 1;  //1us
-    	#else
-        HT_TMR0->TMRDIV = 44 - 1;  //1us
-    	#endif
+    	HT_TMR0->TMRDIV = tick - 1;  //1us
     	HT_TMR0->TMRPRD = us;		//重装值  208us
     	HT_TMR0->TMRIE = 1;
-	    return CL_OK;
-    }else if (1 == timer) {
-    	HT_TMR1->TMRCON = (0x3<<1) | (0<<0); //向上计数   //MODE周期计数
-        #if (0 == IS_CPU_DOU_FRE)
-    	HT_TMR1->TMRDIV = 22 - 1;  //1us
-        #else
-        HT_TMR1->TMRDIV = 44 - 1;  //1us
-        #endif
-    	HT_TMR1->TMRPRD = us;		//重装值52us
-    	HT_TMR1->TMRIE = 1;
-    	return CL_OK;
-    }else if (3 == timer) {
-    	HT_TMR3->TMRCON = (0x3<<1) | (0<<0); //向上计数   //MODE周期计数
-    	#if (0 == IS_CPU_DOU_FRE)
-    	HT_TMR3->TMRDIV = 22 - 1;  //1us
-        #else
-        HT_TMR3->TMRDIV = 44 - 1;  //1us
-        #endif
-    	HT_TMR3->TMRPRD = us;		//重装值  208us
-    	HT_TMR3->TMRIE = 1;
+		
 	    return CL_OK;
     }
+	else if (1 == timer) 
+	{
+    	HT_TMR1->TMRCON = (0x3<<1) | (0<<0); //向上计数   //MODE周期计数
+        HT_TMR1->TMRDIV = tick - 1;  //1us
+    	HT_TMR1->TMRPRD = us;		//重装值52us
+    	HT_TMR1->TMRIE = 1;
+		
+    	return CL_OK;
+    }
+	else if (3 == timer) 
+	{
+    	HT_TMR3->TMRCON = (0x3<<1) | (0<<0); //向上计数   //MODE周期计数
+    	HT_TMR3->TMRDIV = tick - 1;  //1us
+    	HT_TMR3->TMRPRD = us;		//重装值  208us
+    	HT_TMR3->TMRIE = 1;
+		
+	    return CL_OK;
+    }
+	
     return CL_FAIL;
 }
 

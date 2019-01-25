@@ -158,7 +158,7 @@ int OutSizeNetCheck(void)
 	{
         if (0 != gOutNetStatus.connect) 
 		{
-            CL_LOG("check out net ok,connect=%d, 2:485,3:2.4G.\n",gOutNetStatus.connect);
+            CL_LOG("check out net ok,connect=%d, 2:485,3:2.4G.\n", gOutNetStatus.connect);
             return CL_OK;
         }
         vTaskDelay(1000);

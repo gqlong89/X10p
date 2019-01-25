@@ -99,6 +99,7 @@ typedef struct {
     uint8_t  isTesting;                         //0:没有测试状态；1:测试打开；2:应急码打开；3:后台远程控制打开
     uint8_t  isPullOutGun;                      //是否疑似拔枪 0不是；1是并发送事件，未收到应答； 0xff:发送事件并收到应答,或者发送超时没有应答
     uint8_t  checkPowerCnt;                     //检测功率次数
+    uint16_t powerCheckcnt;                     //导致功率段切换的功率变化检测次数
     uint8_t  inCnt;
 
     uint8_t  loopCnt;                           //根据拔枪时长、数组长度和检测频率计算出来的循环次数

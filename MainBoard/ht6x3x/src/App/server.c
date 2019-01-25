@@ -119,7 +119,8 @@ int MuxSempTake(MUX_SEM_STR *pSemp)
 
 void MuxSempGive(MUX_SEM_STR *pSemp)
 {
-    if (0 == pSemp->status) {
+    if (0 == pSemp->status) 
+	{
         CL_LOG("status=%d,error.\n",pSemp->status);
         return;
     }
@@ -516,49 +517,52 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
         }
     }
 
-    //如果充电功率5分钟平均小于2w，就认为枪头拔出
-    if (pGunCharging->loopCnt <= ++pGunCharging->inCnt) 
-	{
-        pGunCharging->inCnt = 0;
-        pGunCharging->power[pGunCharging->powerIndex] = power;
-        if (1 == pGunCharging->isFull) 
+	if ((2*60) < (uint32_t)(rtcTime - pGunInfo->start_time)) 
+	{  //充电开始2分钟内不检测枪头拔出
+		//如果充电功率5分钟平均小于2w，就认为枪头拔出
+		if (pGunCharging->loopCnt <= ++pGunCharging->inCnt) 
 		{
-            powerAll = 0;
-            for (i = 0; i < POWER_CHECK_CNT; i++) 
+			pGunCharging->inCnt = 0;
+			pGunCharging->power[pGunCharging->powerIndex] = power;
+			if (1 == pGunCharging->isFull) 
 			{
-                powerAll += pGunCharging->power[i];
-            }
-            powerAll = powerAll/POWER_CHECK_CNT;
-            if (powerAll < 20) 
+				powerAll = 0;
+				for (i = 0; i < POWER_CHECK_CNT; i++) 
+				{
+					powerAll += pGunCharging->power[i];
+				}
+				powerAll = powerAll/POWER_CHECK_CNT;
+				if (powerAll < 20) 
+				{
+					if ((pGunCharging->pullGunStopTime+60) > (uint32_t)(rtcTime - pGunInfo->start_time)) 
+					{ //充电7分钟之内检测到枪头断开都结束订单
+						CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
+						pGunInfo->stopReason = STOP_PULL_OUT;
+						pGunInfo->reasonDetail = REASON_AVERAGE_POWER_LOW;
+						ProcFuseBreak(pGunInfo->maxPower, gunId);
+						return;
+					}
+					else
+					{  //大于7分钟之后，实时计费、起步金、固定计费打开枪头检测，停止充电
+						if ((CHARGING_ACTUAL == pGunInfo->chargerMethod) || (CHARGING_START == pGunInfo->chargerMethod) ||
+							((CHARGING_FIXED == pGunInfo->chargerMethod) && (1 == pGunCharging->pullGunStop))) 
+						{
+							CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
+							pGunInfo->stopReason = STOP_PULL_OUT;
+							pGunInfo->reasonDetail = REASON_AVERAGE_POWER_LOW;
+							ProcFuseBreak(pGunInfo->maxPower, gunId);
+							return;
+						}
+					}
+				}
+			}
+			if (POWER_CHECK_CNT <= ++pGunCharging->powerIndex) 
 			{
-                if ((pGunCharging->pullGunStopTime+60) > (uint32_t)(rtcTime - pGunInfo->start_time)) 
-				{ //充电7分钟之内检测到枪头断开都结束订单
-                    CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
-                    pGunInfo->stopReason = STOP_PULL_OUT;
-                    pGunInfo->reasonDetail = REASON_AVERAGE_POWER_LOW;
-                    ProcFuseBreak(pGunInfo->maxPower, gunId);
-                    return;
-                }
-				else
-				{  //大于7分钟之后，实时计费、起步金、固定计费打开枪头检测，停止充电
-                    if ((CHARGING_ACTUAL == pGunInfo->chargerMethod) || (CHARGING_START == pGunInfo->chargerMethod) ||
-                        ((CHARGING_FIXED == pGunInfo->chargerMethod) && (1 == pGunCharging->pullGunStop))) 
-                   	{
-                        CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
-                        pGunInfo->stopReason = STOP_PULL_OUT;
-                        pGunInfo->reasonDetail = REASON_AVERAGE_POWER_LOW;
-                        ProcFuseBreak(pGunInfo->maxPower, gunId);
-                        return;
-                    }
-                }
-            }
-        }
-        if (POWER_CHECK_CNT <= ++pGunCharging->powerIndex) 
-		{
-            pGunCharging->powerIndex = 0;
-            pGunCharging->isFull = 1;
-        }
-    }
+				pGunCharging->powerIndex = 0;
+				pGunCharging->isFull = 1;
+			}
+		}
+	}
 
     if (power <= PUT_OUT_GUN_POWER) 
 	{
@@ -570,33 +574,36 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
         }
 		else
 		{
-            time = rtcTime - pGunCharging->beginTime;
-            if (pGunCharging->pullGunStopTime <= time) 
-			{
-                if ((pGunCharging->pullGunStopTime+60) > (uint32_t)(rtcTime - pGunInfo->start_time)) 
-				{ //充电7分钟之内检测到枪头断开都结束订单
-                    CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
-                    pGunInfo->stopReason = STOP_PULL_OUT;
-                    ProcFuseBreak(pGunInfo->maxPower, gunId);
-                    return;
-                }
-				else
-				{  //大于7分钟之后，实时计费、起步金、固定计费打开枪头检测，停止充电
-                    if ((CHARGING_ACTUAL == pGunInfo->chargerMethod) || (CHARGING_START == pGunInfo->chargerMethod) ||
-                        ((CHARGING_FIXED == pGunInfo->chargerMethod) && (1 == pGunCharging->pullGunStop))) 
-                   	{
-                        CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
-                        pGunInfo->stopReason = STOP_PULL_OUT;
-                        ProcFuseBreak(pGunInfo->maxPower, gunId);
-                        return;
-                    }
-                }
-            }
-			else if ((0 == pGunCharging->resetEmuChipFlag) && (30 < time)) 
-            {
-                WritecalparaByGunId(gunId);
-                pGunCharging->resetEmuChipFlag = 1;
-            }
+			if ((2*60) < (uint32_t)(rtcTime - pGunInfo->start_time)) 
+			{  //充电开始2分钟内不检测枪头拔出
+				time = rtcTime - pGunCharging->beginTime;
+	            if (pGunCharging->pullGunStopTime <= time) 
+				{
+	                if ((pGunCharging->pullGunStopTime+60) > (uint32_t)(rtcTime - pGunInfo->start_time)) 
+					{ //充电7分钟之内检测到枪头断开都结束订单
+	                    CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
+	                    pGunInfo->stopReason = STOP_PULL_OUT;
+	                    ProcFuseBreak(pGunInfo->maxPower, gunId);
+	                    return;
+	                }
+					else
+					{  //大于7分钟之后，实时计费、起步金、固定计费打开枪头检测，停止充电
+	                    if ((CHARGING_ACTUAL == pGunInfo->chargerMethod) || (CHARGING_START == pGunInfo->chargerMethod) ||
+	                        ((CHARGING_FIXED == pGunInfo->chargerMethod) && (1 == pGunCharging->pullGunStop))) 
+	                   	{
+	                        CL_LOG("gun pull out,stop,maxPower=%d,gunid=%d.\n",pGunInfo->maxPower,gunId);
+	                        pGunInfo->stopReason = STOP_PULL_OUT;
+	                        ProcFuseBreak(pGunInfo->maxPower, gunId);
+	                        return;
+	                    }
+	                }
+	            }
+				else if ((0 == pGunCharging->resetEmuChipFlag) && (30 < time)) 
+	            {
+	                WritecalparaByGunId(gunId);
+	                pGunCharging->resetEmuChipFlag = 1;
+	            }
+			}
         }
     }
 	else 
@@ -608,7 +615,7 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
                 pGunInfo->is_load_on = GUN_CHARGING_FULL;
                 pGunCharging->currentPower = power;
                 pGunCharging->beginTime = rtcTime;
-                pGunInfo->powerCheckcnt = 90;  //如果是充电开始的时候还没有进入充电中状态就先进来,需要把功率检测时间加长，避免出现未进入充电中状态就开始确定充电功率
+                pGunCharging->checkPowerCnt = 90;  //如果是充电开始的时候还没有进入充电中状态就先进来,需要把功率检测时间加长，避免出现未进入充电中状态就开始确定充电功率
                 CL_LOG("power=%d,判满,gun=%d,cft=%ds,cm=%d.\n",power,gunId,pGunCharging->chargingFullTime,pGunInfo->chargerMethod);
             }
 			else
@@ -643,7 +650,7 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
             if (GUN_STATE_WAIT_PLUG_IN == pGunInfo->gun_state) 
 			{
                 pGunInfo->gun_state = GUN_STATE_ON;
-                pGunInfo->powerCheckcnt = 45;
+                pGunCharging->checkPowerCnt = 45;
                 pGunInfo->getPowerFlag = 0;
             }
         }
@@ -651,18 +658,18 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
 		//确定充电功率
         if (0 == pGunInfo->getPowerFlag) 
 		{
-            if (pGunInfo->powerCheckcnt) 
+            if (pGunCharging->checkPowerCnt) 
 			{
-                pGunInfo->powerCheckcnt--;
+                pGunCharging->checkPowerCnt--;
                 if (pGunInfo->chargingPower < power) 
 				{
                     if (4 <= ++pGunCharging->checkPowerCnt) 
 					{
                         pGunCharging->checkPowerCnt = 0;
                         pGunInfo->chargingPower = power;
-                        if (0 == pGunInfo->powerCheckcnt) 
+                        if (0 == pGunCharging->checkPowerCnt) 
 						{ //如果到了限定时间，功率还在增加，就再延长功率确认时间
-                            pGunInfo->powerCheckcnt = 4;
+                            pGunCharging->checkPowerCnt = 4;
                         }
                     }
                 }
@@ -692,19 +699,19 @@ void GunChargingProc(uint8_t gunId, uint16_t power, gun_info_t *pGunInfo)
 			{
                 if (150 <= (power - pGunInfo->chargingPower)) 
 				{ //如果功率持续升高大于8分钟，则进行功率调节
-                    if (254 <= ++pGunInfo->powerCheckcnt) 
+                    if (900 <= ++pGunCharging->powerCheckcnt) 
 					{
                         pGunInfo->chargingPower = power;
                         GetChargingTime(gunId, pGunInfo->chargingPower);
                         FlashWriteGunInfo(gun_info, sizeof(gun_info), 1);
                         UpdataGunDataSum();
-                        pGunInfo->powerCheckcnt = 0;
+                        pGunCharging->powerCheckcnt = 0;
                     }
                 }
             }
 			else if (power < pGunInfo->chargingPower) 
 			{
-                pGunInfo->powerCheckcnt = 0;
+                pGunCharging->powerCheckcnt = 0;
             }
         }
     }

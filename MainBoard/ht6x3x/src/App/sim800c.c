@@ -163,41 +163,61 @@ int GprsCheckRes(char *cmd, char *res, uint16_t tmo)
     uint8_t c;
     int cnt = 0;
     int retv = CL_FAIL;
-
+	uint32_t WaitTicks = 0;
+		
     memset(gprsBuffer, 0, sizeof(gprsBuffer));
     //CL_LOG("gprs_check_res : recv data=");
-    for (uint16_t time = 0; time < tmo; time+= 50) {
+    for (uint16_t time = 0; time < tmo; time+= 50) 
+	{
         vTaskDelay(50);
         Feed_WDT();
-        while(UsartGetOneData(GPRS_UART_PORT, &c) == 0) {
-            #if (1 == SIM800_DEBUG)
-            printf("%02x ",c);
-            #endif
-            if (c) {
-                if (sizeof(gprsBuffer) > cnt) {
-                    gprsBuffer[cnt++] = c;
-                }else{
-                    CL_LOG("cnt=%d,error.\n",cnt);
-                }
-            }
+		WaitTicks = xTaskGetTickCount();
+		while((WaitTicks + 10) > xTaskGetTickCount())
+		{
+			while((UsartGetOneData(GPRS_UART_PORT, &c) == 0))
+			{
+		#if (1 == SIM800_DEBUG)
+				printf("%02x ",c);
+		#endif
+				if (c) 
+				{
+					if (sizeof(gprsBuffer) > cnt) 
+					{
+						gprsBuffer[cnt++] = c;
+						WaitTicks = xTaskGetTickCount();
+					}
+					else
+					{
+						CL_LOG("cnt=%d,error.\n",cnt);
+					}
+				}
+			}
         }
         ret = strstr((const char*)gprsBuffer, (const char*)res);
-        if (ret) {
+        if (ret) 
+		{
             #if (1 == SIM800_DEBUG)
             printf("\r\n");
             #endif
             retv = CL_OK;
-            if (NULL != cmd) {
-                if (strstr(cmd, "AT+CSQ")) {
+            if (NULL != cmd) 
+			{
+                if (strstr(cmd, "AT+CSQ")) 
+				{
                     ret = strstr((char*)gprsBuffer, "CSQ: ");//+CSQ: 23,99
-                    if (ret != NULL) {
+                    if (ret != NULL) 
+					{
                         gNetSignal = atoi(&ret[5]);
             			c = atoi(&ret[6]);
                         CL_LOG("2G signal value=%d, ber=%d.\n", gNetSignal,c);
                     }
-                }else if (strstr(cmd, "AT+CCID")) {
+                }
+				else if (strstr(cmd, "AT+CCID")) 
+				{
 					GetCcidSn((void*)gprsBuffer);
-				}else if (strstr(cmd, "AT+CIPSTATUS=")) { //判断网络socket的连接状态
+				}
+				else if (strstr(cmd, "AT+CIPSTATUS=")) 
+				{ //判断网络socket的连接状态
                     retv = GetSocketState((void *)gprsBuffer);
                 }
             }
@@ -224,17 +244,22 @@ int GprsSendCmd(char *cmd, char *ack, uint16_t waittime, int flag)
 	CL_LOG(">>> %s.\n",cmd);
     #endif
 
-    if ((ack==NULL) || (waittime==0)) {
+    if ((ack==NULL) || (waittime==0)) 
+	{
         MuxSempGive(&gGprsSendMux);
         return CL_OK;
     }
 
-    if (CL_OK == GprsCheckRes(cmd, ack, waittime)) {
+    if (CL_OK == GprsCheckRes(cmd, ack, waittime)) 
+	{
         res = CL_OK; /*check success, retrun 0*/
-    }else{
+    }
+	else
+	{
         res = (1==flag) ? 0 : 1;
     }
 	MuxSempGive(&gGprsSendMux);
+	
 	return res;
 }
 
@@ -532,14 +557,22 @@ int GprsSendData(char *data, int len, char *ack, uint16_t waittime)
 {
 	int res = 1;
 
+	MuxSempTake(&gGprsSendMux);
     UsartSend(GPRS_UART_PORT, (void*)data, len);
-    #if (1 == SIM800_DEBUG)
+#if (1 == SIM800_DEBUG)
 	PrintfData("GprsSendData", (void*)data, len);
-    #endif
-    if ((ack == NULL) || (waittime == 0)) return CL_OK;
-    if (CL_OK == GprsCheckRes(NULL, ack, waittime)) {
+#endif
+    if ((ack == NULL) || (waittime == 0)) 
+	{
+		MuxSempGive(&gGprsSendMux);
+		return CL_OK;
+	}
+    if (CL_OK == GprsCheckRes(NULL, ack, waittime)) 
+	{
         res = 0; /*check success, retrun 0*/
     }
+	MuxSempGive(&gGprsSendMux);
+	
 	return res;
 }
 
@@ -549,36 +582,46 @@ int SocketSendData(int socket, uint8_t* data, uint16_t len)
 	char cmd_ack[64] = {0};
     int res;
 
-    if (CL_FALSE == system_info.is_socket_0_ok) {
+    if (CL_FALSE == system_info.is_socket_0_ok) 
+	{
         CL_LOG("socket 0 is closed.\n");
         return -1;
     }
 
-    MuxSempTake(&gGprsSendMux);
-    for (int i=0; i<2; i++) {
+ //   MuxSempTake(&gGprsSendMux);
+    for (int i = 0; i < 2; i++) 
+	{
 		sprintf(cmd_ack, "%d, SEND OK", socket);
 		sprintf(cmd_req,"AT+CIPSEND=%d,%d\r", socket, len);
         res = GprsSendCmd(cmd_req, ">", 1000, 1);
-        if (0 != res) {
+        if (0 != res) 
+		{
             CL_LOG("GprsSendCmd=%d,err.\n",res);
             OptFailNotice(50);
         }
 
-        if (CL_OK == (res = GprsSendData((char*)data, len, cmd_ack, 10000))) {
+        if (CL_OK == (res = GprsSendData((char*)data, len, cmd_ack, 10000))) 
+		{
             break;
-        }else{
+        }
+		else
+		{
             system_info.tcp_tx_error_times++;
             CL_LOG("err,times=%d.\n",system_info.tcp_tx_error_times);
             OS_DELAY_MS (1000);
         }
     }
-    MuxSempGive(&gGprsSendMux);
+//    MuxSempGive(&gGprsSendMux);
 
-    if (res == 0) {
+    if (res == 0) 
+	{
         system_info.tcp_tx_error_times = 0;
-    }else {
+    }
+	else 
+	{
         CL_LOG("send err,times=%d.\n",system_info.tcp_tx_error_times);
-        if (system_info.tcp_tx_error_times >= TX_FAIL_MAX_CNT) {
+        if (system_info.tcp_tx_error_times >= TX_FAIL_MAX_CNT) 
+		{
             system_info.tcp_tx_error_times = 0;
 			CL_LOG("send err,reset net.\n");
 			system_info.is_socket_0_ok = CL_FALSE;
@@ -586,6 +629,7 @@ int SocketSendData(int socket, uint8_t* data, uint16_t len)
             OptFailNotice(51);
         }
     }
+	
     return res;
 }
 
@@ -607,16 +651,19 @@ uint8_t * GprsCmdChkNoSpace(char * ack)
     uint8_t data;
     uint8_t flag = 0;
 
-    while ((UsartGetOneData(GPRS_UART_PORT, (void*)&data)) == CL_OK) {
+    while ((UsartGetOneData(GPRS_UART_PORT, (void*)&data)) == CL_OK) 
+	{
         //接收到一个字符
-        if (gGprsRxLen < BUFFER_SIZE) {
+        if (gGprsRxLen < BUFFER_SIZE) 
+		{
             flag = 1;
             gprsBuffer[gGprsRxLen++] = data;
         }
         OS_DELAY_MS(2);
     }
 
-    if (flag) {
+    if (flag) 
+	{
         gprsBuffer[gGprsRxLen] = 0;//添加结束符
         trim((char *)gprsBuffer);
         CL_LOG("buf=%s.\n",gprsBuffer);
@@ -634,38 +681,50 @@ int GprsSendCmdChkNoSpace(char * cmd, char * ack, int waitCnt, int waittime, uin
 	char *ret = NULL;
 
     MuxSempTake(&gGprsSendMux);
-    for (i=0; i<3; i++) {
+    for (i = 0; i < 3; i++) 
+	{
         gGprsRxLen = 0;
         UsartSend(GPRS_UART_PORT, (void *)cmd, strlen(cmd));
-        if (ack) {		//需要等待应答
-            for (k=0; k<waitCnt; k++) {
+        if (ack) 
+		{		//需要等待应答
+            for (k=0; k<waitCnt; k++) 
+			{
                 OS_DELAY_MS(waittime);
-                if (GprsCmdChkNoSpace(ack)) {
+                if (GprsCmdChkNoSpace(ack)) 
+				{
                     //得到有效数据
-					if (strstr(cmd, "AT+CTFSGETID")) {
+					if (strstr(cmd, "AT+CTFSGETID")) 
+					{
 						//+CTFSGETID:"00AAAAAABBBBBB24C857F000"
 						ret = strstr((char*)gprsBuffer, (void*)"+CTFSGETID:");
-						if (ret != NULL) {
+						if (ret != NULL) 
+						{
 							memcpy(data, &ret[12], TFS_ID2_LEN);
 						}
 					}
-					if (strstr(cmd, "AT+CTFSDECRYPT")) {
+					if (strstr(cmd, "AT+CTFSDECRYPT")) 
+					{
 						ret = strstr((char*)gprsBuffer, (void*)"+CTFSDECRYPT:");
-						if (ret != NULL) {
+						if (ret != NULL) 
+						{
 							memcpy(data, &ret[14], TFS_ID2_AES_LEN);
 						}
 					}
 
-					if (strstr(cmd, "AT+CTFSAUTH=0")) {
+					if (strstr(cmd, "AT+CTFSAUTH=0")) 
+					{
 						ret = strstr((char*)gprsBuffer, (void*)"+CTFSAUTH:");
-						if (ret != NULL) {
+						if (ret != NULL) 
+						{
 							memcpy(data, &ret[11], TFS_CHALLENGE_AUTH_CODE_LEN);
 						}
 					}
 
-					if (strstr(cmd, "AT+CTFSAUTH=1")) {
+					if (strstr(cmd, "AT+CTFSAUTH=1")) 
+					{
 						ret = strstr((char*)gprsBuffer, (void*)"+CTFSAUTH:");
-						if (ret != NULL) {
+						if (ret != NULL) 
+						{
 							memcpy(data, &ret[11], TFS_TIMESTAMP_AUTH_CODE_LEN);
 						}
 					}
@@ -673,7 +732,9 @@ int GprsSendCmdChkNoSpace(char * cmd, char * ack, int waitCnt, int waittime, uin
                     return CL_OK;
                 }
             }
-        }else{
+        }
+		else
+		{
             MuxSempGive(&gGprsSendMux);
             return CL_OK;
         }
@@ -705,21 +766,28 @@ int GetGPRSBuffer(uint8_t *buf, uint16_t len)
     int i;
     int timeOut;
 
-    for (i=0; i<len;) {
+    for (i=0; i<len;) 
+	{
         Feed_WDT();
         timeOut = 2000;
-        while (timeOut) {
-            if (UsartGetOneData(GPRS_UART_PORT, &c) == 0) {
+        while (timeOut) 
+		{
+            if (UsartGetOneData(GPRS_UART_PORT, &c) == 0) 
+			{
                 buf[i++] = c;
                 break;
-            }else{
-                if (--timeOut < 3) {
+            }
+			else
+			{
+                if (--timeOut < 3) 
+				{
                     CL_LOG("to=%d,err.\n",timeOut);
                     return i;
                 }
             }
         }
     }
+	
     return i;
 }
 
@@ -924,13 +992,14 @@ int FtpGet(const char* serv, const char* un, const char* pw, const char* file, u
 						{
 							system_info.fwType = FW_X10P;
 							appBackupRecordAddr = AppUpBkpAddr;
+							#if 1
 							if ((system_info.localFwInfo.size == fsize) && (system_info.localFwInfo.checkSum == chsum_in) && (system_info.localFwInfo.ver == fwVer)) 
                             {
                                 CL_LOG("fw same,no need upgrade.\n");
                                 OptSuccessNotice(804);
                                 return CL_OK;
                             }
-							
+							#endif
                             getCnt++;
                             CL_LOG("check X10P fw name ok,fs=%d,sum=%d,fwVer=%d.\n",fsize,chsum_in,fwVer);
                             getLen = 512;

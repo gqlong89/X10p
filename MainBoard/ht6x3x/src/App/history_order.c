@@ -91,7 +91,8 @@ int Write_HistoryOrder(HISTORY_ORDER_STR *order)
 
 	CL_LOG("currPage=%d   currPos=%d.\n",currPage,currPos);
 	//新的扇区，需要擦除扇区
-	if(currPos == 0){
+	if(currPos == 0)
+	{
         CL_LOG("Erase page page=%d \n",currPage);
 		HT_Flash_PageErase(TradeRecordAddr+currPage*FLASH_PAGE_SIZE);
 	}
@@ -137,7 +138,8 @@ int Read_HistoryOrder_first(HISTORY_ORDER_STR *order)
 
 int Read_HistoryOrder_t(uint16_t index, HISTORY_ORDER_STR *order)
 {
-	if(index == orderHeadFlag.w_index){
+	if(index == orderHeadFlag.w_index)
+	{
 		return CL_FAIL;
 	}
 	MuxSempTake(&gTradeRecordMux);
@@ -215,7 +217,8 @@ int Remove_RecordOrder(uint8_t gun_id,uint32_t startTime,uint32_t stopTime)
 
 	MuxSempTake(&gTradeRecordMux);
 	//需要删除的订单不是第一个，需要将删除的单元和第一个单元交换
-	if (index != orderHeadFlag.r_index) {
+	if (index != orderHeadFlag.r_index) 
+	{
 		HISTORY_ORDER_STR firstOrder;
 		Read_HistoryOrder_first(&firstOrder);
 		uint32_t currPage = index/RECORD_BLOCK_NUM_PER_PAGE;	//要删除的订单所在扇区
@@ -242,7 +245,8 @@ int Remove_RecordOrder_first(void)
 	uint16_t orderNum = GetOrderCnt();
 
 	CL_LOG("orderNum=%d.\n",orderNum);
-    if (orderNum) {
+    if (orderNum) 
+	{
     	MuxSempTake(&gTradeRecordMux);
     	orderHeadFlag.r_index = (orderHeadFlag.r_index+1)%RECORD_MAX_BLOCK_NUM;
     	//修改订单头信息

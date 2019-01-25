@@ -13,7 +13,7 @@
 
 #define  __HT60XX_FLASH_C
 
-#define NO_USE_ASM_FLASH			1
+#define NO_USE_ASM_FLASH			0
 
 
 /*
@@ -25,6 +25,8 @@
 #define M8(adr)     (*((uint8_t * ) (adr)))
 #define M16(adr)    (*((uint16_t *) (adr)))
 #define M32(adr)    (*((uint32_t *) (adr)))
+
+
 
 
 /*
@@ -72,7 +74,7 @@ void HT_Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Nu
     MASTER_INT_EN();
 }
 #else
-__ASM void HT_Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
+__ASM void Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
 {
     PUSH    {R4-R6}
     LDR     R6, |KEIL_FLASH_BWR_WPREG_UL_VAL|
@@ -111,6 +113,13 @@ KEIL_FLASH_BWR_END
 |KEIL_FLASH_BWR_WPREG_REG_ADDR| DCD    0x4000F000
 |KEIL_FLASH_BWR_WPREG_UL_VAL|   DCD    0x0000A55A
 |KEIL_FLASH_BWR_CONFIG_UL_VAL|  DCD    0x00007A68
+}
+
+void HT_Flash_ByteWrite(const uint8_t* pWriteByte, uint32_t Address, uint32_t Num)
+{
+	MASTER_INT_DIS();
+    Flash_ByteWrite(pWriteByte, Address, Num);
+	MASTER_INT_EN();
 }
 #endif
 

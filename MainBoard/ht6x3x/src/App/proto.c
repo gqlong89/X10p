@@ -538,7 +538,8 @@ int SendDeviceAesReq(uint32_t time_utc, uint8_t reason)
 	FRAME_STR *pkt = (void*)gProtoSendBuff;
     DEVICE_AES_REQ_STR *pAesReq = (void*)pkt->data;
 
-	if (CL_FAIL == TfsId2GetTimeStampAuthCode(timeStamp, (void*)extraData, TFS_EXTA_LEN, authCodeBuf)) {
+	if (CL_FAIL == TfsId2GetTimeStampAuthCode(timeStamp, (void*)extraData, TFS_EXTA_LEN, authCodeBuf)) 
+	{
         SendEventNotice(0, EVENT_PSW_UPDATE, 5, 0, EVENT_OCCUR, NULL);
         OptFailNotice(32);
 		return CL_FAIL;
@@ -596,84 +597,6 @@ void InitChargingCtrlPara(uint8_t  gunId)
     pGunCharging->chargingFullStop = system_info.chargingFullStop;
 }
 
-void StartChargingqqqqqq(uint8_t startMode, uint32_t money, uint8_t *pCardSn, uint8_t *pOrder, uint8_t ordersource)
-{
-	gChgInfo.current_usr_gun_id = 2;
-    uint8_t  gunId = gChgInfo.current_usr_gun_id;
-    gun_info_t *pGunInfo = &gun_info[gunId-1];
-    GUN_STATUS_STR gunStatus;
-    GUN_CHARGING_STR *pGunCharging = &gChgInfo.gunCharging[gunId-1];
-
-    memset(pGunInfo, 0, sizeof(gun_info_t));
-	pGunInfo->gun_id = gunId;
-    pGunInfo->gun_state = GUN_STATE_WAIT_PLUG_IN;
-	pGunInfo->ordersource = ordersource;
-    if (NULL != pCardSn) {
-        memcpy(pGunInfo->user_account, (void*)pCardSn, sizeof(pGunInfo->user_account));
-    }
-    memcpy(pGunInfo->order, pOrder, sizeof(pGunInfo->order));
-    pGunInfo->cost_mode = system_info.cost_template.mode;
-	pGunInfo->chargerMethod = system_info.chargerMethod;
-	pGunInfo->chargerStartingGold = system_info.chargerStartingGold;
-    if (COST_UNIFY == system_info.cost_template.mode) {
-        pGunInfo->charger_time_plan = money * system_info.cost_template.Data.unifyInfo.duration / system_info.cost_template.Data.unifyInfo.price;
-        pGunInfo->powerInfo.segmet[0].price = system_info.cost_template.Data.unifyInfo.price;
-        pGunInfo->powerInfo.segmet[0].duration = system_info.cost_template.Data.unifyInfo.duration;
-		if (pGunInfo->chargerMethod == CHARGING_START) {
-			//起步价充电时间
-			pGunInfo->startGoldTime = pGunInfo->chargerStartingGold * system_info.cost_template.Data.unifyInfo.duration/ system_info.cost_template.Data.unifyInfo.price;
-		}
-    }else{
-        pGunInfo->charger_time_plan = NO_LOAD_TIME;
-        memcpy(&pGunInfo->powerInfo, &system_info.cost_template.Data.powerInfo, sizeof(pGunInfo->powerInfo));
-        pGunInfo->startGoldTime = NO_LOAD_TIME;
-    }
-    CL_LOG("cm=%d,cw=%d,sg=%d,m=%d,id=%d,cp=%d,pct=%dm,sgt=%dm,gun=%d.\n",
-        pGunInfo->cost_mode,pGunInfo->chargerMethod,pGunInfo->chargerStartingGold,money,system_info.cost_template.template_id,system_info.changePower,pGunInfo->charger_time_plan,pGunInfo->startGoldTime,gunId);
-    pGunInfo->costTempId = system_info.cost_template.template_id;
-    pGunInfo->changePower = system_info.changePower;
-	pGunInfo->start_time = GetRtcCount();
-    GetGunStatus(gunId, &gunStatus);
-    pGunInfo->startElec = gunStatus.elec;
-    pGunInfo->startMode = startMode;
-    pGunInfo->current_usr_money = money;
-    pGunInfo->stopReason = STOP_UNKNOW;
-    pGunInfo->reasonDetail = REASON_UNKNOW;
-    pGunInfo->chargingMode = gChgInfo.mode;
-	pGunInfo->subsidyType = gChgInfo.subsidyType;
-	pGunInfo->subsidyPararm = gChgInfo.subsidyPararm;
-	#if 1
-	if(EnableZXIE(EMUID[6]) != CL_FAIL)
-	{
-	//	CL_LOG("打开走过零点标志 \r\n");
-		EMUIFIFlag = 1;
-	}
-	else
-	{
-		EMUIFIFlag = 0;
-		CL_LOG("关闭走过零点标志 \r\n");
-	}
-    #endif
-    GunTurnOn(gunId);
-    chargingOldTime = pGunInfo->start_time;
-    pGunCharging->chargingTime = pGunInfo->start_time;
-    pGunCharging->isTesting = 0;
-    pGunCharging->checkPowerCnt = 0;
-    pGunCharging->inCnt = 0;
-    pGunCharging->isFull = 0;
-    pGunCharging->powerIndex = 0;
-    pGunCharging->resetEmuChipFlag = 0;
-    pGunCharging->startChargerTimers = 0;
-    InitChargingCtrlPara(gunId);
-    pGunInfo->is_load_on = GUN_CHARGING_UNKNOW_POWER;
-    pGunInfo->isSync = FIRST_START_CHARGING;
-    SendStartChargingNoticeTime = 0;
-    SwitchToUi_Charging(0);
-	SpeechChargeing(gunId);
-    FlashWriteGunInfo(gun_info, sizeof(gun_info), 1);
-    UpdataGunDataSum();
-}
-
 void StartCharging(uint8_t startMode, uint32_t money, uint8_t *pCardSn, uint8_t *pOrder, uint8_t ordersource)
 {
     uint8_t  gunId = gChgInfo.current_usr_gun_id;
@@ -685,22 +608,27 @@ void StartCharging(uint8_t startMode, uint32_t money, uint8_t *pCardSn, uint8_t 
 	pGunInfo->gun_id = gunId;
     pGunInfo->gun_state = GUN_STATE_WAIT_PLUG_IN;
 	pGunInfo->ordersource = ordersource;
-    if (NULL != pCardSn) {
+    if (NULL != pCardSn) 
+	{
         memcpy(pGunInfo->user_account, (void*)pCardSn, sizeof(pGunInfo->user_account));
     }
     memcpy(pGunInfo->order, pOrder, sizeof(pGunInfo->order));
     pGunInfo->cost_mode = system_info.cost_template.mode;
 	pGunInfo->chargerMethod = system_info.chargerMethod;
 	pGunInfo->chargerStartingGold = system_info.chargerStartingGold;
-    if (COST_UNIFY == system_info.cost_template.mode) {
+    if (COST_UNIFY == system_info.cost_template.mode) 
+	{
         pGunInfo->charger_time_plan = money * system_info.cost_template.Data.unifyInfo.duration / system_info.cost_template.Data.unifyInfo.price;
         pGunInfo->powerInfo.segmet[0].price = system_info.cost_template.Data.unifyInfo.price;
         pGunInfo->powerInfo.segmet[0].duration = system_info.cost_template.Data.unifyInfo.duration;
-		if (pGunInfo->chargerMethod == CHARGING_START) {
+		if (pGunInfo->chargerMethod == CHARGING_START) 
+		{
 			//起步价充电时间
 			pGunInfo->startGoldTime = pGunInfo->chargerStartingGold * system_info.cost_template.Data.unifyInfo.duration/ system_info.cost_template.Data.unifyInfo.price;
 		}
-    }else{
+    }
+	else
+	{
         pGunInfo->charger_time_plan = NO_LOAD_TIME;
         memcpy(&pGunInfo->powerInfo, &system_info.cost_template.Data.powerInfo, sizeof(pGunInfo->powerInfo));
         pGunInfo->startGoldTime = NO_LOAD_TIME;
@@ -736,6 +664,7 @@ void StartCharging(uint8_t startMode, uint32_t money, uint8_t *pCardSn, uint8_t 
     pGunCharging->chargingTime = pGunInfo->start_time;
     pGunCharging->isTesting = 0;
     pGunCharging->checkPowerCnt = 0;
+	pGunCharging->powerCheckcnt = 0;
     pGunCharging->inCnt = 0;
     pGunCharging->isFull = 0;
     pGunCharging->powerIndex = 0;
@@ -762,7 +691,8 @@ void StopCharging(uint8_t gunId)
     pPowerSement = &pGunInfo->powerInfo.segmet[pGunInfo->powerSemenIndex];
     //为了防止用户主动停止充电来不急计费更新，强制刷新一次充电金额
     pGunInfo->money = pGunInfo->realChargingTime * pPowerSement->price / pPowerSement->duration;
-    if (pGunInfo->money > pGunInfo->current_usr_money) {
+    if (pGunInfo->money > pGunInfo->current_usr_money) 
+	{
         pGunInfo->money = pGunInfo->current_usr_money;
     }
     pGunInfo->stop_time = GetRtcCount();

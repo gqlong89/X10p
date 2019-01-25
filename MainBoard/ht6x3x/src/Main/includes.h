@@ -171,11 +171,11 @@
 //	#define REGISTER_CODE					"830484693193"
 #endif
 
-#define IS_CPU_DOU_FRE                  1                   //ÊÇ·ñ±¶Æµ  0²»±¶Æµ£»  1±¶Æµ
+#define IS_CPU_DOU_FRE                  	1                   //ÊÇ·ñ±¶Æµ  0²»±¶Æµ£»  1±¶Æµ
 #if (0 == IS_CPU_DOU_FRE)
-	#define VOICE_DELAY_DIV               2
+	#define VOICE_DELAY_DIV               	2
 #else
-	#define VOICE_DELAY_DIV               1
+	#define VOICE_DELAY_DIV               	1
 #endif
 
 #define IS_THREE_DIAL                   0

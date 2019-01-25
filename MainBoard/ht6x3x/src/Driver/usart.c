@@ -37,13 +37,16 @@ void (*gUartInitFun[])(void) = {Init_Uart0,Init_Uart1,Init_Uart2,Init_Uart3,Init
 //******************************************************************
 void Set_Uart_Bandrate(HT_UART_TypeDef* usart, uint32_t bps)
 {
+	uint32_t val;
+	
+#if (0 == IS_CPU_DOU_FRE)
+	val = (44040192/2/(2*bps)-1);
+#else
+	val = (44040192/(2*bps)-1);
+#endif
 	//bps = Fsys/2*(SREL+1)
 	//³õÖµSREL=Fsys/2*bps-1, Fsys=44MHz
-	#if (0 == IS_CPU_DOU_FRE)
-	usart->SREL=44040192/2/(2*bps)-1;
-    #else
-    usart->SREL=44040192/(2*bps)-1;
-    #endif
+	usart->SREL = val;
 }
 
 
@@ -63,12 +66,15 @@ int UartSendData(UART_INFO_STR*pUart, const uint8_t *pData, uint16_t len)
     pUart->sendCnt = 0;
     pUart->pSendData = (void*)pData;
     pUart->Data.sysAddr->SBUF = pData[0];
-    while (pUart->sendCnt < pUart->allCnt) {
+    while (pUart->sendCnt < pUart->allCnt) 
+	{
         OS_DELAY_MS(1);
-        if (waitCnt < ++cnt) {
+        if (waitCnt < ++cnt) 
+		{
             break;
         }
     }
+	
     return CL_OK;
 }
 

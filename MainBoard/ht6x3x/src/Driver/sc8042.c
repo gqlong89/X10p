@@ -119,10 +119,14 @@ void OptFailNotice(int code)
 {
     Feed_WDT();
     CL_LOG("errcode=%03d.\n",code);
-    if ((code > SIM800_STATE_NUM) && (100 != code) && (101 != code)) {
+    if ((code > SIM800_STATE_NUM) && (100 != code) && (101 != code)) 
+	{
 		SoundCode(code);
-	}else{
-		if (code != gChgInfo.errCode) {
+	}
+	else
+	{
+		if (code != gChgInfo.errCode) 
+		{
             UiDisplay_ErrCode(code);
 			SoundCode(code);
 			gChgInfo.errCode = code;

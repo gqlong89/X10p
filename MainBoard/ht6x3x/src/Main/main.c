@@ -188,11 +188,13 @@ void TempProc(void)
 //处理离线订单
 void ProcTradeRecord(void)
 {
-	if (((uint32_t)(GetRtcCount() - uploadHistoryOrderTimes) > 8) && (oneUploadTradeNum < GetOrderCnt())) {
+	if (((uint32_t)(GetRtcCount() - uploadHistoryOrderTimes) > 8) && (oneUploadTradeNum < GetOrderCnt())) 
+	{
 		uploadHistoryOrderTimes = GetRtcCount();
 
 		HISTORY_ORDER_STR order;
-		if(Read_HistoryOrder_next(&order) == CL_OK){
+		if(Read_HistoryOrder_next(&order) == CL_OK)
+		{
 			BlueUpLoadHistoryOrder(&order);
 		}
 	}
@@ -278,12 +280,6 @@ void MainTask(void)
     uint8_t  flag = 0;
 
 	
-//	uint32_t readAddr;
-//	uint32_t read_len;
-//	uint8_t buf[UPGRADE_PACKAGE_SIZE];
-
-
-	
    	BspInit();
     
 	memset(&gChgInfo, 0, sizeof(gChgInfo));
@@ -310,12 +306,26 @@ void MainTask(void)
 			TimeTick = GetRtcCount();
 			#if 1
 			CL_LOG("仓盖1温度: %3.1f, 仓盖2温度: %3.1f.\n", ReadResistanceValue(TBS_ADC3), ReadResistanceValue(TBS_ADC4));
-			//GetCpuTemp();
 			#endif
 
-			//readAddr = KeyBoardBackAddr;
-			//HT_Flash_ByteRead(&buf[0], readAddr, UPGRADE_PACKAGE_SIZE);
-		//	PrintfData("[qqqqqqqqqqqq]", &buf[0], UPGRADE_PACKAGE_SIZE);
+//			readAddr = KeyBoardBackAddr;
+//            for(i = 0; i < 64; i++)
+//            {
+//                buf[i] = i;
+//            }
+//            
+//            HT_Flash_PageErase(readAddr);
+//			HT_Flash_ByteRead(&buf[0], readAddr, UPGRADE_PACKAGE_SIZE);
+//            PrintfData("[qqqqHHHHqqqq]", &buf[0], UPGRADE_PACKAGE_SIZE);
+//            for(i = 0; i < 64; i++)
+//            {
+//                buf[i] = i;
+//            }
+//            PrintfData("[qqqqKKKKqqqq]", &buf[0], UPGRADE_PACKAGE_SIZE);
+//            HT_Flash_ByteWrite((void*)buf, readAddr, UPGRADE_PACKAGE_SIZE);
+//            memset(buf, 0, 64);
+//			HT_Flash_ByteRead(&buf[0], readAddr, UPGRADE_PACKAGE_SIZE);
+//			PrintfData("[qqqqqqqqqqqq]", &buf[0], UPGRADE_PACKAGE_SIZE);
 //			LcdTurnOnLed();
 //			OS_DELAY_MS(500);
 //			LcdTurnOffLed();

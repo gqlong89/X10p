@@ -76,10 +76,12 @@ int SendBlueNetPkt(uint8_t dest, uint8_t *pPkt, uint16_t len)
 
     MuxSempTake(&gCKBSendMux);
     i = 0;
-    while (gWaitMsgAck) {
+    while (gWaitMsgAck) 
+	{
         Feed_WDT();
         vTaskDelay(50);
-        if (20 < ++i) {
+        if (20 < ++i) 
+		{
             CL_LOG("to.\n");
             gWaitMsgAck = 0;
             break;

@@ -391,10 +391,13 @@ void BlueHistoryOrderEnsure(BLUE_PROTO_STR *pMsg)
 
 	int result = Remove_RecordOrder(gun_id,startTime,record->stopTime);
 
-	if(result == CL_OK){
+	if(result == CL_OK)
+	{
         oneUploadTradeNum--;
 		CL_LOG("Remove_RecordOrder success.\n");
-	}else{
+	}
+	else
+	{
 		CL_LOG("Remove_RecordOrder failed.\n");
 	}
 
@@ -444,10 +447,14 @@ void BtSetChargerSn(BLUE_PROTO_STR *pMsg)
     uint8_t result = 0;
 
     PrintfData("BtSetChargerSn set sn", pMsg->data, sizeof(system_info.station_id));
-    if (GetOrderCnt() || GetChargingGunCnt() > 0){
+    if (GetOrderCnt() || GetChargingGunCnt() > 0)
+	{
         result = 1;
-    }else{
-        if (memcmp(system_info.station_id,pMsg->data,CHARGER_SN_LEN) != 0) {
+    }
+	else
+	{
+        if (memcmp(system_info.station_id,pMsg->data,CHARGER_SN_LEN) != 0) 
+		{
             WriteCfgInfo(CFG_CHARGER_SN, CHARGER_SN_LEN, pMsg->data);
 
             memset(gun_info, 0, sizeof(gun_info));
@@ -677,7 +684,8 @@ void BlueFWDownLoad(BLUE_PROTO_STR *pMsg)
 	pMsg->head.len = sizeof(BLUE_FW_DOWNLOAD_ACK_STR);
 	pMsg->data[pMsg->head.len] = GetPktSum((void*)pMsg, sizeof(BLUE_PROTO_HEAD_STR)+pMsg->head.len);
     SendBlueNetPkt(NODE_BLUE, (void*)pMsg, sizeof(BLUE_PROTO_HEAD_STR)+pMsg->head.len+1);
-	if(result == 2){
+	if(result == 2)
+	{
         OptSuccessNotice(805);
 		CL_LOG("system will reboot.\n");
 		ResetSysTem();

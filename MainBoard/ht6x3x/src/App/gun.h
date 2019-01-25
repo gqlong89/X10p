@@ -64,7 +64,7 @@ typedef struct{
     uint8_t  maxPower;					//充电过程中最大功率 0.1w 大于10w是10w
     uint16_t realChargingTime;          //实际充电时间，不含掉电时间 分钟
 	uint16_t chargingPower;             //用于功率段计费的功率 0.1w
-    uint8_t  powerCheckcnt;             //功率读取次数
+    uint8_t  rsv;                       //功率读取次数
     uint8_t  powerSemenIndex;           //功率段指示
     uint16_t chargingElec;              //0.01kwh 累计充电电量
     uint8_t  subsidyType;				//. 补贴类型 @2018-4-13 add

@@ -10,6 +10,10 @@
 
 
 
+typedef enum {
+	CLOCK_44=0,
+	CLOCK_22
+}CLOCK_TYPE;
 
 
 void SwitchTo_Flf(void);
