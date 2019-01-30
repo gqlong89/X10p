@@ -347,8 +347,10 @@ void MainTask(void)
 					{ //本地sim上网才进行id2加密处理
                         if (0 == memcmp(gZeroArray, gID2, TFS_ID2_LEN)) 
 						{
+						//	PrintfData("[gID21111]", &gID2[0], TFS_ID2_LEN);
                             if (CL_OK == TfsGetId2(gID2)) 
 							{
+						//		PrintfData("[gID2]", &gID2[0], TFS_ID2_LEN);
                                 SendDeviceAesReq(GetRtcCount(), gChgInfo.ReqKeyReason);
                                 gChgInfo.lastOpenTime = GetRtcCount();
                             }

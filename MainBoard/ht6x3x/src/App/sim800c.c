@@ -654,6 +654,7 @@ uint8_t * GprsCmdChkNoSpace(char * ack)
     while ((UsartGetOneData(GPRS_UART_PORT, (void*)&data)) == CL_OK) 
 	{
         //接收到一个字符
+     //   printf("[%x, %c]\r", data, data);
         if (gGprsRxLen < BUFFER_SIZE) 
 		{
             flag = 1;
@@ -707,6 +708,7 @@ int GprsSendCmdChkNoSpace(char * cmd, char * ack, int waitCnt, int waittime, uin
 						ret = strstr((char*)gprsBuffer, (void*)"+CTFSDECRYPT:");
 						if (ret != NULL) 
 						{
+							PrintfData("ggggggggggggggggg",(void*)&ret[14], 100);
 							memcpy(data, &ret[14], TFS_ID2_AES_LEN);
 						}
 					}
@@ -725,7 +727,8 @@ int GprsSendCmdChkNoSpace(char * cmd, char * ack, int waitCnt, int waittime, uin
 						ret = strstr((char*)gprsBuffer, (void*)"+CTFSAUTH:");
 						if (ret != NULL) 
 						{
-							memcpy(data, &ret[11], TFS_TIMESTAMP_AUTH_CODE_LEN);
+							//memcpy(data, &ret[11], TFS_TIMESTAMP_AUTH_CODE_LEN);
+							memcpy(data, &ret[11], 120);
 						}
 					}
                     MuxSempGive(&gGprsSendMux);

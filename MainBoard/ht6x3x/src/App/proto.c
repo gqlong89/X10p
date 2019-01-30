@@ -41,7 +41,8 @@ extern TaskHandle_t gEmuTaskHandle_t;
 
 void UpdateSysToken(void)
 {
-    if (0x7e < ++SysToken[0]) {
+    if (0x7e < ++SysToken[0]) 
+	{
         SysToken[0] = 0x21;
     }
 }
@@ -259,20 +260,26 @@ int SendCardAuthReq(int flag)
     pMsg->gun_id = gChgInfo.current_usr_gun_id;
 	memcpy((void*)pMsg->card_id, (void*)gChgInfo.current_usr_card_id, sizeof(pMsg->card_id));
 	memset(pMsg->card_psw, 0, sizeof(pMsg->card_psw));
-	if (CARD_CHECK_MONEY == flag) {
+	if (CARD_CHECK_MONEY == flag) 
+	{
         gCardReqFlag = 0;
 		pMsg->card_type = 0;
 		pMsg->optType = flag;
         gChgInfo.money = 0;
-	}  else {
+	}  
+	else 
+	{
 		gCardReqFlag = 1;
 		pMsg->optType = 0;
-		if (CARD_AUTH == flag) {
+		if (CARD_AUTH == flag) 
+		{
 			pMsg->mode = 1;
 			pMsg->card_type = 0;
 			pMsg->chargingPara = gChgInfo.money*100;
             gChgInfo.cardType = ORDER_AUTH_CARD;
-	    } else if (CARD_MONTH == flag) {//月卡
+	    } 
+		else if (CARD_MONTH == flag) 
+		{//月卡
 			pMsg->card_type = 1;
 			pMsg->mode = 0;
             pMsg->chargingPara = 0;
@@ -533,7 +540,7 @@ int SendCostTemplateAck(uint32_t sn, uint8_t result, uint8_t gunId)
 
 int SendDeviceAesReq(uint32_t time_utc, uint8_t reason)
 {
-	uint8_t authCodeBuf[100] = {0};
+	uint8_t authCodeBuf[120] = {0};
 	uint64_t timeStamp = (uint64_t)(time_utc) * 1000;
 	FRAME_STR *pkt = (void*)gProtoSendBuff;
     DEVICE_AES_REQ_STR *pAesReq = (void*)pkt->data;
@@ -549,7 +556,11 @@ int SendDeviceAesReq(uint32_t time_utc, uint8_t reason)
 	memset(gProtoSendBuff, 0, sizeof(gProtoSendBuff));
 	memcpy((void*)pAesReq->id2, gID2, TFS_ID2_LEN);
 	memset((void*)pAesReq->authCode, 0, sizeof(pAesReq->authCode));
+#if (1 == SPECIAL_NET_CARD)
 	memcpy((void*)pAesReq->authCode, authCodeBuf, TFS_TIMESTAMP_AUTH_CODE_LEN);
+#else
+	memcpy((void*)pAesReq->authCode, authCodeBuf, strlen((const char *)authCodeBuf));
+#endif
 	memcpy((void*)pAesReq->extra, extraData, TFS_EXTA_LEN);
 	pAesReq->reason = reason;
 	UpdateSysToken();
@@ -1075,14 +1086,18 @@ int DecryptAndCheckServeData(uint8_t *inData, uint8_t *outData, uint16_t len)
 	uint8_t checkSum = 0;
 
 	DecryptData((void*)inData, (void*)outData, len, &gChgInfo.deAes);
-	for (uint8_t i=0; i<(len-1); i++) {
+	for (uint8_t i=0; i<(len-1); i++) 
+	{
 		checkSum += outData[i];
 	}
 
-	if (checkSum == outData[len-1]) {
+	if (checkSum == outData[len-1]) 
+	{
 		//CL_LOG("checkSum ok.\n");
 		return CL_OK;
-	} else {
+	} 
+	else 
+	{
 	    CL_LOG("cs error.\n");
 	    //PrintfData("DecryptAndCheckServeData: checkSum error, origin data", outData, len);
 		return CL_FAIL;
@@ -1093,7 +1108,7 @@ int DecryptAndCheckServeData(uint8_t *inData, uint8_t *outData, uint16_t len)
 int AesInfoHandle( PKT_STR* pFrame, uint16_t len)
 {
     uint8_t AesKey[18];
-	uint8_t AesInfo[64] = {0};
+	uint8_t AesInfo[130] = {0};
 	uint8_t hashVal[16] = {0};
 	uint8_t hashValBcdToStr[32]={0};
 	DEVICE_AES_REQ_ACK_STR* pAesInfo = (DEVICE_AES_REQ_ACK_STR*)pFrame->data;
@@ -1102,13 +1117,17 @@ int AesInfoHandle( PKT_STR* pFrame, uint16_t len)
 	//更新系统时间
 	SycTimeCount(pAesInfo->time_utc);
 	SetRtcCount(pAesInfo->time_utc);
-	if (pAesInfo->result == 0) {
-		//PrintfData("recv aes update req ack cipherText",(void*)pAesInfo->aesInfo, CIPHER_SIZE);
-		TfsId2Decrypt(pAesInfo->aesInfo, CIPHER_SIZE, AesInfo);
-		//PrintfData("AesInfoHandle: id2 decrypt aes data",(void*)AesInfo, 64);
+	if (pAesInfo->result == 0) 
+	{
+	//	PrintfData("recv aes update req ack cipherText",(void*)pAesInfo->aesInfo, 128);
+		//TfsId2Decrypt(pAesInfo->aesInfo, CIPHER_SIZE + 8, AesInfo);
+	//	printf("wwwwwwwwwww aesInfoLen = %d", pAesInfo->aesInfoLen);
+		TfsId2Decrypt(pAesInfo->aesInfo, pAesInfo->aesInfoLen, AesInfo);
+	//	PrintfData("AesInfoHandle: id2 decrypt aes data",(void*)AesInfo, 64);
 
 		//判断token
-		if (memcmp((void*)SysToken, (void*)&AesInfo, 16) != 0) {
+		if (memcmp((void*)SysToken, (void*)&AesInfo, 16) != 0) 
+		{
 			CL_LOG("Systoken err.\n");
             SendEventNotice(0, EVENT_PSW_UPDATE, 2, 0, EVENT_OCCUR, NULL);
 			return CL_FAIL;
@@ -1120,7 +1139,8 @@ int AesInfoHandle( PKT_STR* pFrame, uint16_t len)
 		DeviceBcd2str((void*)hashValBcdToStr, (void*)hashVal, 16);
 
 		//比较哈希值
-		if (memcmp((void*)hashValBcdToStr, (void*)&AesInfo[32], 32) == 0) {
+		if (memcmp((void*)hashValBcdToStr, (void*)&AesInfo[32], 32) == 0) 
+		{
 			memcpy(AesKey, (void*)&AesInfo[16], 16);
             AES_set_encrypt_key(AesKey, 128, &gChgInfo.enAes);
             AES_set_decrypt_key(AesKey, 128, &gChgInfo.deAes);
@@ -1129,12 +1149,16 @@ int AesInfoHandle( PKT_STR* pFrame, uint16_t len)
             SendEventNotice(0, EVENT_PSW_UPDATE, 0, 0, EVENT_OCCUR, NULL);
 			CL_LOG("update aes Aeskey:%s.\n", AesKey);
 			return CL_OK;
-		} else {
+		} 
+		else 
+		{
 			CL_LOG("hash err.\n");
             SendEventNotice(0, EVENT_PSW_UPDATE, 3, 0, EVENT_OCCUR, NULL);
 			return CL_FAIL;
 		}
-	} else {
+	} 
+	else 
+	{
 		AesKeyUpdateFlag = 0;
         SendEventNotice(0, EVENT_PSW_UPDATE, 4, 0, EVENT_OCCUR, NULL);
 		CL_LOG("update aes fail.\n");
@@ -1167,21 +1191,28 @@ int RecvServerData(PKT_STR *pFrame, uint16_t len)
     int ret;
     gun_info_t *pGunInfo = NULL;
     uint32_t now = GetRtcCount();
-
-    if (CHARGER_TYPE != pFrame->head.type) {
+	
+    if (CHARGER_TYPE != pFrame->head.type) 
+	{
         //CL_LOG("type=%d,error, pkt drop.\n",pFrame->head.type);
         OptFailNotice(110);
         return CL_FAIL;
     }
 
-    if ((MQTT_CMD_REGISTER == pFrame->head.cmd) || (MQTT_CMD_AES_REQ == pFrame->head.cmd) || (MQTT_CMD_UPDATE_AES_NOTICE == pFrame->head.cmd)) {
-        if (memcmp(pFrame->head.chargerSn, system_info.station_id, sizeof(pFrame->head.chargerSn))) {
+    if ((MQTT_CMD_REGISTER == pFrame->head.cmd) || (MQTT_CMD_AES_REQ == pFrame->head.cmd) || 
+		(MQTT_CMD_UPDATE_AES_NOTICE == pFrame->head.cmd)) 
+	{
+        if (memcmp(pFrame->head.chargerSn, system_info.station_id, sizeof(pFrame->head.chargerSn))) 
+		{
             //CL_LOG("sn diff error, pkt drop,cmd=%d.\n",pFrame->head.cmd);
             OptFailNotice(109);
             return CL_FAIL;
         }
-    } else {
-		if (memcmp(pFrame->head.chargerSn, system_info.idCode, 8)) {
+    } 
+	else 
+	{
+		if (memcmp(pFrame->head.chargerSn, system_info.idCode, 8)) 
+		{
 			//CL_LOG("idCode diff error, pkt drop,cmd=%d.\n",pFrame->head.cmd);
 			OptFailNotice(109);
 			return CL_FAIL;
@@ -1190,26 +1221,34 @@ int RecvServerData(PKT_STR *pFrame, uint16_t len)
 
 	//CL_LOG("RecvServerData: ver = %d, cmd = %d.\n", pFrame->head.ver, pFrame->head.cmd);
 	#if (1 == ID2)
-	if (MESSAGE_VER_ENCRYPT == pFrame->head.ver) {  //外接485网络不会走进该分支
+	if (MESSAGE_VER_ENCRYPT == pFrame->head.ver) 
+	{  //外接485网络不会走进该分支
 		PrintfData("RecvServerData encryp data:", (void*)pFrame, len);
-		if(CL_OK == DecryptAndCheckServeData((void*)pFrame->data, (void*)pFrame->data, len-sizeof(PKT_HEAD_STR)-1)) {
+		if(CL_OK == DecryptAndCheckServeData((void*)pFrame->data, (void*)pFrame->data, len-sizeof(PKT_HEAD_STR)-1)) 
+		{
             gChgInfo.id2DecrypErrCnt = 0;
 			ENCRYPT_PKT_STR *encryptPkt = (ENCRYPT_PKT_STR*)pFrame->data;
 			//CL_LOG("currentRtcCount=%d, getServerRtcCount=%d.\n", currentRtcCount, encryptPkt->time);
 			now = (now > encryptPkt->time) ? now - encryptPkt->time : encryptPkt->time - now;
-			if (600 < now) { //10分钟相差
+			if (600 < now) 
+			{ //10分钟相差
 				CL_LOG("rx time>600.\n");
 				return CL_FAIL;
 			}
 			memmove((void*)pFrame->data, (void*)&pFrame->data[6], len);
-		} else {
+		} 
+		else 
+		{
 		    OptFailNotice(35);
 			CL_LOG("decrypt err.\n");
-            if (1 <= gChgInfo.id2DecrypErrCnt) {
+            if (1 <= gChgInfo.id2DecrypErrCnt) 
+			{
                 gChgInfo.id2DecrypErrCnt = 0;
                 AesKeyUpdateFlag = 0;
                 gChgInfo.ReqKeyReason = 1;
-            }else{
+            }
+			else
+			{
                 gChgInfo.id2DecrypErrCnt++;
             }
 			return CL_FAIL;

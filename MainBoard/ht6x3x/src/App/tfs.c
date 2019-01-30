@@ -17,7 +17,7 @@ const uint8_t *extraData = "CL123456";
 
 int TfsGetId2(uint8_t id[TFS_ID2_LEN])
 {
-	if (GprsSendCmdChkNoSpace("AT+CTFSGETID\r", "OK", 10, 200, id)==0) 
+	if (GprsSendCmdChkNoSpace("AT+CTFSGETID\r", "OK", 10, 200, id) == 0) 
 	{
 		CL_LOG("get id2 ok=%s.\n", id);
 		return CL_OK;
@@ -41,6 +41,7 @@ int TfsId2Decrypt(const uint8_t *cipherText, uint8_t cipherLen, uint8_t *out)
 		strcat(tmp, tmp1);
 	}
 	sprintf(decryptCmdReq,"AT+CTFSDECRYPT=\"%s\"\r", tmp);
+//	PrintfChar("bbbbbbbbbbbb",(void*)decryptCmdReq, strlen(decryptCmdReq));
 	if (GprsSendCmdChkNoSpace(decryptCmdReq, "OK", 10, 200, out)==0) 
 	{
 		CL_LOG("decrypt ok.\n");

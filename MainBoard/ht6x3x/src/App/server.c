@@ -73,6 +73,21 @@ void PrintfData(void *pfunc, uint8_t *pdata, int len)
 		printf("\n");
     }
 }
+void PrintfChar(void *pfunc, uint8_t *pdata, int len)
+{
+	uint32_t i;
+
+  //  if (LOG_OPEN == system_info.printSwitch) 
+	{
+		PRINTF_LOG("call by %s,len=%d, pdata:",(char*)pfunc,len);
+	    Feed_WDT();
+		for (i=0; i<len; i++) 
+		{
+			printf("%c",pdata[i]);
+		}
+		printf("\n");
+    }
+}
 
 
 //返回 0 是在线
@@ -157,7 +172,8 @@ void DeviceBcd2str(char *des, unsigned char *src , int len)
     char tmp[4];
 
     p = src;
-    for(i=0; i<len; i++) {
+    for(i=0; i<len; i++) 
+	{
         memset(tmp, 0, sizeof(tmp));
         sprintf(tmp, "%02x", *p++);
         strcat(des, tmp);
@@ -420,8 +436,8 @@ void ChargerInfoProc(void)
 //	#if 1
 //	printf("qqqqqqqqqqqqqqqqqqq\n");
 //    charger.station_id[3] = 0x78;
-//	charger.station_id[4] = 0x22;
-//	charger.station_id[5] = 0x33;
+//	charger.station_id[4] = 0x66;
+//	charger.station_id[5] = 0x66;
 //	charger.station_id[6] = 0x88;
 //	charger.station_id[7] = 0x99;
 //	memset(charger.idCode, 0, sizeof(system_info.idCode));
@@ -899,16 +915,21 @@ void ProcNetStatus(void)
 	int is_online;
 
     is_online = (CL_OK == IsSysOnLine()) ? ONLINE : OFFLINE;
-	if (is_online != is_online_history) {
-		if (ONLINE == is_online) {
+	if (is_online != is_online_history) 
+	{
+		if (ONLINE == is_online) 
+		{
 			LcdDisplayBackStageConnect(LCD_DISPLAY);
-            if (30 < (uint32_t)(GetRtcCount() - gChgInfo.lastOpenTime)) {
-                SendStartUpNotice(2);//登录
-            }
+          //  if (30 < (uint32_t)(GetRtcCount() - gChgInfo.lastOpenTime)) 
+			//{
+            //    SendStartUpNotice(2);//登录
+          //  }
 			// re-store gun state to normal
-			for (int i=1; i<=GUN_NUM_MAX; i++) {
+			for (int i=1; i<=GUN_NUM_MAX; i++) 
+			{
                 pGunInfo = &gun_info[i-1];
-				if (pGunInfo->is_load_on) {
+				if (pGunInfo->is_load_on) 
+				{
                     pGunInfo->isSync = NET_RECOVER;
 				}
 			}
@@ -1080,14 +1101,16 @@ void ServerTask(void)
         {
             OS_DELAY_MS(1000);
             first = 0;
+			system_info.is_socket_0_ok = CL_TRUE;
         }
         else
         { //离线后的网络恢复，随机等待一定时间(2分钟之内)再重新发送数据到后台，避免后台故障恢复后桩端同时密集发送数据到后台，以缓解后台消息处理压力
             step = gChgInfo.second & 0x7f;
             CL_LOG("wait %ds\n", step);
             OS_DELAY_MS(step * 1000);
+			system_info.is_socket_0_ok = CL_TRUE;
+            SendStartUpNotice(2);//登录
         }
-        system_info.is_socket_0_ok = CL_TRUE;
         LcdDisplaySingnal(LCD_DISPLAY);
 		LcdDisplayNoSingnal(LCD_CLEAR);
         step = FIND_AA;
@@ -1210,9 +1233,13 @@ void ServerTask(void)
 
                     case FIND_CHK:
                         pktBuff[pktLen++] = data;
-                        if (data == sum) {
+                        if (data == sum) 
+						{
+						//	PrintfData("接收服务器数据", (void*)pktBuff, pktLen);
                             RecvServerData((void*)pktBuff, pktLen);
-                        }else{
+                        }
+						else
+						{
                             CL_LOG("recv err,sum=%#x,pkt sum=%#x.\n",sum,data);
                         }
                         step = FIND_AA;

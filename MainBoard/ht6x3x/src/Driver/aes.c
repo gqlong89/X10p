@@ -1513,7 +1513,8 @@ int DecryptData(uint8_t *in, uint8_t *out, uint16_t len, AES_KEY *pAesKey)
 	uint8_t cnt;
 
 	cnt = len/16;
-	for (uint8_t i=0; i<cnt; i++) {
+	for (uint8_t i=0; i<cnt; i++) 
+	{
 		AES_decrypt((void*)in, (void*)out, pAesKey);
         Feed_WDT();
 		in += 16;

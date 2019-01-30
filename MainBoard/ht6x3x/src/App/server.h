@@ -313,6 +313,7 @@ char* GetCurrentTime(void);
 
 void ServerTask(void);
 void PrintfData(void *pfunc, uint8_t *pdata, int len);
+void PrintfChar(void *pfunc, uint8_t *pdata, int len);
 int GetCostMode(void);
 int StrToHex(uint8_t *pbDest, const char *pbSrc, int srcLen);
 void ProcNetStatus(void);

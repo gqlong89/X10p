@@ -553,6 +553,7 @@ typedef struct {
 	uint8_t  result;                            //0. 结果
 	uint32_t time_utc;                          //1. 系统时间
 	uint8_t  aesInfo[128];	//请求token(16byte) + 秘钥(16byte) + hash值(MD5:32byte)/(SHA256:64byte)
+	uint8_t  aesInfoLen;
 }DEVICE_AES_REQ_ACK_STR;
 
 
@@ -608,4 +609,5 @@ extern uint32_t SendTradeRecordNoticeTime;
 extern uint32_t SendStartChargingNoticeTime;
 
 #endif //__PROTO_H__
+
 
